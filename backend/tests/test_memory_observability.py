@@ -20,7 +20,22 @@ def test_session_context_is_bounded_and_clearable(tmp_path):
     memory.add_message("conversation-1", "assistant", "second")
     memory.add_message("conversation-1", "user", "third")
     assert [m["content"] for m in memory.get_session("conversation-1")] == ["second", "third"]
-    assert memory.clear_session("conversation-1") == 2
+    assert memory.clear_session("conversation-1") == 3
+
+
+def test_saved_conversation_keeps_full_transcript_and_response_metadata(tmp_path):
+    memory = MemoryService(tmp_path / "memory.sqlite3", session_limit=2)
+    memory.add_message("conversation-2", "user", "first question")
+    memory.add_message("conversation-2", "assistant", "first answer", {"citations": []})
+    memory.add_message("conversation-2", "user", "second question")
+    memory.add_message("conversation-2", "assistant", "second answer", {"traceId": "run_2"})
+    assert len(memory.get_session("conversation-2")) == 2
+    transcript = memory.get_conversation("conversation-2")
+    assert [message["content"] for message in transcript] == [
+        "first question", "first answer", "second question", "second answer",
+    ]
+    assert transcript[-1]["metadata"]["traceId"] == "run_2"
+    assert memory.list_conversations()[0]["title"] == "first question"
 
 
 def test_trace_persists_documented_tool_complete_contract_and_record_ids(tmp_path):

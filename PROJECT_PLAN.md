@@ -1,4 +1,4 @@
-# Live Data Intelligence Agent — Project Plan
+# Parallax — Work Intelligence Project Plan
 
 ## 1. Project in one sentence
 
@@ -290,6 +290,6 @@ Copy one prompt to each teammate’s coding LLM after sharing this file.
 
 ## 15. Suggested project title and résumé bullet
 
-**Project title:** Live Data Intelligence Agent
+**Project title:** Parallax — Work Intelligence
 
 **Résumé bullet (adapt after completion):** Built a full-stack agentic work-intelligence system that orchestrates Gmail, Jira, and Notion retrieval, synthesizes evidence-backed answers with citations, persists consented user memory, and exposes run-level observability; evaluated retrieval and citation fidelity using a reproducible test suite.

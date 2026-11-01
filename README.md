@@ -1,6 +1,6 @@
-# Live Data Intelligence Agent
+# Parallax — Work Intelligence
 
-An agentic work assistant that searches Gmail, Jira, and Notion, combines retrieved evidence into cited answers, and records a visible run trace. See [PROJECT_PLAN.md](PROJECT_PLAN.md) for the product scope, module ownership, API contracts, demo story, and evaluation plan.
+Parallax is an agentic work assistant that searches Gmail, Jira, and Notion, combines retrieved evidence into cited answers, and records a visible run trace. See [PROJECT_PLAN.md](PROJECT_PLAN.md) for the product scope, module ownership, API contracts, demo story, and evaluation plan.
 
 ## Team modules
 
@@ -15,7 +15,7 @@ Keep module implementations in their owned folders. Coordinate changes to shared
 
 ## Local setup
 
-1. Copy `.env.example` to `.env` and fill only the credentials you intend to use. Demo mode works without external service credentials. Keep `.env` private; it is ignored by Git.
+1. Copy `.env.example` to `.env`. Demo mode works without credentials. For live APIs set `CONNECTOR_ENABLE_LIVE=true`, `VITE_CONNECTOR_DEMO_MODE=false`, and add the relevant credentials. Gmail accepts an OAuth access token or a refresh token plus Google client ID/secret; Jira needs its site URL, account email, and API token; Notion needs an integration token and access to the pages. Groq is optional and controls answer phrasing; without it, the backend returns extractive answers. Keep `.env` private; it is ignored by Git.
 2. Create and activate a Python virtual environment from the repository root.
 3. Install backend dependencies and start the API:
 

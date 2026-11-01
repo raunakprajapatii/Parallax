@@ -57,4 +57,7 @@ class TraceEvent(BaseModel):
     durationMs: int | None = None
     recordCount: int | None = None
     timestamp: str
-    details: dict[str, object] = Field(default_factory=dict)
+    labels: dict[str, object] = Field(default_factory=dict)
+    status: str | None = None
+    error: str | None = None
+    recordIds: list[str] = Field(default_factory=list)

@@ -13,9 +13,16 @@ class ConnectorConfig:
     demo_mode: bool = True
     enable_live: bool = False
     gmail_token: str | None = None
+    gmail_refresh_token: str | None = None
+    google_client_id: str | None = None
+    google_client_secret: str | None = None
     jira_base_url: str | None = None
+    jira_email: str | None = None
     jira_token: str | None = None
     notion_token: str | None = None
+    notion_version: str = "2022-06-28"
+    groq_api_key: str | None = None
+    groq_model: str = "llama-3.3-70b-versatile"
 
     @classmethod
     def from_environment(cls) -> "ConnectorConfig":
@@ -23,10 +30,17 @@ class ConnectorConfig:
             demo_mode=os.getenv("CONNECTOR_DEMO_MODE", "true").casefold() != "false",
             enable_live=os.getenv("CONNECTOR_ENABLE_LIVE", "false").casefold() == "true",
             gmail_token=os.getenv("GMAIL_ACCESS_TOKEN"),
+            gmail_refresh_token=os.getenv("GMAIL_REFRESH_TOKEN"),
+            google_client_id=os.getenv("GOOGLE_CLIENT_ID"),
+            google_client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
             jira_base_url=os.getenv("JIRA_BASE_URL"),
+            jira_email=os.getenv("JIRA_EMAIL"),
             jira_token=os.getenv("JIRA_API_TOKEN"),
-            notion_token=os.getenv("NOTION_TOKEN"),
+            notion_token=os.getenv("NOTION_API_KEY") or os.getenv("NOTION_TOKEN"),
+            notion_version=os.getenv("NOTION_VERSION", "2022-06-28"),
+            groq_api_key=os.getenv("GROQ_API_KEY"),
+            groq_model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         )
 
     def live_credentials_configured(self) -> bool:
-        return bool(self.enable_live and self.gmail_token and self.jira_base_url and self.jira_token and self.notion_token)
+        return bool(self.enable_live and self.gmail_token and self.jira_base_url and self.jira_email and self.jira_token and self.notion_token)

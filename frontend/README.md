@@ -1,6 +1,6 @@
-# Atlas Intelligence frontend
+# Parallax frontend
 
-React, TypeScript, and Vite frontend for the Live Data Intelligence Agent. The interface posts questions to the documented `POST /api/chat` endpoint and renders the returned answer, citations, conversation ID, trace ID, and memory usage.
+React, TypeScript, and Vite frontend for Parallax. The interface posts questions to the documented `POST /api/chat` endpoint and renders the returned answer, citations, conversation ID, and memory usage.
 
 ## Run locally
 
