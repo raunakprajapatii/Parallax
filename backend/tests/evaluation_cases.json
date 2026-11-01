@@ -1,0 +1,20 @@
+[
+  {"id":"E01","category":"single_source","question":"What is blocking ATL-42?","required_sources":["jira"],"expected_record_ids":["jira:ATL-42"]},
+  {"id":"E02","category":"single_source","question":"What is the status of ATL-51?","required_sources":["jira"],"expected_record_ids":["jira:ATL-51"]},
+  {"id":"E03","category":"single_source","question":"Find the Atlas design handoff delay discussion.","required_sources":["gmail"],"expected_record_ids":["gmail:design-handoff-delay"]},
+  {"id":"E04","category":"single_source","question":"Who is asked to approve the Atlas launch?","required_sources":["gmail"],"expected_record_ids":["gmail:atlas-approval-request"]},
+  {"id":"E05","category":"single_source","question":"What date is listed for the Atlas launch?","required_sources":["notion"],"expected_record_ids":["notion:atlas-launch-brief"]},
+  {"id":"E06","category":"single_source","question":"Who owns workstreams in Atlas Launch?","required_sources":["notion"],"expected_record_ids":["notion:atlas-owner-list"]},
+  {"id":"E07","category":"cross_source","question":"What is blocking Atlas and who owns the blocker?","required_sources":["jira","notion"],"expected_record_ids":["jira:ATL-42","notion:atlas-owner-list"]},
+  {"id":"E08","category":"cross_source","question":"Summarize the design handoff delay and its impact on launch readiness.","required_sources":["gmail","notion"],"expected_record_ids":["gmail:design-handoff-delay","notion:atlas-launch-brief"]},
+  {"id":"E09","category":"cross_source","question":"What should happen next for the API rate-limit blocker?","required_sources":["jira","gmail"],"expected_record_ids":["jira:ATL-42","gmail:atlas-approval-request"]},
+  {"id":"E10","category":"cross_source","question":"What is blocking the Atlas launch, who owns each blocker, and what should happen next?","required_sources":["gmail","jira","notion"],"expected_record_ids":["jira:ATL-42","gmail:design-handoff-delay","gmail:atlas-approval-request","notion:atlas-launch-brief","notion:atlas-owner-list"]},
+  {"id":"E11","category":"temporal","question":"Which Atlas ticket is currently in review?","required_sources":["jira"],"expected_record_ids":["jira:ATL-51"]},
+  {"id":"E12","category":"temporal","question":"What changed most recently in the launch blockers?","required_sources":["gmail","jira"],"expected_record_ids":["jira:ATL-42","jira:ATL-51","gmail:design-handoff-delay"]},
+  {"id":"E13","category":"insufficient_evidence","question":"What was the exact API vendor's uptime last week?","required_sources":["jira","gmail","notion"],"expected_record_ids":[],"must_abstain":true},
+  {"id":"E14","category":"insufficient_evidence","question":"What is the final approved launch budget?","required_sources":["gmail","notion"],"expected_record_ids":[],"must_abstain":true},
+  {"id":"E15","category":"citation_fidelity","question":"Give the evidence for ATL-42's blocker and cite it.","required_sources":["jira"],"expected_record_ids":["jira:ATL-42"],"citation_required":true},
+  {"id":"E16","category":"citation_fidelity","question":"Cite the Atlas target date and the launch brief.","required_sources":["notion"],"expected_record_ids":["notion:atlas-launch-brief"],"citation_required":true},
+  {"id":"E17","category":"memory_behavior","question":"Remember that Atlas is the Q4 launch project.","required_sources":[],"expected_record_ids":[],"memory_action":"write_after_explicit_instruction"},
+  {"id":"E18","category":"memory_behavior","question":"What project name did I ask you to remember?","required_sources":[],"expected_record_ids":[],"memory_action":"retrieve_prior_consent"}
+]
