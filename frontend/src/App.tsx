@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { Activity, ArrowDown, ArrowLeft, ArrowUp, Check, ChevronDown, ChevronRight, CircleHelp, Command, FileText, Layers3, Link2, LoaderCircle, MessageSquareText, Plus, Sparkles, TriangleAlert, X } from 'lucide-react'
-import { postChat, type ChatClient, type ChatRequest, type ChatResponse, type Citation } from './api'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { Activity, ArrowDown, ArrowLeft, ArrowUp, ChevronRight, Clock3, FileText, Layers3, Link2, LoaderCircle, Plus, Sparkles, TriangleAlert, X } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import { getConversation, getConversations, postChat, type ChatClient, type ChatRequest, type ChatResponse, type Citation, type ConversationSummary } from './api'
 import { mockChat } from './mockApi'
 import './App.css'
 import './classic.css'
-import './dark.css'
 
 type Turn = { question: string; response?: ChatResponse }
 const suggestions = [
@@ -26,9 +26,12 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [conversationId, setConversationId] = useState<string>()
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null)
-  const [traceOpen, setTraceOpen] = useState(false)
   const [isDemo, setIsDemo] = useState(false)
   const [useMock, setUseMock] = useState(false)
+  const [conversations, setConversations] = useState<ConversationSummary[]>([])
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const conversationRef = useRef<HTMLDivElement>(null)
+  const connectorDemoMode = import.meta.env.VITE_CONNECTOR_DEMO_MODE !== 'false'
 
   const client: ChatClient = useMemo(() => useMock ? mockChat : postChat, [useMock])
   useEffect(() => {
@@ -37,17 +40,31 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
+  useEffect(() => {
+    void refreshConversations()
+  }, [])
+
+  async function refreshConversations() {
+    if (useMock) return
+    try { setConversations(await getConversations()) } catch { /* Chat still works if history is temporarily unavailable. */ }
+  }
+
+  useEffect(() => {
+    const conversation = conversationRef.current
+    if (conversation) conversation.scrollTo({ top: conversation.scrollHeight, behavior: 'smooth' })
+  }, [turns, loading])
+
   async function submitQuestion(question = draft) {
     const message = question.trim()
     if (!message || loading) return
-    setDraft(''); setError(null); setLoading(true); setTraceOpen(false)
+    setDraft(''); setError(null); setLoading(true)
     setTurns((previous) => [...previous, { question: message }])
-    const request: ChatRequest = { conversationId, message, demoMode: useMock }
+    const request: ChatRequest = { conversationId, message, demoMode: connectorDemoMode }
     try {
       let response: ChatResponse
       try {
         response = await client(request)
-        setIsDemo(useMock)
+        setIsDemo(connectorDemoMode || useMock)
       } catch (cause) {
         if (useMock || !(cause instanceof TypeError)) throw cause
         response = await mockChat({ ...request, demoMode: true })
@@ -55,60 +72,101 @@ function App() {
       }
       setConversationId(response.conversationId)
       setTurns((previous) => previous.map((turn, index) => index === previous.length - 1 ? { ...turn, response } : turn))
+      void refreshConversations()
     } catch (cause) {
       setTurns((previous) => previous.slice(0, -1))
       setError(cause instanceof Error ? cause.message : 'Something went wrong. Please try again.')
     } finally { setLoading(false) }
   }
 
-  function resetConversation() { setTurns([]); setDraft(''); setError(null); setConversationId(undefined); setTraceOpen(false) }
+  function resetConversation() { setTurns([]); setDraft(''); setError(null); setConversationId(undefined); setSelectedCitation(null) }
+
+  async function openConversation(id: string) {
+    if (loading || useMock) return
+    setError(null)
+    try {
+      const saved = await getConversation(id)
+      const restored: Turn[] = []
+      let pendingQuestion: string | undefined
+      for (const message of saved.messages) {
+        if (message.role === 'user') pendingQuestion = message.content
+        if (message.role === 'assistant' && pendingQuestion !== undefined) {
+          const metadata = message.metadata ?? {}
+          restored.push({ question: pendingQuestion, response: {
+            conversationId: id,
+            answer: message.content,
+            citations: metadata.citations ?? [],
+            traceId: metadata.traceId ?? '',
+            memoryUsed: metadata.memoryUsed ?? [],
+          } })
+          setIsDemo(Boolean(metadata.demoMode))
+          pendingQuestion = undefined
+        }
+      }
+      setConversationId(id)
+      setTurns(restored)
+      setDraft('')
+      setSelectedCitation(null)
+      setHistoryOpen(false)
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Could not open this saved conversation.')
+    }
+  }
   function onSubmit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void submitQuestion() }
 
   const renderAnswer = (response: ChatResponse) => {
-    const pieces = response.answer.split(/(\[\d+\])/g)
-    return pieces.map((piece, index) => {
-      const match = piece.match(/^\[(\d+)\]$/)
-      if (!match) return <span key={`text-${index}`}>{piece}</span>
-      const citation = response.citations.find((item) => item.number === Number(match[1]))
-      return citation ? <button className="citation-inline" key={`cite-${index}`} onClick={() => setSelectedCitation(citation)} aria-label={`Open citation ${citation.number}`}>[{citation.number}]</button> : <span key={`missing-${index}`}>{piece}</span>
-    })
+    const markdown = response.answer.replace(/\[(\d+)\]/g, '[$1](#citation-$1)')
+    return <ReactMarkdown components={{
+      a: ({ href, children }) => {
+        const match = href?.match(/^#citation-(\d+)$/)
+        if (match) {
+          const citation = response.citations.find((item) => item.number === Number(match[1]))
+          return citation
+            ? <button type="button" className="citation-inline" onClick={() => setSelectedCitation(citation)} aria-label={`Open citation ${citation.number}`}>[{citation.number}]</button>
+            : <span>{children}</span>
+        }
+        if (href?.startsWith('https://') || href?.startsWith('http://')) {
+          return <a href={href} target="_blank" rel="noreferrer">{children}</a>
+        }
+        return <span>{children}</span>
+      },
+    }}>{markdown}</ReactMarkdown>
   }
 
   return <div className="app-shell">
-    <aside className="sidebar" aria-label="Main navigation">
-      <div className="brand"><span className="brand-mark"><Sparkles size={18}/></span><span><span className="brand-name">atlas intelligence</span><span className="brand-caption">WORKSPACE ASSISTANT</span></span></div>
-      <button className="new-chat" onClick={resetConversation}><Plus size={16}/> New conversation <Command size={13} style={{marginLeft:'auto',opacity:.5}}/></button>
-      <div><div className="side-label">Workspace</div><div className="nav-item active"><MessageSquareText size={16}/> Ask Atlas</div><div className="nav-item"><Layers3 size={16}/> Knowledge sources</div><div className="nav-item"><Activity size={16}/> Activity</div></div>
-      <div><div className="side-label">Recent conversations</div><div className={`recent-title ${turns.length ? 'selected' : ''}`}>{turns.at(-1)?.question ?? 'Atlas launch planning'}</div><div className="recent-title">Q4 launch readiness</div><div className="recent-title">Product team sync</div></div>
-      <div className="side-bottom"><div className="nav-item"><CircleHelp size={16}/> Help & feedback</div><div className="nav-item"><span className="avatar">A</span><span style={{lineHeight:1.4}}>Alex Morgan<small style={{display:'block',color:'#a0a7b6',fontSize:10}}>Workspace admin</small></span><ChevronDown size={14} style={{marginLeft:'auto'}}/></div></div>
+    <aside className="sidebar" aria-label="Parallax">
+      <div className="brand"><span className="brand-mark"><Sparkles size={18}/></span><span><span className="brand-name">PARALLAX</span><span className="brand-caption">WORK INTELLIGENCE</span></span></div>
+      <button className="new-chat" onClick={resetConversation}><Plus size={16}/> New conversation</button>
+      <div className="saved-chats">
+        <div className="saved-chats-label">Recent chats</div>
+        {conversations.length ? conversations.map((conversation) => <button className={`saved-chat ${conversationId === conversation.conversationId ? 'selected' : ''}`} key={conversation.conversationId} onClick={() => void openConversation(conversation.conversationId)} title={conversation.title}>{conversation.title}</button>) : <div className="no-saved-chats">Your conversations will appear here.</div>}
+      </div>
     </aside>
 
     <section className="workspace">
-      <header className="topbar"><div className="mobile-brand"><span className="brand-mark"><Sparkles size={15}/></span>atlas intelligence</div><div className="breadcrumb"><span>Workspace</span><ChevronRight size={13}/><strong>Ask Atlas</strong></div><div className="top-right"><div className="demo-pill"><span className="demo-dot"/>{isDemo ? 'Demo workspace' : 'Ready to ask'}</div><div className="avatar" aria-label="Alex Morgan">A</div></div></header>
+      <header className="topbar"><div className="mobile-brand"><span className="brand-mark"><Sparkles size={15}/></span>PARALLAX</div><div className="breadcrumb"><span>Work intelligence</span><ChevronRight size={13}/><strong>Ask Parallax</strong></div><div className="top-right"><button className="mobile-history-toggle" onClick={() => setHistoryOpen((open) => !open)} aria-expanded={historyOpen}><Clock3 size={14}/> History</button><div className="demo-pill"><span className="demo-dot"/>{isDemo ? 'Demo workspace' : 'Ready to ask'}</div></div>
+        {historyOpen && <div className="mobile-history-menu"><div className="saved-chats-label">Recent chats</div>{conversations.length ? conversations.map((conversation) => <button className="saved-chat" key={conversation.conversationId} onClick={() => void openConversation(conversation.conversationId)} title={conversation.title}>{conversation.title}</button>) : <div className="no-saved-chats">Your conversations will appear here.</div>}</div>}
+      </header>
       <main className="main-content">
-        {turns.length === 0 ? <div className="intro"><div className="eyebrow"><Sparkles size={14}/> YOUR WORK, IN CONTEXT</div><h1>Good morning, Alex <span aria-hidden="true">✦</span></h1><p>Ask across your connected work apps. Get clear answers grounded in your team's knowledge.</p></div> : <div className="intro" style={{marginBottom:22}}><div className="eyebrow"><Sparkles size={13}/> ATLAS WORKSPACE</div><h1 style={{fontSize:27}}>Your workspace, understood.</h1></div>}
+        {turns.length === 0 ? <div className="intro"><div className="eyebrow"><Sparkles size={14}/> YOUR WORK, IN CONTEXT</div><h1>Everything, in context.</h1><p>Ask a question across your connected work apps.</p></div> : <div className="intro" style={{marginBottom:22}}><div className="eyebrow"><Sparkles size={13}/> PARALLAX</div><h1 style={{fontSize:27}}>Your workspace, understood.</h1></div>}
 
         {turns.length === 0 && <div className="prompt-grid" aria-label="Suggested questions">{suggestions.map((suggestion, index) => <button className="prompt-card" key={suggestion} onClick={() => void submitQuestion(suggestion)}><span className="prompt-icon">{index === 0 ? <Layers3 size={15}/> : index === 1 ? <Activity size={15}/> : index === 2 ? <FileText size={15}/> : <ArrowDown size={15}/>}</span><span>{suggestion}</span><ArrowUp size={13} style={{marginLeft:'auto',flex:'none',color:'#a2a7b7'}}/></button>)}</div>}
 
-        <div className="conversation" aria-live="polite">
+        <div className="conversation" aria-live="polite" ref={conversationRef}>
           {turns.map((turn, index) => <div className="turn" key={`${index}-${turn.question}`}>
             <div className="user-message">{turn.question}</div>
             {turn.response ? <>
-              <article className="answer-card"><div className="answer-head"><span className="assistant-icon"><Sparkles size={15}/></span><span><strong>Atlas AI</strong><small>{isDemo ? 'Demo response · Just now' : 'Answer grounded in your workspace'}</small></span></div>
+              <article className="answer-card"><div className="answer-head"><span className="assistant-icon"><Sparkles size={15}/></span><span><strong>Parallax</strong><small>{isDemo ? 'Demo response · Just now' : 'Answer grounded in your workspace'}</small></span></div>
                 <div className="answer-body">{renderAnswer(turn.response)}</div>
                 {turn.response.citations.length > 0 && <div className="citation-list">{turn.response.citations.map((citation) => <button className="citation-chip" key={citation.number} onClick={() => setSelectedCitation(citation)}><SourceMark source={citation.source}/><span>[{citation.number}] {citation.title}</span><ArrowUp size={11} style={{transform:'rotate(45deg)',color:'#a0a7b6'}}/></button>)}</div>}
-                {turn.response.memoryUsed.length > 0 && <div className="answer-foot"><span><Check size={12}/> Memory used</span><span>{turn.response.memoryUsed.join(' · ')}</span></div>}
               </article>
-              <section className="trace"><button className="trace-toggle" aria-expanded={traceOpen} onClick={() => setTraceOpen((open) => !open)}><span className="trace-title"><Activity size={15}/> Execution trace <span style={{fontWeight:400,color:'#9aa2b3'}}>· {turn.response.traceId}</span></span>{traceOpen ? <ChevronDown size={16}/> : <ChevronRight size={16}/>}</button>
-                {traceOpen && <div className="trace-content"><div className="trace-row"><Check size={13} color="#57b98e"/> Request completed</div><div className="trace-row"><span>Run ID</span><code>{turn.response.traceId}</code></div><div className="trace-row"><span>Sources cited</span><strong>{turn.response.citations.length}</strong></div><div className="trace-row"><span>Conversation</span><code>{turn.response.conversationId}</code></div><p className="trace-footnote">Per-tool trace events are not included in the documented chat response.</p></div>}
-              </section>
             </> : index === turns.length - 1 && loading ? <div className="answer-card"><div className="answer-head"><span className="assistant-icon"><Sparkles size={15}/></span><span><strong>Atlas AI</strong><small>Searching your workspace <span className="loading-dots"><i/><i/><i/></span></small></span><LoaderCircle size={15} className="spin" style={{marginLeft:'auto',color:'#7775d8'}}/></div><div className="answer-body" style={{color:'#929bad'}}>Connecting relevant knowledge and preparing a cited answer…</div></div> : null}
           </div>)}
           {turns.length === 0 && <div className="empty-state"><span className="assistant-icon" style={{display:'inline-grid',marginBottom:10}}><Sparkles size={15}/></span><div>Ready when you are. Ask a question to explore your workspace.</div></div>}
           {error && <div className="error-banner" role="alert"><TriangleAlert size={16} style={{flex:'none'}}/><span>{error}</span><button aria-label="Dismiss error" onClick={() => setError(null)} style={{marginLeft:'auto',border:0,background:'transparent',color:'inherit',cursor:'pointer'}}><X size={14}/></button></div>}
         </div>
 
-        <div className="composer-wrap"><form className="composer" onSubmit={onSubmit}><textarea aria-label="Ask a question" placeholder="Ask anything about your work…" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); void submitQuestion() } }} disabled={loading}/><div className="composer-actions"><span className="composer-hint">Enter to send · Shift + Enter for a new line</span><button className="send-button" type="submit" disabled={!draft.trim() || loading} aria-label="Send question">{loading ? <LoaderCircle size={16}/> : <ArrowUp size={17}/>}</button></div></form><div className="disclaimer">AI can make mistakes. Verify important details in the original sources.</div></div>
+        <div className="composer-wrap"><form className="composer" onSubmit={onSubmit}><textarea aria-label="Ask a question" placeholder="Ask anything about your work…" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); void submitQuestion() } }} disabled={loading}/><div className="composer-actions"><span className="composer-hint">Enter to send · Shift + Enter for a new line</span><button className="send-button" type="submit" disabled={!draft.trim() || loading} aria-label="Send question">{loading ? <LoaderCircle size={16}/> : <ArrowUp size={17}/>}</button></div></form></div>
       </main>
     </section>
 

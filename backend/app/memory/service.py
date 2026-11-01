@@ -85,10 +85,6 @@ class MemoryService:
             db.execute("INSERT INTO session_messages VALUES (?, ?, ?, ?, ?, ?)",
                        (row["id"], conversation_id, role, content,
                         json.dumps(row["metadata"], ensure_ascii=False), row["created_at"]))
-            stale = db.execute("SELECT id FROM session_messages WHERE conversation_id=? ORDER BY created_at DESC, rowid DESC LIMIT -1 OFFSET ?",
-                               (conversation_id, self.session_limit)).fetchall()
-            if stale:
-                db.executemany("DELETE FROM session_messages WHERE id=?", [(r["id"],) for r in stale])
         return row
 
     def get_session(self, conversation_id: str, limit: int | None = None) -> list[dict[str, Any]]:
@@ -99,6 +95,37 @@ class MemoryService:
         return [{"id": r["id"], "conversation_id": r["conversation_id"], "role": r["role"],
                  "content": r["content"], "metadata": json.loads(r["metadata_json"]),
                  "created_at": r["created_at"]} for r in reversed(rows)]
+
+    def list_conversations(self, limit: int = 30) -> list[dict[str, Any]]:
+        """Return saved chat titles and timestamps, newest activity first."""
+        with self._connect() as db:
+            rows = db.execute("""
+                SELECT conversation_id, MIN(CASE WHEN role='user' THEN content END) AS title,
+                       MAX(created_at) AS updated_at
+                FROM session_messages GROUP BY conversation_id
+                ORDER BY updated_at DESC LIMIT ?
+            """, (max(1, limit),)).fetchall()
+        return [{"conversationId": row["conversation_id"],
+                 "title": (row["title"] or "New conversation").strip()[:72],
+                 "updatedAt": row["updated_at"]} for row in rows]
+
+    def get_conversation(self, conversation_id: str) -> list[dict[str, Any]]:
+        """Return a complete saved transcript with response metadata."""
+        with self._connect() as db:
+            rows = db.execute("SELECT * FROM session_messages WHERE conversation_id=? ORDER BY rowid",
+                              (conversation_id,)).fetchall()
+        return [{"id": row["id"], "role": row["role"], "content": row["content"],
+                 "metadata": json.loads(row["metadata_json"]), "createdAt": row["created_at"]}
+                for row in rows]
+
+    def get_relevant(self, conversation_id: str, query: str) -> list[str]:
+        """Return bounded session context and matching consented facts."""
+        session = self.get_session(conversation_id)
+        terms = {term.casefold() for term in query.split() if len(term) > 2}
+        memories = self.list_memories(conversation_id, touch=False)
+        matching = [item["text"] for item in memories
+                    if not terms or terms.intersection(item["text"].casefold().split())]
+        return [item["content"] for item in session[-4:]] + matching[:4]
 
     def clear_session(self, conversation_id: str) -> int:
         with self._connect() as db:
