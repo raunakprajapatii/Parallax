@@ -1,32 +1,24 @@
-# React + TypeScript + Vite
+# Atlas Intelligence frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React, TypeScript, and Vite frontend for the Live Data Intelligence Agent. The interface posts questions to the documented `POST /api/chat` endpoint and renders the returned answer, citations, conversation ID, trace ID, and memory usage.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```powershell
+cd frontend
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Vite serves the app at `http://localhost:3000` and proxies `/api` requests to `http://localhost:8000`. Start the backend separately using the root project instructions.
+
+If the chat endpoint cannot be reached due to a network connection failure, the frontend automatically switches to a clearly labeled Atlas demo response. The isolated mock is in `src/mockApi.ts`. To return to backend mode, reload the page after starting the API.
+
+## Checks
+
+```powershell
+npm run build
+npm run lint
+```
+
+The chat response contract does not include source record content or per-tool trace events. The source detail dialog therefore displays only citation fields supplied by the API, and the trace panel identifies the run and available response metadata. Connector status endpoints are not defined in `PROJECT_PLAN.md`.

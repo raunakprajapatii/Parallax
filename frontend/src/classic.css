@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* A quieter, more classic treatment with Inter inspired by Nothing Phone typography. */
+.app-shell *{font-family:Inter,Roboto,Arial,sans-serif!important}
+.app-shell{background:#f7f8f8;color:#202328}
+.sidebar{border-color:#e7e8e8}
+.brand-mark{background:#202328;box-shadow:none;border-radius:9px}
+.new-chat{border-color:#e3e5e6;border-radius:8px;color:#34383d}
+.new-chat:hover{border-color:#b8b9dc;background:#fafaff;color:#5e5bb5}
+.nav-item{border-radius:7px;color:#626970}
+.nav-item.active{background:#ededf4;color:#5653a7}
+.topbar{border-color:#e7e8e8}
+.intro h1{font-weight:650;letter-spacing:-1.1px;color:#202328}
+.eyebrow{color:#6663b5;letter-spacing:.8px}
+.prompt-card{border-color:#e4e6e7;border-radius:10px;color:#454a50}
+.prompt-card:hover{border-color:#bcbcdc;box-shadow:0 5px 16px #22252a0b}
+.prompt-icon{border-radius:7px;background:#efeff5;color:#6663b5}
+.user-message{background:#30343a;border-radius:12px 12px 3px 12px;box-shadow:none}
+.answer-card{border-color:#e4e6e7;border-radius:12px;box-shadow:0 4px 16px #22252a09}
+.assistant-icon{background:#30343a;border-radius:8px}
+.answer-head{border-color:#eceeef}
+.answer-body{color:#3d434a}
+.citation-inline{background:#f0f0f6;color:#5c59a9;border-radius:4px}
+.citation-chip{border-color:#e6e8e9;border-radius:6px;color:#4b5157}
+.trace{border-color:#e4e6e7;border-radius:9px}
+.send-button{background:#30343a;border-radius:7px}
+.send-button:hover{background:#17191c}
+.composer{border-color:#dfe2e3;border-radius:12px;box-shadow:0 5px 20px #22252a0a}
+.composer:focus-within{border-color:#aaa9cd;box-shadow:0 5px 20px #22252a0d}
+.modal{border-radius:12px}
+.modal-close{border-radius:6px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
