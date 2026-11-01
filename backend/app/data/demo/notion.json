@@ -1,0 +1,22 @@
+[
+  {
+    "id": "notion:atlas-launch-brief",
+    "source": "notion",
+    "title": "Atlas Launch Brief",
+    "content": "Atlas Launch target date is 2026-12-15. The go/no-go review requires API sync validation, approved mobile designs, and security sign-off. Program owner is Maya Chen.",
+    "url": "https://demo.local/notion/atlas-launch-brief",
+    "author": "Maya Chen",
+    "createdAt": "2026-10-28T10:00:00Z",
+    "metadata": {"workspace": "Atlas Launch", "status": "active", "launch_date": "2026-12-15", "owner": "Maya Chen"}
+  },
+  {
+    "id": "notion:atlas-owner-list",
+    "source": "notion",
+    "title": "Atlas Launch Owner List",
+    "content": "Maya Chen owns API sync and release coordination. Jordan Lee owns design and observability review. Alex Romero owns security approval. Escalate unresolved launch blockers to Maya.",
+    "url": "https://demo.local/notion/atlas-owner-list",
+    "author": "Maya Chen",
+    "createdAt": "2026-10-29T14:30:00Z",
+    "metadata": {"workspace": "Atlas Launch", "status": "active", "owner": "Maya Chen", "label": "owners"}
+  }
+]

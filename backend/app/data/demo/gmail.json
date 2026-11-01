@@ -1,0 +1,22 @@
+[
+  {
+    "id": "gmail:atlas-design-handoff",
+    "source": "gmail",
+    "title": "Atlas Launch - design handoff delayed",
+    "content": "Priya says the final mobile design handoff is two days late because the responsive empty-state screens still need sign-off. Jordan owns the design review and will post the approved Figma link by 2026-11-05.",
+    "url": "https://demo.local/gmail/atlas-design-handoff",
+    "author": "Priya Nair",
+    "createdAt": "2026-11-01T09:15:00Z",
+    "metadata": {"thread": "Atlas Launch", "status": "at_risk", "owner": "Jordan Lee", "label": "design"}
+  },
+  {
+    "id": "gmail:atlas-approval-request",
+    "source": "gmail",
+    "title": "Approval needed: Atlas launch checklist",
+    "content": "Maya requests product and security approval for the Atlas launch checklist. The release cannot move to go/no-go until the security review is acknowledged; Alex owns the approval response.",
+    "url": "https://demo.local/gmail/atlas-approval-request",
+    "author": "Maya Chen",
+    "createdAt": "2026-11-01T12:40:00Z",
+    "metadata": {"thread": "Atlas Launch", "status": "awaiting_approval", "owner": "Alex Romero", "label": "approval"}
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "jira:ATL-42",
+    "source": "jira",
+    "title": "ATL-42 - API rate limits block launch sync",
+    "content": "The Atlas launch sync is blocked by API rate limits from the partner service. The retry/backoff patch is in progress and must be deployed before end-to-end validation can start.",
+    "url": "https://demo.local/jira/browse/ATL-42",
+    "author": "Maya Chen",
+    "createdAt": "2026-10-30T16:20:00Z",
+    "metadata": {"status": "Blocked", "assignee": "Maya Chen", "priority": "Highest", "labels": "atlas,launch"}
+  },
+  {
+    "id": "jira:ATL-51",
+    "source": "jira",
+    "title": "ATL-51 - production observability review",
+    "content": "Observability dashboards and alert thresholds are ready for review. The ticket is in review and Jordan Lee is waiting for approval before the launch checklist can be closed.",
+    "url": "https://demo.local/jira/browse/ATL-51",
+    "author": "Jordan Lee",
+    "createdAt": "2026-11-01T08:05:00Z",
+    "metadata": {"status": "In Review", "assignee": "Jordan Lee", "priority": "High", "labels": "atlas,launch"}
+  }
+]
