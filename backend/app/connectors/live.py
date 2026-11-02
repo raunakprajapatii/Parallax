@@ -11,6 +11,7 @@ import httpx
 
 from app.agent.models import SourceName, SourceRecord, ToolResult
 from .config import ConnectorConfig
+from .oauth import OAuthStore, access_token
 
 
 def _plain(value: Any) -> str:
@@ -62,18 +63,21 @@ class LiveConnector:
                               error=f"{self.source} request failed: {exc}")
 
     def _gmail(self, query: str, limit: int) -> list[SourceRecord]:
-        token = self.config.gmail_token
-        if self.config.gmail_refresh_token and self.config.google_client_id and self.config.google_client_secret:
-            refreshed = httpx.post("https://oauth2.googleapis.com/token", timeout=15, data={
-                "client_id": self.config.google_client_id,
-                "client_secret": self.config.google_client_secret,
-                "refresh_token": self.config.gmail_refresh_token,
-                "grant_type": "refresh_token",
-            })
-            refreshed.raise_for_status()
-            token = refreshed.json().get("access_token")
+        token = access_token(OAuthStore(self.config.oauth_db_path), "gmail",
+                             self.config.google_client_id, self.config.google_client_secret)
         if not token:
-            raise ValueError("set GMAIL_ACCESS_TOKEN or configure the Google OAuth refresh fields")
+            token = self.config.gmail_token
+            if self.config.gmail_refresh_token and self.config.google_client_id and self.config.google_client_secret:
+                refreshed = httpx.post("https://oauth2.googleapis.com/token", timeout=15, data={
+                    "client_id": self.config.google_client_id,
+                    "client_secret": self.config.google_client_secret,
+                    "refresh_token": self.config.gmail_refresh_token,
+                    "grant_type": "refresh_token",
+                })
+                refreshed.raise_for_status()
+                token = refreshed.json().get("access_token")
+        if not token:
+            raise ValueError("Connect Gmail at /api/oauth/gmail/connect or configure Google OAuth credentials")
         headers = {"Authorization": f"Bearer {token}"}
         with httpx.Client(timeout=15) as client:
             data = client.get("https://gmail.googleapis.com/gmail/v1/users/me/messages",
@@ -99,8 +103,23 @@ class LiveConnector:
 
     def _jira(self, query: str, limit: int) -> list[SourceRecord]:
         cfg = self.config
-        if not cfg.jira_base_url or not cfg.jira_email or not cfg.jira_token:
-            raise ValueError("JIRA_BASE_URL, JIRA_EMAIL, and JIRA_API_TOKEN are required")
+        oauth_store = OAuthStore(cfg.oauth_db_path)
+        oauth_access = access_token(oauth_store, "jira", cfg.jira_oauth_client_id, cfg.jira_oauth_client_secret)
+        cloud_base = None
+        if oauth_access:
+            with httpx.Client(timeout=15, headers={"Authorization": f"Bearer {oauth_access}",
+                                                   "Accept": "application/json"}) as client:
+                sites = client.get("https://api.atlassian.com/oauth/token/accessible-resources").raise_for_status().json()
+            if not sites:
+                raise ValueError("No Jira site is available to this Atlassian account")
+            site = sites[0]
+            cloud_base = f"https://api.atlassian.com/ex/jira/{site['id']}"
+            web_base = site.get("url", "")
+        elif cfg.jira_base_url and cfg.jira_email and cfg.jira_token:
+            cloud_base = cfg.jira_base_url.rstrip("/")
+            web_base = cloud_base
+        else:
+            raise ValueError("Connect Jira at /api/oauth/jira/connect or configure Jira API token credentials")
         issue_keys = list(dict.fromkeys(re.findall(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper())))
         if issue_keys:
             keys = ", ".join(f'"{key}"' for key in issue_keys)
@@ -114,8 +133,11 @@ class LiveConnector:
                 terms = re.findall(r"[A-Za-z0-9_-]+", query)
             jql_terms = " AND ".join(f'text ~ "{term.replace(chr(34), "")[:80]}"' for term in terms[:6])
             jql = f"{jql_terms} ORDER BY updated DESC"
-        with httpx.Client(timeout=15, auth=(cfg.jira_email, cfg.jira_token)) as client:
-            data = client.post(f"{cfg.jira_base_url.rstrip('/')}/rest/api/3/search/jql",
+        headers = {"Authorization": f"Bearer {oauth_access}"} if oauth_access else None
+        auth = None if oauth_access else (cfg.jira_email, cfg.jira_token)
+        with httpx.Client(timeout=15, auth=auth, headers=headers) as client:
+            endpoint = f"{cloud_base}/rest/api/3/search/jql"
+            data = client.post(endpoint,
                                json={"jql": jql, "maxResults": limit,
                                      "fields": ["summary", "description", "status", "assignee", "priority", "updated"]}).raise_for_status().json()
         records = []
@@ -133,16 +155,18 @@ class LiveConnector:
             content = ". ".join(fact for fact in [*facts, description] if fact)
             records.append(SourceRecord(id=f"jira:{issue['key']}", source="jira", title=fields.get("summary", ""),
                 content=content,
-                url=f"{cfg.jira_base_url.rstrip('/')}/browse/{quote(issue['key'])}",
+                url=f"{web_base.rstrip('/')}/browse/{quote(issue['key'])}",
                 author=assignee_name if assignee_name != "Unassigned" else None, createdAt=fields.get("updated"),
                 metadata={"status": status, "assignee": assignee_name, "priority": priority,
                           "description": description}))
         return records
 
     def _notion(self, query: str, limit: int) -> list[SourceRecord]:
-        token = self.config.notion_token
+        token = access_token(OAuthStore(self.config.oauth_db_path), "notion",
+                             self.config.notion_oauth_client_id, self.config.notion_oauth_client_secret)
+        token = token or self.config.notion_token
         if not token:
-            raise ValueError("NOTION_API_KEY is not configured")
+            raise ValueError("Connect Notion at /api/oauth/notion/connect or configure NOTION_API_KEY")
         headers = {"Authorization": f"Bearer {token}", "Notion-Version": self.config.notion_version}
         with httpx.Client(timeout=15, headers=headers) as client:
             results = client.post("https://api.notion.com/v1/search", json={"query": query, "page_size": limit}).raise_for_status().json().get("results", [])

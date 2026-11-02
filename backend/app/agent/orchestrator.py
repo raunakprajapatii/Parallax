@@ -2,6 +2,7 @@
 
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
+import os
 from time import perf_counter
 from uuid import uuid4
 
@@ -16,12 +17,16 @@ _TOOL_EXECUTOR = ThreadPoolExecutor(max_workers=3, thread_name_prefix="agent-too
 
 class AgentOrchestrator:
     def __init__(self, connectors: ConnectorRegistry, memory: MemoryService | None = None,
-                 trace_recorder: TraceRecorder | None = None, *, tool_timeout_seconds: float = 3.0,
+                 trace_recorder: TraceRecorder | None = None, *,
+                 tool_timeout_seconds: float | None = None,
                  groq_api_key: str | None = None, groq_model: str = "llama-3.3-70b-versatile"):
         self.connectors = connectors
         self.memory = memory
         self.trace_recorder = trace_recorder
-        self.tool_timeout_seconds = tool_timeout_seconds
+        # Live Notion retrieval performs a search plus a page-block fetch;
+        # three seconds was too short for that normal two-request path.
+        self.tool_timeout_seconds = (tool_timeout_seconds if tool_timeout_seconds is not None
+                                     else float(os.getenv("AGENT_TOOL_TIMEOUT_SECONDS", "12")))
         self.groq_api_key = groq_api_key
         self.groq_model = groq_model
 

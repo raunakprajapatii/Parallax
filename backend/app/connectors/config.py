@@ -21,6 +21,11 @@ class ConnectorConfig:
     jira_token: str | None = None
     notion_token: str | None = None
     notion_version: str = "2022-06-28"
+    jira_oauth_client_id: str | None = None
+    jira_oauth_client_secret: str | None = None
+    notion_oauth_client_id: str | None = None
+    notion_oauth_client_secret: str | None = None
+    oauth_db_path: str = "backend/data/live_data_intelligence.sqlite3"
     groq_api_key: str | None = None
     groq_model: str = "llama-3.3-70b-versatile"
 
@@ -38,6 +43,11 @@ class ConnectorConfig:
             jira_token=os.getenv("JIRA_API_TOKEN"),
             notion_token=os.getenv("NOTION_API_KEY") or os.getenv("NOTION_TOKEN"),
             notion_version=os.getenv("NOTION_VERSION", "2022-06-28"),
+            jira_oauth_client_id=os.getenv("JIRA_OAUTH_CLIENT_ID"),
+            jira_oauth_client_secret=os.getenv("JIRA_OAUTH_CLIENT_SECRET"),
+            notion_oauth_client_id=os.getenv("NOTION_OAUTH_CLIENT_ID"),
+            notion_oauth_client_secret=os.getenv("NOTION_OAUTH_CLIENT_SECRET"),
+            oauth_db_path=os.getenv("OAUTH_DB_PATH", "backend/data/live_data_intelligence.sqlite3"),
             groq_api_key=os.getenv("GROQ_API_KEY"),
             groq_model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         )
