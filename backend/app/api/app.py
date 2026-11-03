@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from .chat import router
+from .calendar import router as calendar_router
 from .oauth import router as oauth_router
 from app.agent.orchestrator import AgentOrchestrator
 from app.connectors.config import ConnectorConfig
@@ -23,6 +24,7 @@ load_dotenv(BACKEND_ROOT.parent / ".env")
 def create_app(*, orchestrator=None) -> FastAPI:
     app = FastAPI(title="Parallax Work Intelligence API")
     app.include_router(router)
+    app.include_router(calendar_router)
     app.include_router(oauth_router)
     config = ConnectorConfig.from_environment()
     db_path = BACKEND_ROOT.parent / "backend" / "data" / "live_data_intelligence.sqlite3"
@@ -34,7 +36,11 @@ def create_app(*, orchestrator=None) -> FastAPI:
     app.state.oauth_store = OAuthStore(db_path)
     app.state.agent_orchestrator = orchestrator or AgentOrchestrator(
         ConnectorRegistry(config), memory=memory, trace_recorder=traces,
-        groq_api_key=config.groq_api_key, groq_model=config.groq_model
+        groq_api_key=config.groq_api_key, groq_model=config.groq_model,
+        llm_provider=config.llm_provider, gemini_api_key=config.gemini_api_key,
+        gemini_model=config.gemini_model,
+        calendar_connected=bool(app.state.oauth_store.get("calendar")),
+        calendar_store=app.state.oauth_store
     )
     return app
 

@@ -30,6 +30,21 @@ def test_general_talk_does_not_trigger_work_source_retrieval():
     assert not is_work_query("Explain how photosynthesis works")
     assert is_work_query("Hi, what is blocking the Atlas launch?")
     assert is_work_query("What is the status of Jira ticket ATL-42?")
+    assert is_work_query("How many unread emails do I have?")
+    assert is_work_query("Which issues are overdue?")
+    assert is_work_query("Summarize my latest meeting notes.")
+
+
+def test_live_retrieval_queries_are_specialized_for_connected_sources():
+    from app.agent.routing import retrieval_query
+
+    assert retrieval_query("How many unread emails do I have?", "gmail") == "is:unread __parallax_count__"
+    assert retrieval_query("Find emails from my professor.", "gmail") == "from:professor"
+    assert "-in:sent" in retrieval_query("Who sent me an email today?", "gmail")
+    assert retrieval_query("Which issues are overdue?", "jira") == "Which issues are overdue?"
+    assert retrieval_query("check jira", "jira") == "latest Jira updates"
+    assert retrieval_query("check jira for latest updates", "jira") == "latest Jira updates"
+    assert route_query("check jira").sources == ("jira",)
 
 
 def test_short_referential_questions_are_detected_as_follow_ups():
@@ -53,6 +68,19 @@ def test_rejects_citation_to_missing_record():
         assert "unavailable record" in str(exc)
     else:
         raise AssertionError("fabricated citation should be rejected")
+
+
+def test_gmail_sender_answers_use_sender_and_subject_fields():
+    from app.agent.synthesis import synthesize
+
+    message = record(id="gmail:m1", source="gmail", title="Launch checklist approval",
+                     content="Please review the security checklist.", author="Maya Chen",
+                     createdAt="2026-11-02T08:30:00Z")
+    answer, citations = synthesize("Who sent me an email today?", [message])
+
+    assert "Maya Chen" in answer
+    assert "Launch checklist approval" in answer
+    assert citations[0].recordId == "gmail:m1"
 
 
 def test_rejects_mismatched_citation_metadata():

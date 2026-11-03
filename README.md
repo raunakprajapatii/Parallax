@@ -15,7 +15,7 @@ Keep module implementations in their owned folders. Coordinate changes to shared
 
 ## Local setup
 
-1. Copy `.env.example` to `.env`. Demo mode works without credentials. For live APIs set `CONNECTOR_ENABLE_LIVE=true`, `VITE_CONNECTOR_DEMO_MODE=false`, and add the relevant credentials. Gmail accepts an OAuth access token or a refresh token plus Google client ID/secret; Jira needs its site URL, account email, and API token; Notion needs an integration token and access to the pages. Groq is optional and controls answer phrasing; without it, the backend returns extractive answers. Keep `.env` private; it is ignored by Git.
+1. Copy `.env.example` to `.env`. Demo mode works without connector credentials. To use Gemini, set `LLM_PROVIDER=gemini` and `GEMINI_API_KEY`; to use Groq, set `LLM_PROVIDER=groq` and `GROQ_API_KEY`. Provider keys are optional; without one, the backend returns extractive answers. For live integrations set `CONNECTOR_ENABLE_LIVE=true`, `CONNECTOR_DEMO_MODE=false`, and add the relevant credentials. Keep `.env` private; it is ignored by Git.
 2. Create and activate a Python virtual environment from the repository root.
 3. Install backend dependencies and start the API:
 
@@ -24,7 +24,9 @@ Keep module implementations in their owned folders. Coordinate changes to shared
    uvicorn app.api.app:app --reload --app-dir backend
    ```
 
-4. Open `http://localhost:8000/docs` to inspect the API. Frontend setup instructions will be added when Module A establishes its package scripts.
+4. In another terminal, run `cd frontend`, `npm install`, then `npm run dev`. Open `http://localhost:3000` for Parallax or `http://localhost:8000/docs` for the API.
+
+To schedule meetings, configure the Google OAuth client and register both the Gmail and Calendar callback URLs in Google Cloud. Calendar uses the separate `calendar.events` permission; connect it from the Calendar prompt in chat. Parallax prepares a draft first and creates the event only after you select **Create event**.
 
 ## Working together
 
@@ -37,3 +39,15 @@ Keep module implementations in their owned folders. Coordinate changes to shared
 ## Configuration
 
 `.env.example` lists the shared configuration names. Optional service credentials should remain blank for demo mode. If a real key is accidentally committed, revoke it immediately; deleting it in a later commit does not remove it from Git history.
+
+## Agent workflow
+
+The chat orchestrator is implemented as a LangGraph state graph in `backend/app/agent/workflow.py`:
+
+```text
+load context → route to work retrieval or general chat
+             → select sources → retrieve → synthesize and validate citations
+             → persist the response
+```
+
+The graph carries turn state between nodes. The existing SQLite memory service remains the durable transcript store, so the graph does not keep a second copy of conversation history. Read-only connector requests retry once for transient 429/5xx or timeout errors; permission and authentication failures are reported without retry. The application-specific router still chooses sources, while LangGraph owns the workflow and branching.

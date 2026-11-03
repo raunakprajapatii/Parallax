@@ -79,3 +79,54 @@ def test_jira_description_parser_handles_paragraphs_and_lists():
     ]}
 
     assert _plain(adf) == "Issue summary.\n• First requirement\n"
+
+
+def test_live_jira_latest_updates_query_uses_recent_update_order(monkeypatch, tmp_path):
+    captured = {}
+
+    class _LatestClient(_Client):
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+        def post(self, url, json):
+            captured.update(json)
+            return _Response()
+
+    monkeypatch.setattr("app.connectors.live.httpx.Client", _LatestClient)
+    connector = LiveConnector("jira", ConnectorConfig(
+        enable_live=True, jira_base_url="https://example.atlassian.net",
+        jira_email="demo@example.com", jira_token="test-token",
+        oauth_db_path=str(tmp_path / "oauth.sqlite3"),
+    ))
+
+    result = connector.search("latest Jira updates")
+
+    assert result.error is None
+    assert captured["jql"] == "updated >= -30d ORDER BY updated DESC"
+    assert "updated" in captured["fields"]
+
+
+def test_live_jira_natural_language_filters_translate_to_useful_jql(monkeypatch, tmp_path):
+    captured = []
+
+    class _FilterClient(_Client):
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+        def post(self, url, json):
+            captured.append(json["jql"])
+            return _Response()
+
+    monkeypatch.setattr("app.connectors.live.httpx.Client", _FilterClient)
+    connector = LiveConnector("jira", ConnectorConfig(
+        enable_live=True, jira_base_url="https://example.atlassian.net",
+        jira_email="demo@example.com", jira_token="test-token",
+        oauth_db_path=str(tmp_path / "oauth.sqlite3"),
+    ))
+
+    for query in ("What tasks are currently assigned to me?", "Which issues are overdue?",
+                  "Which high-priority tasks remain unresolved?"):
+        result = connector.search(query)
+        assert result.error is None
+
+    assert captured[0] == "assignee = currentUser() AND resolution IS EMPTY ORDER BY updated DESC"
+    assert captured[1] == "due < now() AND resolution IS EMPTY ORDER BY due ASC"
+    assert "resolution IS EMPTY" in captured[2] and '"High"' in captured[2]

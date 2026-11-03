@@ -7,6 +7,11 @@
 .sidebar{background:#080808;border-color:#222;width:244px}
 .brand-mark,.assistant-icon{background:#f2f2f2;color:#050505;border-radius:2px;box-shadow:none}
 .brand-mark svg,.assistant-icon svg{stroke-width:1.8}
+.brand{display:flex;align-items:center;justify-content:flex-start;padding:0 5px;min-height:54px}
+.brand-wordmark{display:block;width:100%;height:54px;object-fit:cover;object-position:center;border-radius:2px}
+.assistant-logo{display:block;width:20px;height:20px;object-fit:contain}
+.assistant-icon{width:36px;height:36px;display:grid;place-items:center;flex:none}
+.mobile-brand-mark{width:28px;height:28px;display:block;object-fit:contain}
 .brand-name,.mobile-brand{font:400 15px 'DotGothic16','Space Mono',monospace;letter-spacing:.09em;text-transform:uppercase;color:#f2f2f2}
 .brand-caption,.side-label,.eyebrow,.composer-hint,.disclaimer,.answer-head small,.detail-label{font-family:'DotGothic16','Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
 .brand-caption,.side-label{color:#777}
@@ -44,6 +49,10 @@
 .citation-inline{background:#eee;color:#050505;border-radius:1px}
 .citation-inline:hover{background:#bbb}
 .citation-chip{color:#cfcfcf}
+.calendar-action-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 19px 18px}
+.calendar-action{display:inline-flex;align-items:center;border:1px solid #ddd;background:#eee;color:#050505;text-decoration:none;padding:9px 13px;border-radius:2px;font:700 11px 'Space Mono',monospace;cursor:pointer}
+.calendar-action:disabled{opacity:.55;cursor:wait}
+.calendar-action-row small{color:#888;font-size:10px;line-height:1.5}
 .source-jira,.source-gmail,.source-notion{background:#171717;color:#eee;border:1px solid #444;border-radius:2px}
 .trace-toggle,.trace-content{color:#bdbdbd}
 .trace-row code{background:#171717;color:#eee;border-radius:1px}

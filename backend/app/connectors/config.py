@@ -28,6 +28,9 @@ class ConnectorConfig:
     oauth_db_path: str = "backend/data/live_data_intelligence.sqlite3"
     groq_api_key: str | None = None
     groq_model: str = "llama-3.3-70b-versatile"
+    llm_provider: str = "groq"
+    gemini_api_key: str | None = None
+    gemini_model: str = "gemini-2.5-flash"
 
     @classmethod
     def from_environment(cls) -> "ConnectorConfig":
@@ -50,6 +53,9 @@ class ConnectorConfig:
             oauth_db_path=os.getenv("OAUTH_DB_PATH", "backend/data/live_data_intelligence.sqlite3"),
             groq_api_key=os.getenv("GROQ_API_KEY"),
             groq_model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+            llm_provider=os.getenv("LLM_PROVIDER", "groq").casefold(),
+            gemini_api_key=os.getenv("GEMINI_API_KEY"),
+            gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
         )
 
     def live_credentials_configured(self) -> bool:

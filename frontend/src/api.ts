@@ -18,6 +18,17 @@ export type ChatResponse = {
   citations: Citation[]
   traceId: string
   memoryUsed: string[]
+  calendarDraft?: CalendarEventDraft
+  calendarConnectUrl?: string
+}
+
+export type CalendarEventDraft = {
+  draftId: string
+  summary: string
+  start: string
+  end: string
+  description: string
+  attendeeEmails: string[]
 }
 
 export type ChatClient = (request: ChatRequest) => Promise<ChatResponse>
@@ -26,7 +37,7 @@ export type StoredMessage = {
   id: string
   role: 'user' | 'assistant'
   content: string
-  metadata: { citations?: Citation[]; traceId?: string; memoryUsed?: string[]; demoMode?: boolean }
+  metadata: { citations?: Citation[]; traceId?: string; memoryUsed?: string[]; demoMode?: boolean; calendarDraft?: CalendarEventDraft; calendarConnectUrl?: string }
   createdAt: string
 }
 
@@ -53,4 +64,16 @@ export function getConversations(): Promise<ConversationSummary[]> {
 
 export function getConversation(conversationId: string): Promise<{ conversationId: string; messages: StoredMessage[] }> {
   return getJson<{ conversationId: string; messages: StoredMessage[] }>(`/api/conversations/${encodeURIComponent(conversationId)}`)
+}
+
+export async function createCalendarEvent(event: CalendarEventDraft): Promise<{ summary: string; htmlLink?: string }> {
+  const response = await fetch('/api/calendar/events', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(event),
+  })
+  if (!response.ok) {
+    let message = `Could not create the calendar event (${response.status}).`
+    try { message = (await response.json()).detail ?? message } catch { /* Keep the status-based message. */ }
+    throw new Error(message)
+  }
+  return response.json()
 }

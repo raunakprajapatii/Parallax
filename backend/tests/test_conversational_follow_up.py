@@ -70,7 +70,7 @@ def test_groq_synthesis_includes_recent_chat_and_prefers_natural_answers(monkeyp
     assert "[1]" in answer
     assert len(citations) == 1 and citations[0].recordId == "jira:SCRUM-1"
     messages = captured["json"]["messages"]
-    assert "friendly work assistant" in messages[0]["content"]
+    assert "friendly work intelligence assistant" in messages[0]["content"]
     assert any("SCRUM-1" in message["content"] for message in messages[1:-1])
     assert any("Key fields: status: To Do; assignee: Jesse Pinkman" in message["content"] for message in messages)
     assert captured["json"]["include_reasoning"] is False
