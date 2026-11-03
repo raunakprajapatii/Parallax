@@ -6,6 +6,7 @@ import httpx
 from .models import Citation, SourceRecord
 
 INSUFFICIENT_ANSWER = "I don’t have enough evidence in the connected sources to answer that."
+SYNTHESIS_UNAVAILABLE = "I retrieved matching records, but couldn’t prepare a cited summary just now. Please try again."
 _WORD_RE = re.compile(r"[\w'-]+", re.UNICODE)
 
 
@@ -87,6 +88,14 @@ def _jira_issue_answer(query: str, record: SourceRecord) -> str:
 
 def synthesize(query: str, records: list[SourceRecord], max_records: int = 5) -> tuple[str, list[Citation]]:
     """Return brief factual excerpts with one grounded citation per sentence."""
+    count_record = next((record for record in records if record.source == "gmail" and "count" in record.metadata), None)
+    if count_record:
+        count = count_record.metadata["count"]
+        kind = count_record.metadata.get("countType", "matching")
+        noun = "emails" if kind == "matching" else f"{kind} emails"
+        citation = Citation(number=1, recordId=count_record.id, title=count_record.title,
+                            source=count_record.source, url=count_record.url)
+        return f"You have {count} {noun}. [1]", [citation]
     ranked = rank_records(query, records, max_records)
     usable: list[tuple[SourceRecord, str]] = []
     issue_keys = set(re.findall(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()))
@@ -111,6 +120,11 @@ def synthesize(query: str, records: list[SourceRecord], max_records: int = 5) ->
                 title = f" ({record.title})" if record.title else ""
                 usable.append((record, f"{key}{title} " + "; it ".join(selected_facts) + "."))
                 continue
+        if record.source == "gmail" and record.author and re.search(r"\b(who sent|sender|from whom|sent me|from\s+\S+)\b", query.casefold()):
+            subject = f' with subject “{record.title}”' if record.title else ""
+            date = f" ({record.createdAt})" if record.createdAt else ""
+            usable.append((record, f"{record.author} sent an email{subject}{date}."))
+            continue
         content = re.sub(r"\s+", " ", record.content).strip()
         if content:
             # Keep a complete excerpt; never add claims, owners, dates, or conclusions.
@@ -122,31 +136,39 @@ def synthesize(query: str, records: list[SourceRecord], max_records: int = 5) ->
         return INSUFFICIENT_ANSWER, []
     citations = [Citation(number=i, recordId=record.id, title=record.title, source=record.source, url=record.url)
                  for i, (record, _) in enumerate(usable, start=1)]
-    answer = "\n".join(f"{excerpt} [{i}]" for i, (_, excerpt) in enumerate(usable, start=1))
+    answer = "\n\n".join(f"- {excerpt} [{i}]" for i, (_, excerpt) in enumerate(usable, start=1))
     answer = _append_follow_up(answer, [record for record, _ in usable], query)
     return answer, citations
 
 
 def synthesize_with_groq(query: str, records: list[SourceRecord], api_key: str,
                          model: str = "llama-3.3-70b-versatile",
-                         history: list[dict[str, str]] | None = None) -> tuple[str, list[Citation]]:
-    """Ask Groq to write a concise answer, mapping citations only to supplied records."""
+                         history: list[dict[str, str]] | None = None,
+                         provider: str = "groq") -> tuple[str, list[Citation]]:
+    """Ask the configured model for a readable answer, mapping citations to supplied records."""
     ranked = rank_records(query, records, 10)
     if not ranked:
         return INSUFFICIENT_ANSWER, []
-    if re.search(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()) and any(record.source == "jira" for record in ranked):
-        # Exact Jira-key lookups are answered directly from Jira fields. This
-        # prevents the language model from inventing issue owners or statuses.
-        return synthesize(query, ranked)
     evidence_parts = []
     for i, record in enumerate(ranked, 1):
         metadata = "; ".join(f"{key}: {value}" for key, value in record.metadata.items() if value)
+        if record.author:
+            metadata = "; ".join(value for value in (metadata, f"sender/owner: {record.author}") if value)
+        if record.createdAt:
+            metadata = "; ".join(value for value in (metadata, f"timestamp: {record.createdAt}") if value)
         details = f"\nKey fields: {metadata}" if metadata else ""
-        evidence_parts.append(f"[{i}] id={record.id} source={record.source} title={record.title}{details}\n{record.content[:1800]}")
+        evidence_parts.append(f"[{i}] id={record.id} source={record.source} title={record.title}{details}\n{record.content[:1200]}")
     evidence = "\n\n".join(evidence_parts)
     messages = [{"role": "system", "content": (
-        "You are Parallax, a friendly work assistant. Answer the user's latest question directly and naturally in plain language. "
+        "You are Parallax, a friendly work intelligence assistant. The application has already queried relevant live connected tools for this turn. "
+        "Answer the user's latest question directly and naturally. Format the answer for easy reading: use short paragraphs, "
+        "a descriptive heading when the answer has distinct sections, and bullets for multiple findings or steps. "
+        "Never return a dense wall of text or put separate findings on one line. Synthesize across the evidence instead of reproducing records. "
+        "Do not repeat the same fact. Exclude email signatures, verification codes, tracking links, HTML artifacts, separators, and irrelevant evidence. "
+        "For a summary request, provide a short overview followed by only the most useful distinct points. "
         "Use prior conversation only to understand references and follow-ups; use the current retrieved evidence for factual claims. "
+        "Treat an empty evidence set as no matching result, not as proof that a source is disconnected or that no such item exists. "
+        "Distinguish a missing result from unavailable access when the application reports that distinction. "
         "Do not copy raw notes or irrelevant source text. Be concise, explain the answer in your own words, and cite each factual claim "
         "with the matching evidence number, such as [1]. If the evidence does not answer the question, say so plainly. "
         "When it would help the conversation, end with one brief, specific follow-up question about another read-only lookup or detail "
@@ -158,52 +180,72 @@ def synthesize_with_groq(query: str, records: list[SourceRecord], api_key: str,
             messages.append({"role": turn["role"], "content": turn["content"][:1200]})
     messages.append({"role": "user", "content": f"Latest question: {query}\n\nRetrieved evidence:\n{evidence}"})
     try:
-        response = httpx.post("https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}"}, timeout=25,
-            json={"model": model, "temperature": 0.2, "reasoning_effort": "low",
-                  "include_reasoning": False, "max_completion_tokens": 700,
-                  "messages": messages})
-        response.raise_for_status()
-        answer = response.json()["choices"][0]["message"]["content"].strip()
+        if provider == "gemini":
+            gemini_messages = [turn for turn in messages if turn["role"] != "system"]
+            payload = {"systemInstruction": {"parts": [{"text": messages[0]["content"]}]},
+                       "contents": [{"role": "model" if turn["role"] == "assistant" else "user",
+                                     "parts": [{"text": turn["content"]}]} for turn in gemini_messages],
+                       "generationConfig": {"temperature": 0.2, "maxOutputTokens": 1000}}
+            response = httpx.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                                  params={"key": api_key}, timeout=25, json=payload)
+            response.raise_for_status()
+            answer = "".join(part.get("text", "") for part in response.json()["candidates"][0]["content"]["parts"]).strip()
+        else:
+            response = httpx.post("https://api.groq.com/openai/v1/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}"}, timeout=25,
+                json={"model": model, "temperature": 0.2, "reasoning_effort": "low",
+                      "include_reasoning": False, "max_completion_tokens": 700,
+                      "messages": messages})
+            response.raise_for_status()
+            answer = response.json()["choices"][0]["message"]["content"].strip()
         marker = re.compile(r"\[(\d+)\]|【(\d+)】")
         used = sorted({int(match.group(1) or match.group(2)) for match in marker.finditer(answer)
                        if 1 <= int(match.group(1) or match.group(2)) <= len(ranked)})
         if not answer or not used:
-            return synthesize(query, records)
+            raise ValueError("Model response did not include valid evidence citations")
         # Strip invalid citation markers and build only citations tied to evidence.
         answer = marker.sub(lambda match: f"[{match.group(1) or match.group(2)}]"
                             if int(match.group(1) or match.group(2)) in used else "", answer)
         citations = [Citation(number=i, recordId=ranked[n-1].id, title=ranked[n-1].title,
                               source=ranked[n-1].source, url=ranked[n-1].url)
                      for i, n in enumerate(used, 1)]
-        for new, old in enumerate(used, 1):
-            answer = answer.replace(f"[{old}]", f"[{new}]")
+        citation_numbers = {old: new for new, old in enumerate(used, 1)}
+        answer = marker.sub(lambda match: f"[{citation_numbers[int(match.group(1) or match.group(2))]}]"
+                            if int(match.group(1) or match.group(2)) in citation_numbers else "", answer)
         answer = re.sub(r"(?<!\s)(\[\d+\])", r" \1", answer)
         answer = _append_follow_up(answer, ranked, query)
         return answer, citations
     except (httpx.HTTPError, KeyError, ValueError, IndexError):
-        return synthesize(query, records)
+        return SYNTHESIS_UNAVAILABLE, []
 
 
 def answer_general_with_groq(message: str, api_key: str | None,
                              model: str = "llama-3.3-70b-versatile",
-                             history: list[dict[str, str]] | None = None) -> str:
+                             history: list[dict[str, str]] | None = None,
+                             provider: str = "groq") -> str:
     """Answer general conversation with Groq, without retrieving work content."""
     if not api_key:
-        return "Groq is not configured. Add GROQ_API_KEY to enable conversational replies."
+        return f"{provider.title()} is not configured. Add its API key to enable conversational replies."
     try:
+        system = "You are Parallax, a friendly and helpful conversational assistant. Reply naturally, use short paragraphs and lists when they improve readability, remember recent conversation, answer concisely, and do not claim feelings or personal experiences. You do not have access to private work data unless current retrieved evidence is supplied."
+        turns = [{"role": turn["role"], "content": turn["content"][:1200]}
+                 for turn in (history or [])[-8:] if turn.get("role") in {"user", "assistant"} and turn.get("content")]
+        turns.append({"role": "user", "content": message})
+        if provider == "gemini":
+            response = httpx.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                params={"key": api_key}, timeout=20,
+                json={"systemInstruction": {"parts": [{"text": system}]},
+                      "contents": [{"role": "model" if turn["role"] == "assistant" else "user",
+                                    "parts": [{"text": turn["content"]}]} for turn in turns],
+                      "generationConfig": {"temperature": 0.6, "maxOutputTokens": 300}})
+            response.raise_for_status()
+            return "".join(part.get("text", "") for part in response.json()["candidates"][0]["content"]["parts"]).strip()
         response = httpx.post("https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}"}, timeout=20,
             json={"model": model, "temperature": 0.6, "reasoning_effort": "low",
                   "include_reasoning": False, "max_completion_tokens": 300,
-                  "messages": [
-                      {"role": "system", "content": "You are Parallax, a friendly and helpful conversational assistant. Reply naturally, remember the recent conversation provided here, and handle follow-up questions in context. Answer general questions concisely. Do not claim feelings or personal experiences. You do not have access to private work data unless current retrieved evidence is supplied."},
-                      *[{"role": turn["role"], "content": turn["content"][:1200]}
-                        for turn in (history or [])[-8:]
-                        if turn.get("role") in {"user", "assistant"} and turn.get("content")],
-                      {"role": "user", "content": message},
-                  ]})
+                  "messages": [{"role": "system", "content": system}, *turns]})
         response.raise_for_status()
         return response.json()["choices"][0]["message"]["content"].strip()
     except (httpx.HTTPError, KeyError, ValueError, IndexError):
-        return "I couldn’t reach Groq just now. Please try again in a moment."
+        return f"I couldn’t reach {provider.title()} just now. Please try again in a moment."

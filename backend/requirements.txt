@@ -4,3 +4,4 @@ pydantic
 pytest
 httpx
 python-dotenv
+langgraph>=1.2.19,<2

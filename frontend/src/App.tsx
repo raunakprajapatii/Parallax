@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Activity, ArrowDown, ArrowLeft, ArrowUp, ChevronRight, Clock3, FileText, Layers3, Link2, LoaderCircle, Plus, Sparkles, TriangleAlert, X } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
-import { getConversation, getConversations, postChat, type ChatClient, type ChatRequest, type ChatResponse, type Citation, type ConversationSummary } from './api'
+import { createCalendarEvent, getConversation, getConversations, postChat, type ChatClient, type ChatRequest, type ChatResponse, type Citation, type ConversationSummary } from './api'
 import { mockChat } from './mockApi'
 import './App.css'
 import './classic.css'
@@ -30,6 +30,7 @@ function App() {
   const [useMock, setUseMock] = useState(false)
   const [conversations, setConversations] = useState<ConversationSummary[]>([])
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [calendarCreating, setCalendarCreating] = useState<number | null>(null)
   const conversationRef = useRef<HTMLDivElement>(null)
   const connectorDemoMode = import.meta.env.VITE_CONNECTOR_DEMO_MODE !== 'false'
 
@@ -98,6 +99,8 @@ function App() {
             citations: metadata.citations ?? [],
             traceId: metadata.traceId ?? '',
             memoryUsed: metadata.memoryUsed ?? [],
+            calendarDraft: metadata.calendarDraft,
+            calendarConnectUrl: metadata.calendarConnectUrl,
           } })
           setIsDemo(Boolean(metadata.demoMode))
           pendingQuestion = undefined
@@ -113,6 +116,20 @@ function App() {
     }
   }
   function onSubmit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void submitQuestion() }
+
+  async function confirmCalendarEvent(turnIndex: number, response: ChatResponse) {
+    if (!response.calendarDraft || calendarCreating !== null) return
+    setCalendarCreating(turnIndex); setError(null)
+    try {
+      const created = await createCalendarEvent(response.calendarDraft)
+      setTurns((previous) => previous.map((turn, index) => index !== turnIndex || !turn.response ? turn : {
+        ...turn,
+        response: { ...turn.response, answer: `${turn.response.answer}\n\n**Scheduled:** ${created.htmlLink ? `[${created.summary}](${created.htmlLink})` : created.summary}`, calendarDraft: undefined, calendarConnectUrl: undefined },
+      }))
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Could not create the calendar event.')
+    } finally { setCalendarCreating(null) }
+  }
 
   const renderAnswer = (response: ChatResponse) => {
     const markdown = response.answer.replace(/\[(\d+)\]/g, '[$1](#citation-$1)')
@@ -135,7 +152,7 @@ function App() {
 
   return <div className="app-shell">
     <aside className="sidebar" aria-label="Parallax">
-      <div className="brand"><span className="brand-mark"><Sparkles size={18}/></span><span><span className="brand-name">PARALLAX</span><span className="brand-caption">WORK INTELLIGENCE</span></span></div>
+      <div className="brand"><img className="brand-wordmark" src="/parallax-logo.png" alt="Parallax Work Intelligence" /></div>
       <button className="new-chat" onClick={resetConversation}><Plus size={16}/> New conversation</button>
       <div className="saved-chats">
         <div className="saved-chats-label">Recent chats</div>
@@ -144,7 +161,7 @@ function App() {
     </aside>
 
     <section className="workspace">
-      <header className="topbar"><div className="mobile-brand"><span className="brand-mark"><Sparkles size={15}/></span>PARALLAX</div><div className="breadcrumb"><span>Work intelligence</span><ChevronRight size={13}/><strong>Ask Parallax</strong></div><div className="top-right"><button className="mobile-history-toggle" onClick={() => setHistoryOpen((open) => !open)} aria-expanded={historyOpen}><Clock3 size={14}/> History</button><div className="demo-pill"><span className="demo-dot"/>{isDemo ? 'Demo workspace' : 'Ready to ask'}</div></div>
+      <header className="topbar"><div className="mobile-brand"><img className="mobile-brand-mark" src="/parallax-mark.svg" alt="" />PARALLAX</div><div className="breadcrumb"><span>Work intelligence</span><ChevronRight size={13}/><strong>Ask Parallax</strong></div><div className="top-right"><button className="mobile-history-toggle" onClick={() => setHistoryOpen((open) => !open)} aria-expanded={historyOpen}><Clock3 size={14}/> History</button><div className="demo-pill"><span className="demo-dot"/>{isDemo ? 'Demo workspace' : 'Ready to ask'}</div></div>
         {historyOpen && <div className="mobile-history-menu"><div className="saved-chats-label">Recent chats</div>{conversations.length ? conversations.map((conversation) => <button className="saved-chat" key={conversation.conversationId} onClick={() => void openConversation(conversation.conversationId)} title={conversation.title}>{conversation.title}</button>) : <div className="no-saved-chats">Your conversations will appear here.</div>}</div>}
       </header>
       <main className="main-content">
@@ -156,13 +173,19 @@ function App() {
           {turns.map((turn, index) => <div className="turn" key={`${index}-${turn.question}`}>
             <div className="user-message">{turn.question}</div>
             {turn.response ? <>
-              <article className="answer-card"><div className="answer-head"><span className="assistant-icon"><Sparkles size={15}/></span><span><strong>Parallax</strong><small>{isDemo ? 'Demo response · Just now' : 'Answer grounded in your workspace'}</small></span></div>
+              <article className="answer-card"><div className="answer-head"><span className="assistant-icon"><img className="assistant-logo" src="/parallax-mark.svg" alt="" /></span><span><strong>Parallax</strong><small>{isDemo ? 'Demo response · Just now' : 'Answer grounded in your workspace'}</small></span></div>
                 <div className="answer-body">{renderAnswer(turn.response)}</div>
+                {(turn.response.calendarDraft || turn.response.calendarConnectUrl) && <div className="calendar-action-row">
+                  {turn.response.calendarConnectUrl
+                    ? <a className="calendar-action" href={turn.response.calendarConnectUrl} target="_blank" rel="noreferrer">Connect Google Calendar</a>
+                    : turn.response.calendarDraft && <button className="calendar-action" type="button" disabled={calendarCreating === index} onClick={() => void confirmCalendarEvent(index, turn.response!)}>{calendarCreating === index ? 'Creating event…' : 'Create event'}</button>}
+                  <small>{turn.response.calendarConnectUrl ? turn.response.calendarDraft ? 'Review the details, connect your account, then return and reopen this chat to confirm.' : 'Calendar is needed to create the event. Connect now, then tell me the date and time.' : 'This adds the event to Google Calendar and emails the listed invitees.'}</small>
+                </div>}
                 {turn.response.citations.length > 0 && <div className="citation-list">{turn.response.citations.map((citation) => <button className="citation-chip" key={citation.number} onClick={() => setSelectedCitation(citation)}><SourceMark source={citation.source}/><span>[{citation.number}] {citation.title}</span><ArrowUp size={11} style={{transform:'rotate(45deg)',color:'#a0a7b6'}}/></button>)}</div>}
               </article>
-            </> : index === turns.length - 1 && loading ? <div className="answer-card"><div className="answer-head"><span className="assistant-icon"><Sparkles size={15}/></span><span><strong>Atlas AI</strong><small>Searching your workspace <span className="loading-dots"><i/><i/><i/></span></small></span><LoaderCircle size={15} className="spin" style={{marginLeft:'auto',color:'#7775d8'}}/></div><div className="answer-body" style={{color:'#929bad'}}>Connecting relevant knowledge and preparing a cited answer…</div></div> : null}
+            </> : index === turns.length - 1 && loading ? <div className="answer-card"><div className="answer-head"><span className="assistant-icon"><img className="assistant-logo" src="/parallax-mark.svg" alt="" /></span><span><strong>Parallax</strong><small>Searching your workspace <span className="loading-dots"><i/><i/><i/></span></small></span><LoaderCircle size={15} className="spin" style={{marginLeft:'auto',color:'#7775d8'}}/></div><div className="answer-body" style={{color:'#929bad'}}>Connecting relevant knowledge and preparing a cited answer…</div></div> : null}
           </div>)}
-          {turns.length === 0 && <div className="empty-state"><span className="assistant-icon" style={{display:'inline-grid',marginBottom:10}}><Sparkles size={15}/></span><div>Ready when you are. Ask a question to explore your workspace.</div></div>}
+          {turns.length === 0 && <div className="empty-state"><span className="assistant-icon" style={{display:'inline-grid',marginBottom:10}}><img className="assistant-logo" src="/parallax-mark.svg" alt="" /></span><div>Ready when you are. Ask a question to explore your workspace.</div></div>}
           {error && <div className="error-banner" role="alert"><TriangleAlert size={16} style={{flex:'none'}}/><span>{error}</span><button aria-label="Dismiss error" onClick={() => setError(null)} style={{marginLeft:'auto',border:0,background:'transparent',color:'inherit',cursor:'pointer'}}><X size={14}/></button></div>}
         </div>
 

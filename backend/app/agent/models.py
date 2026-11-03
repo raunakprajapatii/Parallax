@@ -48,6 +48,17 @@ class ChatResponse(BaseModel):
     citations: list[Citation]
     traceId: str
     memoryUsed: list[str]
+    calendarDraft: dict[str, object] | None = None
+    calendarConnectUrl: str | None = None
+
+
+class CalendarEventRequest(BaseModel):
+    draftId: str = Field(pattern=r"^[0-9a-f]{32}$")
+    summary: str = Field(min_length=1, max_length=200)
+    start: str = Field(min_length=1, max_length=80)
+    end: str = Field(min_length=1, max_length=80)
+    description: str = Field(default="", max_length=4000)
+    attendeeEmails: list[str] = Field(default_factory=list, max_length=50)
 
 
 class TraceEvent(BaseModel):
