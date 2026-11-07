@@ -17,6 +17,8 @@ _TERMS: dict[SourceName, tuple[str, ...]] = {
     "gmail": ("email", "emails", "mail", "inbox", "gmail", "unread", "sender", "sent", "received", "urgent", "important", "professor", "message"),
     "jira": ("jira", "ticket", "issue", "task", "tasks", "overdue", "unresolved", "priority", "blocked", "blocker", "status", "assignee", "assigned", "scrum-", "atl-", "sprint", "on my plate", "what should i work on", "next priority", "to-do"),
     "notion": ("notion", "notes", "meeting", "action item", "action items", "brief", "project documentation", "document", "documentation", "wiki", "roadmap", "launch readiness", "owner list"),
+    "calendar": ("calendar", "meeting", "meetings", "event", "events", "appointment", "appointments"),
+    "drive": ("google drive", "drive", "company", "company knowledge", "knowledge base", "employee", "employees", "staff", "pan card", "pan number", "pan", "tax id", "gst", "leave policy", "annual leave", "support ticket", "support tickets", "atlas", "company profile", "employee directory"),
 }
 _CROSS_SOURCE = ("across all sources", "all sources", "all work apps", "each blocker", "related to my current jira", "compare my jira", "mentioning unresolved jira", "cross-platform")
 _WORK_CONTEXT = (
@@ -25,6 +27,7 @@ _WORK_CONTEXT = (
     "blocked", "ticket", "issue", "task", "overdue", "unresolved", "sprint", "assignee", "owner", "roadmap", "handoff",
     "standup", "meeting", "meeting notes", "notes", "brief", "document", "documentation", "wiki", "action items", "release", "approval", "atl-", "scrum-", "project status", "assigned",
     "what needs attention", "what needs my attention", "what should i work on", "what's on my plate", "what is on my plate", "my next priority", "next priority", "latest updates",
+    "company", "employee", "employees", "pan card", "pan number", "pan", "tax id", "gst", "leave policy", "annual leave", "knowledge base", "google drive", "calendar", "meetings", "events",
 )
 
 _FOLLOW_UP_PREFIXES = (
@@ -62,6 +65,8 @@ def is_follow_up(query: str) -> bool:
 def route_query(query: str) -> Route:
     """Choose relevant sources in a stable order, always querying at least one."""
     text = query.casefold()
+    if re.search(r"\bPX-(?:SUP|ATLAS)-\d+\b", query.upper()):
+        return Route(("drive",), "drive_record_id")
     if re.search(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()):
         return Route(("jira",), "jira_issue_key")
     selected = [source for source, terms in _TERMS.items() if any(term in text for term in terms)]
@@ -75,6 +80,8 @@ def route_query(query: str) -> Route:
         "gmail": (r"\bgmail\b", r"\bgoogle mail\b"),
         "jira": (r"\bjira\b",),
         "notion": (r"\bnotion\b",),
+        "calendar": (r"\bcalendar\b",),
+        "drive": (r"\bgoogle drive\b", r"\bdrive\b", r"\bcompany knowledge\b", r"\bknowledge base\b"),
     }.items() if any(re.search(pattern, text) for pattern in patterns)]
     if named:
         return Route(tuple(named), "explicit_sources")
@@ -90,7 +97,7 @@ def route_query(query: str) -> Route:
     return Route(tuple(selected[:3]), "keyword_match" if any(s in selected for s in _TERMS) else "general_query")
 
 
-def retrieval_query(query: str, source: SourceName) -> str:
+def retrieval_query(query: str, source: SourceName, planned_query: str | None = None) -> str:
     """Translate common Gmail intents to Gmail's query language; preserve provider queries."""
     normalized = re.sub(r"\s+", " ", query).strip()
     lower = normalized.casefold()
@@ -102,6 +109,10 @@ def retrieval_query(query: str, source: SourceName) -> str:
         return "Which high-priority tasks remain unresolved?"
     if source == "jira" and any(term in lower for term in ("my jira task", "current jira task", "emails related to", "email related to")):
         return "What tasks are currently assigned to me?"
+    if source == "calendar" and planned_query:
+        return planned_query
+    if source in {"jira", "notion", "drive"} and planned_query:
+        return planned_query
     if source != "gmail":
         return normalized
     text = lower
@@ -122,6 +133,11 @@ def retrieval_query(query: str, source: SourceName) -> str:
         terms.append("-in:sent")
     if re.search(r"\bhow many\b|\bcount\b|\bnumber of\b", text):
         terms.append("__parallax_count__")
+    # Keep provider-ready rewrites for Gmail, retaining explicit count and filters.
+    if planned_query:
+        for term in planned_query.split():
+            if term not in terms:
+                terms.append(term)
     # Keep meaningful free-text terms for Gmail full-text search.
     if not terms:
         ignored = {"show", "find", "email", "emails", "mail", "message", "messages", "latest", "recent", "me", "my", "the", "from", "sent", "who", "what", "are", "is", "have", "today", "summarize", "please"}

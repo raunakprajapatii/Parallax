@@ -18,7 +18,8 @@ from langgraph.graph import END, START, StateGraph
 from .citations import validate_citations
 from .models import ChatRequest, ChatResponse, Citation, SourceName, SourceRecord, ToolResult
 from .routing import is_follow_up, is_work_query, retrieval_query, route_query
-from .synthesis import (INSUFFICIENT_ANSWER, SYNTHESIS_UNAVAILABLE,
+from .planning import plan_search
+from .synthesis import (INSUFFICIENT_ANSWER, SYNTHESIS_UNAVAILABLE, synthesize,
                         answer_general_with_groq, synthesize_with_groq)
 from .scheduling import extract_meeting_details, is_scheduling_request
 
@@ -35,6 +36,7 @@ class AgentRunState(TypedDict, total=False):
     is_work_turn: bool
     contextual_query: str
     selected_sources: list[SourceName]
+    source_queries: dict[str, str]
     tool_results: list[ToolResult]
     records: list[SourceRecord]
     answer: str
@@ -146,8 +148,22 @@ def build_agent_workflow(agent: Any):
 
     def select_sources(state: AgentRunState) -> dict[str, object]:
         route = route_query(state["contextual_query"])
-        agent._trace(state["trace_id"], "route_complete", selectedSources=list(route.sources), reason=route.reason)
-        return {"selected_sources": list(route.sources[:3]), "tool_results": [], "records": []}
+        provider = agent.llm_provider
+        api_key, model = ((agent.gemini_api_key, agent.gemini_model) if provider == "gemini"
+                          else (agent.groq_api_key, agent.groq_model))
+        fixed_route = route.reason in {"explicit_sources", "jira_issue_key", "drive_record_id"}
+        if not fixed_route and route.sources == ("drive",):
+            fixed_route = True
+        plan = None if fixed_route else plan_search(
+            state["contextual_query"], api_key, model, provider, allowed_sources=route.sources)
+        if plan:
+            sources, queries, reason = plan.sources, plan.queries, "llm_plan"
+        else:
+            sources, queries, reason = route.sources, {}, route.reason
+        selected = list(sources[:3])
+        agent._trace(state["trace_id"], "route_complete", selectedSources=selected, reason=reason)
+        return {"selected_sources": selected, "source_queries": queries,
+                "tool_results": [], "records": []}
 
     def retrieve_sources(state: AgentRunState) -> dict[str, object]:
         request = state["request"]
@@ -156,7 +172,8 @@ def build_agent_workflow(agent: Any):
         records: list[SourceRecord] = []
         related_jira_terms: list[str] = []
         for source in state.get("selected_sources", []):
-            query = retrieval_query(contextual_query, source)
+            query = retrieval_query(contextual_query, source,
+                                    state.get("source_queries", {}).get(source))
             if source == "gmail" and related_jira_terms:
                 issue_keys = [term for term in related_jira_terms if re.fullmatch(r"[A-Z][A-Z0-9]+-\d+", term)]
                 if issue_keys:
@@ -217,15 +234,24 @@ def build_agent_workflow(agent: Any):
             failures = [result.error or "" for result in results if result.error]
             if failures and len(failures) == len(results):
                 if any("403" in error or "permission" in error.casefold() for error in failures):
-                    answer = "I couldn’t access the connected source because the account may be missing permission for this data. Reconnect it or grant the required read access, then try again."
+                    answer = "Access was denied by the connected source. Reconnect it or grant read access, then retry."
                 elif any("401" in error or "unauthorized" in error.casefold() for error in failures):
-                    answer = "The connected source rejected its credentials. Reconnect the account and try again."
+                    answer = "The connected source needs reauthorization. Reconnect it and retry."
+                elif any("not connected" in error.casefold() for error in failures):
+                    source = next((result.toolName.removeprefix("search_") for result in results
+                                   if result.error and "not connected" in result.error.casefold()), "source")
+                    answer = f"{source.title()} isn’t connected. Connect it in Knowledge sources, then retry."
+                elif any("disabled" in error.casefold() for error in failures):
+                    answer = "Live connectors are disabled. Enable them in the backend settings and restart."
+                elif any("timeout" in error.casefold() for error in failures):
+                    answer = "The connected source timed out. Please try again."
                 else:
-                    answer = "I couldn’t retrieve data from the connected source just now. Please try again."
+                    source = next((result.toolName.removeprefix("search_") for result in results if result.error), "source")
+                    answer = f"Couldn’t retrieve data from {source.title()}. Please try again."
             elif failures:
-                answer = "I checked the available connected sources, but one or more could not be reached, so this result may be incomplete."
+                answer = "Some sources were unavailable, so this answer may be incomplete."
             else:
-                answer = "I checked the connected sources and found no matching items for that request. Try a name, project, issue key, or a narrower date range."
+                answer = "I found no matching items in the selected sources. Try a more specific name, project, or date."
             citations: list[Citation] = []
         else:
             provider = agent.llm_provider
@@ -235,6 +261,8 @@ def build_agent_workflow(agent: Any):
                 answer, citations = synthesize_with_groq(
                     request.message, records, api_key, model,
                     history=state.get("history", []), provider=provider)
+                if answer == SYNTHESIS_UNAVAILABLE:
+                    answer, citations = synthesize(request.message, records, max_records=2)
             else:
                 # Never expose raw connector records as if they were a finished answer.
                 answer, citations = SYNTHESIS_UNAVAILABLE, []

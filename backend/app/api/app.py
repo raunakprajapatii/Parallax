@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from .chat import router
 from .calendar import router as calendar_router
 from .oauth import router as oauth_router
+from .drive import router as drive_router
 from app.agent.orchestrator import AgentOrchestrator
 from app.connectors.config import ConnectorConfig
 from app.connectors.registry import ConnectorRegistry
@@ -26,6 +27,7 @@ def create_app(*, orchestrator=None) -> FastAPI:
     app.include_router(router)
     app.include_router(calendar_router)
     app.include_router(oauth_router)
+    app.include_router(drive_router)
     config = ConnectorConfig.from_environment()
     db_path = BACKEND_ROOT.parent / "backend" / "data" / "live_data_intelligence.sqlite3"
     config = replace(config, oauth_db_path=str(db_path))

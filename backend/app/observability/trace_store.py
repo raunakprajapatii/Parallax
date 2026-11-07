@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 TRACE_STEPS = {"run_started", "source_selected", "tool_started", "tool_complete", "answer_complete", "memory_written", "run_failed"}
-TOOLS = {"search_gmail", "search_jira", "search_notion"}
+TOOLS = {"search_gmail", "search_jira", "search_notion", "search_calendar", "search_drive"}
 
 
 def _now() -> str:

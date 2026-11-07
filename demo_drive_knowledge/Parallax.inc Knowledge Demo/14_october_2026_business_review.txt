@@ -1,0 +1,15 @@
+PARALLAX.INC — OCTOBER 2026 BUSINESS REVIEW
+
+Revenue and customers: October recurring revenue closed at INR 38.4 million, up 6.2% from September. Net revenue retention was 112%. The account register contains 180 accounts; 126 were active customers, 18 were onboarding, 21 were in renewal, and 15 were prospects at the reporting cut-off.
+
+Customer health: 14 accounts were marked At Risk or Needs Attention. Customer Success is reviewing Amber Systems, Cedar Networks, and Juniper Group first.
+
+Support: The support register contains 500 tickets across all statuses. The urgent queue included PX-SUP-1042, an Atlas workspace permissions escalation assigned to Kabir Shah.
+
+Delivery: The portfolio register contains 12 active initiatives and 360 work items. Atlas and Keystone remain on the Q4 launch path. The Atlas access-control permission matrix remains the primary launch blocker.
+
+People: The employee directory contains 241 records across 10 departments. Leave requests are tracked separately in the People Operations workflow.
+
+Finance: Monthly close completed on 6 November. Two department cost-owner certifications were received after the target date; Finance is following up with the relevant leads.
+
+Reporting date: 5 November 2026.

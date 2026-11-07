@@ -1,0 +1,181 @@
+account_id,account_name,industry,account_tier,account_owner,region,lifecycle_stage,annual_contract_value_inr,renewal_month,health_status,primary_contact,contact_email
+PX-ACCT-0001,Amber Systems,Healthcare,Growth,Ishaan Saxena,APAC,Customer,268750,2028-06,At Risk,Aditi Iyer,contact001@account001.example.test
+PX-ACCT-0002,Cedar Networks,Retail,Scale,Manav Verma,EMEA,Customer,287500,2027-11,At Risk,Akash Nair,contact002@account002.example.test
+PX-ACCT-0003,Juniper Group,Manufacturing,Strategic,Varun Shah,North America,Customer,306250,2028-04,At Risk,Ananya Das,contact003@account003.example.test
+PX-ACCT-0004,Amber Networks,Professional Services,Growth,Leela Menon,India,Customer,325000,2027-09,At Risk,Arjun Reddy,contact004@account004.example.test
+PX-ACCT-0005,Amber Group,Technology,Scale,Aditya Rao,APAC,Customer,343750,2028-02,At Risk,Diya Chopra,contact005@account005.example.test
+PX-ACCT-0006,Amber Industries,Education,Strategic,Aditi Pillai,EMEA,Customer,362500,2027-07,At Risk,Ishaan Banerjee,contact006@account006.example.test
+PX-ACCT-0007,Amber Partners,Logistics,Growth,Nikhil Bose,North America,Customer,381250,2028-12,At Risk,Kavya Pillai,contact007@account007.example.test
+PX-ACCT-0008,Amber Works,Financial Services,Scale,Mira Sharma,India,Customer,400000,2027-05,Needs Attention,Kabir Bhat,contact008@account008.example.test
+PX-ACCT-0009,Amber Labs,Healthcare,Strategic,Kunal Nair,APAC,Customer,418750,2028-10,Needs Attention,Meera Mishra,contact009@account009.example.test
+PX-ACCT-0010,Amber Holdings,Retail,Growth,Karan Mehta,EMEA,Customer,437500,2027-03,Needs Attention,Neha Sharma,contact010@account010.example.test
+PX-ACCT-0011,Amber Solutions,Manufacturing,Scale,Priya Shah,North America,Customer,456250,2028-08,Needs Attention,Rohan Iyer,contact011@account011.example.test
+PX-ACCT-0012,Amber Collective,Professional Services,Strategic,Sahil Reddy,India,Customer,475000,2027-01,Needs Attention,Sana Nair,contact012@account012.example.test
+PX-ACCT-0013,Amber Services,Technology,Growth,Kavya Nair,APAC,Customer,493750,2028-06,Needs Attention,Vikram Das,contact013@account013.example.test
+PX-ACCT-0014,Amber Digital,Education,Scale,Zoya Pillai,EMEA,Customer,512500,2027-11,Needs Attention,Zoya Reddy,contact014@account014.example.test
+PX-ACCT-0015,Blue Systems,Logistics,Strategic,Kunal Sethi,North America,Customer,531250,2028-04,Healthy,Dev Chopra,contact015@account015.example.test
+PX-ACCT-0016,Blue Networks,Financial Services,Growth,Aditi Banerjee,India,Customer,550000,2027-09,Healthy,Ira Banerjee,contact016@account016.example.test
+PX-ACCT-0017,Blue Group,Healthcare,Scale,Ishaan Reddy,APAC,Customer,568750,2028-02,Healthy,Nikhil Pillai,contact017@account017.example.test
+PX-ACCT-0018,Blue Industries,Retail,Strategic,Vikram Patel,EMEA,Customer,587500,2027-07,Healthy,Priya Bhat,contact018@account018.example.test
+PX-ACCT-0019,Blue Partners,Manufacturing,Growth,Priya Mishra,North America,Customer,606250,2028-12,Healthy,Reyansh Mishra,contact019@account019.example.test
+PX-ACCT-0020,Blue Works,Professional Services,Scale,Naveen Sethi,India,Customer,625000,2027-05,Healthy,Tara Sharma,contact020@account020.example.test
+PX-ACCT-0021,Blue Labs,Technology,Strategic,Mira Chopra,APAC,Customer,643750,2028-10,Healthy,Yash Iyer,contact021@account021.example.test
+PX-ACCT-0022,Blue Holdings,Education,Growth,Akash Verma,EMEA,Customer,662500,2027-03,Healthy,Mira Nair,contact022@account022.example.test
+PX-ACCT-0023,Blue Solutions,Logistics,Scale,Dev Desai,North America,Customer,681250,2028-08,Healthy,Asha Das,contact023@account023.example.test
+PX-ACCT-0024,Blue Collective,Financial Services,Strategic,Riya Reddy,India,Customer,700000,2027-01,Healthy,Kunal Reddy,contact024@account024.example.test
+PX-ACCT-0025,Blue Services,Healthcare,Growth,Kabir Desai,APAC,Customer,718750,2028-06,Healthy,Leela Chopra,contact025@account025.example.test
+PX-ACCT-0026,Blue Digital,Retail,Scale,Karan Patel,EMEA,Customer,737500,2027-11,Healthy,Naveen Banerjee,contact026@account026.example.test
+PX-ACCT-0027,Cedar Systems,Manufacturing,Strategic,Ishaan Pillai,North America,Customer,756250,2028-04,Healthy,Riya Pillai,contact027@account027.example.test
+PX-ACCT-0028,Cedar Group,Professional Services,Growth,Aditi Chopra,India,Customer,775000,2027-09,Healthy,Sameer Bhat,contact028@account028.example.test
+PX-ACCT-0029,Cedar Industries,Technology,Scale,Asha Desai,APAC,Customer,793750,2028-02,Healthy,Tanvi Mishra,contact029@account029.example.test
+PX-ACCT-0030,Cedar Partners,Education,Strategic,Riya Sharma,EMEA,Customer,812500,2027-07,Healthy,Varun Sharma,contact030@account030.example.test
+PX-ACCT-0031,Cedar Works,Logistics,Growth,Sana Chopra,North America,Customer,831250,2028-12,Healthy,Ishita Iyer,contact031@account031.example.test
+PX-ACCT-0032,Cedar Labs,Financial Services,Scale,Vikram Nair,India,Customer,850000,2027-05,Healthy,Aditya Nair,contact032@account032.example.test
+PX-ACCT-0033,Cedar Holdings,Healthcare,Strategic,Rohan Sethi,APAC,Customer,868750,2028-10,Healthy,Pooja Das,contact033@account033.example.test
+PX-ACCT-0034,Cedar Solutions,Retail,Growth,Vikram Banerjee,EMEA,Customer,887500,2027-03,Healthy,Rahul Reddy,contact034@account034.example.test
+PX-ACCT-0035,Cedar Collective,Manufacturing,Scale,Sameer Gupta,North America,Customer,906250,2028-08,Healthy,Sahil Chopra,contact035@account035.example.test
+PX-ACCT-0036,Cedar Services,Professional Services,Strategic,Neha Patel,India,Customer,925000,2027-01,Healthy,Simran Banerjee,contact036@account036.example.test
+PX-ACCT-0037,Cedar Digital,Technology,Growth,Aarav Mehta,APAC,Customer,943750,2028-06,Healthy,Karan Pillai,contact037@account037.example.test
+PX-ACCT-0038,Delta Systems,Education,Scale,Kavya Saxena,EMEA,Customer,962500,2027-11,Healthy,Anika Bhat,contact038@account038.example.test
+PX-ACCT-0039,Delta Networks,Logistics,Strategic,Nikhil Thomas,North America,Customer,981250,2028-04,Healthy,Manav Mishra,contact039@account039.example.test
+PX-ACCT-0040,Delta Group,Financial Services,Growth,Ira Kapoor,India,Customer,1000000,2027-09,Healthy,Aarav Sharma,contact040@account040.example.test
+PX-ACCT-0041,Delta Industries,Healthcare,Scale,Naveen Joshi,APAC,Customer,1018750,2028-02,Healthy,Aditi Iyer,contact041@account041.example.test
+PX-ACCT-0042,Delta Partners,Retail,Strategic,Simran Gupta,EMEA,Customer,1037500,2027-07,Healthy,Akash Nair,contact042@account042.example.test
+PX-ACCT-0043,Delta Works,Manufacturing,Growth,Riya Pillai,North America,Customer,1056250,2028-12,Healthy,Ananya Das,contact043@account043.example.test
+PX-ACCT-0044,Delta Labs,Professional Services,Scale,Pooja Iyer,India,Customer,1075000,2027-05,Healthy,Arjun Reddy,contact044@account044.example.test
+PX-ACCT-0045,Delta Holdings,Technology,Strategic,Karan Rao,APAC,Customer,1093750,2028-10,Healthy,Diya Chopra,contact045@account045.example.test
+PX-ACCT-0046,Delta Solutions,Education,Growth,Reyansh Desai,EMEA,Customer,1112500,2027-03,Healthy,Ishaan Banerjee,contact046@account046.example.test
+PX-ACCT-0047,Delta Collective,Logistics,Scale,Asha Chopra,North America,Customer,1131250,2028-08,Healthy,Kavya Pillai,contact047@account047.example.test
+PX-ACCT-0048,Delta Services,Financial Services,Strategic,Tanvi Iyer,India,Customer,1150000,2027-01,Healthy,Kabir Bhat,contact048@account048.example.test
+PX-ACCT-0049,Delta Digital,Healthcare,Growth,Kunal Das,APAC,Customer,1168750,2028-06,Healthy,Meera Mishra,contact049@account049.example.test
+PX-ACCT-0050,Evergreen Systems,Retail,Scale,Aditya Khanna,EMEA,Customer,1187500,2027-11,Healthy,Neha Sharma,contact050@account050.example.test
+PX-ACCT-0051,Evergreen Networks,Manufacturing,Strategic,Ira Ghosh,North America,Customer,1206250,2028-04,Healthy,Rohan Iyer,contact051@account051.example.test
+PX-ACCT-0052,Evergreen Group,Professional Services,Growth,Naveen Bhat,India,Customer,1225000,2027-09,Healthy,Sana Nair,contact052@account052.example.test
+PX-ACCT-0053,Evergreen Industries,Technology,Scale,Vikram Kapoor,APAC,Customer,1243750,2028-02,Healthy,Vikram Das,contact053@account053.example.test
+PX-ACCT-0054,Evergreen Partners,Education,Strategic,Aarav Iyer,EMEA,Customer,1262500,2027-07,Healthy,Zoya Reddy,contact054@account054.example.test
+PX-ACCT-0055,Evergreen Works,Logistics,Growth,Ananya Bhat,North America,Customer,1281250,2028-12,Healthy,Dev Chopra,contact055@account055.example.test
+PX-ACCT-0056,Evergreen Labs,Financial Services,Scale,Anika Sen,India,Customer,1300000,2027-05,Healthy,Ira Banerjee,contact056@account056.example.test
+PX-ACCT-0057,Evergreen Holdings,Healthcare,Strategic,Leela Shah,APAC,Customer,1318750,2028-10,Healthy,Nikhil Pillai,contact057@account057.example.test
+PX-ACCT-0058,Evergreen Solutions,Retail,Growth,Ananya Joshi,EMEA,Customer,1337500,2027-03,Healthy,Priya Bhat,contact058@account058.example.test
+PX-ACCT-0059,Evergreen Collective,Manufacturing,Scale,Sana Khanna,North America,Customer,1356250,2028-08,Healthy,Reyansh Mishra,contact059@account059.example.test
+PX-ACCT-0060,Evergreen Services,Professional Services,Strategic,Vikram Rao,India,Customer,1375000,2027-01,Healthy,Tara Sharma,contact060@account060.example.test
+PX-ACCT-0061,Evergreen Digital,Technology,Growth,Tanvi Joshi,APAC,Customer,1393750,2028-06,Healthy,Yash Iyer,contact061@account061.example.test
+PX-ACCT-0062,Fable Systems,Education,Scale,Karan Khan,EMEA,Customer,1412500,2027-11,Healthy,Mira Nair,contact062@account062.example.test
+PX-ACCT-0063,Fable Networks,Logistics,Strategic,Meera Ghosh,North America,Customer,1431250,2028-04,Healthy,Asha Das,contact063@account063.example.test
+PX-ACCT-0064,Fable Group,Financial Services,Growth,Ishaan Mishra,India,Customer,1450000,2027-09,Healthy,Kunal Reddy,contact064@account064.example.test
+PX-ACCT-0065,Fable Industries,Healthcare,Scale,Kunal Thomas,APAC,Customer,1468750,2028-02,Healthy,Leela Chopra,contact065@account065.example.test
+PX-ACCT-0066,Fable Partners,Retail,Strategic,Riya Bose,EMEA,Customer,1487500,2027-07,Healthy,Naveen Banerjee,contact066@account066.example.test
+PX-ACCT-0067,Fable Works,Manufacturing,Growth,Karan Ghosh,North America,Customer,1506250,2028-12,Healthy,Riya Pillai,contact067@account067.example.test
+PX-ACCT-0068,Fable Labs,Professional Services,Scale,Kavya Bose,India,Customer,1525000,2027-05,Healthy,Sameer Bhat,contact068@account068.example.test
+PX-ACCT-0069,Fable Holdings,Technology,Strategic,Dev Joshi,APAC,Customer,1543750,2028-10,Healthy,Tanvi Mishra,contact069@account069.example.test
+PX-ACCT-0070,Fable Solutions,Education,Growth,Leela Joshi,EMEA,Customer,1562500,2027-03,Healthy,Varun Sharma,contact070@account070.example.test
+PX-ACCT-0071,Fable Collective,Logistics,Scale,Riya Sen,North America,Customer,1581250,2028-08,Healthy,Ishita Iyer,contact071@account071.example.test
+PX-ACCT-0072,Fable Services,Financial Services,Strategic,Nikhil Gupta,India,Customer,1600000,2027-01,Healthy,Aditya Nair,contact072@account072.example.test
+PX-ACCT-0073,Fable Digital,Healthcare,Growth,Ishita Nair,APAC,Customer,1618750,2028-06,Healthy,Pooja Das,contact073@account073.example.test
+PX-ACCT-0074,Granite Systems,Retail,Scale,Vikram Khanna,EMEA,Customer,1637500,2027-11,Healthy,Rahul Reddy,contact074@account074.example.test
+PX-ACCT-0075,Granite Networks,Manufacturing,Strategic,Leela Mishra,North America,Customer,1656250,2028-04,Healthy,Sahil Chopra,contact075@account075.example.test
+PX-ACCT-0076,Granite Group,Professional Services,Growth,Meera Thomas,India,Customer,1675000,2027-09,Healthy,Simran Banerjee,contact076@account076.example.test
+PX-ACCT-0077,Granite Industries,Technology,Scale,Akash Sharma,APAC,Customer,1693750,2028-02,Healthy,Karan Pillai,contact077@account077.example.test
+PX-ACCT-0078,Granite Partners,Education,Strategic,Naveen Desai,EMEA,Customer,1712500,2027-07,Healthy,Anika Bhat,contact078@account078.example.test
+PX-ACCT-0079,Granite Works,Logistics,Growth,Simran Malhotra,North America,Customer,1731250,2028-12,Healthy,Manav Mishra,contact079@account079.example.test
+PX-ACCT-0080,Granite Labs,Financial Services,Scale,Tanvi Pillai,India,Customer,1750000,2027-05,Healthy,Aarav Sharma,contact080@account080.example.test
+PX-ACCT-0081,Granite Holdings,Healthcare,Strategic,Rohan Iyer,APAC,Customer,1768750,2028-10,Healthy,Aditi Iyer,contact081@account081.example.test
+PX-ACCT-0082,Granite Solutions,Retail,Growth,Diya Saxena,EMEA,Customer,1787500,2027-03,Healthy,Akash Nair,contact082@account082.example.test
+PX-ACCT-0083,Granite Collective,Manufacturing,Scale,Ananya Shah,North America,Customer,1806250,2028-08,Healthy,Ananya Das,contact083@account083.example.test
+PX-ACCT-0084,Granite Services,Professional Services,Strategic,Varun Das,India,Customer,1825000,2027-01,Healthy,Arjun Reddy,contact084@account084.example.test
+PX-ACCT-0085,Granite Digital,Technology,Growth,Kunal Sharma,APAC,Customer,1843750,2028-06,Healthy,Diya Chopra,contact085@account085.example.test
+PX-ACCT-0086,Harbor Systems,Education,Scale,Akash Banerjee,EMEA,Customer,1862500,2027-11,Healthy,Ishaan Banerjee,contact086@account086.example.test
+PX-ACCT-0087,Harbor Networks,Logistics,Strategic,Mira Desai,North America,Customer,1881250,2028-04,Healthy,Kavya Pillai,contact087@account087.example.test
+PX-ACCT-0088,Harbor Group,Financial Services,Growth,Asha Patel,India,Customer,1900000,2027-09,Healthy,Kabir Bhat,contact088@account088.example.test
+PX-ACCT-0089,Harbor Industries,Healthcare,Scale,Varun Khanna,APAC,Customer,1918750,2028-02,Healthy,Meera Mishra,contact089@account089.example.test
+PX-ACCT-0090,Harbor Partners,Retail,Strategic,Vikram Gupta,EMEA,Customer,1937500,2027-07,Healthy,Neha Sharma,contact090@account090.example.test
+PX-ACCT-0091,Harbor Works,Manufacturing,Growth,Dev Das,North America,Customer,1956250,2028-12,Healthy,Rohan Iyer,contact091@account091.example.test
+PX-ACCT-0092,Harbor Labs,Professional Services,Scale,Akash Gupta,India,Customer,1975000,2027-05,Healthy,Sana Nair,contact092@account092.example.test
+PX-ACCT-0093,Harbor Holdings,Technology,Strategic,Sana Thomas,APAC,Customer,1993750,2028-10,Healthy,Vikram Das,contact093@account093.example.test
+PX-ACCT-0094,Harbor Solutions,Education,Growth,Pooja Bose,EMEA,Customer,2012500,2027-03,Healthy,Zoya Reddy,contact094@account094.example.test
+PX-ACCT-0095,Harbor Collective,Logistics,Scale,Naveen Sharma,North America,Customer,2031250,2028-08,Healthy,Dev Chopra,contact095@account095.example.test
+PX-ACCT-0096,Harbor Services,Financial Services,Strategic,Kavya Ghosh,India,Customer,2050000,2027-01,Healthy,Ira Banerjee,contact096@account096.example.test
+PX-ACCT-0097,Harbor Digital,Healthcare,Growth,Asha Gupta,APAC,Customer,2068750,2028-06,Healthy,Nikhil Pillai,contact097@account097.example.test
+PX-ACCT-0098,Indigo Systems,Retail,Scale,Aditi Sethi,EMEA,Customer,2087500,2027-11,Healthy,Priya Bhat,contact098@account098.example.test
+PX-ACCT-0099,Indigo Networks,Manufacturing,Strategic,Manav Sharma,North America,Customer,2106250,2028-04,Healthy,Reyansh Mishra,contact099@account099.example.test
+PX-ACCT-0100,Indigo Group,Professional Services,Growth,Neha Sen,India,Customer,2125000,2027-09,Healthy,Tara Sharma,contact100@account100.example.test
+PX-ACCT-0101,Indigo Industries,Technology,Scale,Varun Menon,APAC,Customer,2143750,2028-02,Healthy,Yash Iyer,contact101@account101.example.test
+PX-ACCT-0102,Indigo Partners,Education,Strategic,Priya Patel,EMEA,Customer,2162500,2027-07,Healthy,Mira Nair,contact102@account102.example.test
+PX-ACCT-0103,Indigo Works,Logistics,Growth,Kabir Malhotra,North America,Customer,2181250,2028-12,Healthy,Asha Das,contact103@account103.example.test
+PX-ACCT-0104,Indigo Labs,Financial Services,Scale,Sahil Sharma,India,Customer,2200000,2027-05,Healthy,Kunal Reddy,contact104@account104.example.test
+PX-ACCT-0105,Indigo Holdings,Healthcare,Strategic,Zoya Bhat,APAC,Customer,2218750,2028-10,Healthy,Leela Chopra,contact105@account105.example.test
+PX-ACCT-0106,Indigo Solutions,Retail,Growth,Ishita Iyer,EMEA,Customer,2237500,2027-03,Healthy,Naveen Banerjee,contact106@account106.example.test
+PX-ACCT-0107,Indigo Collective,Manufacturing,Scale,Riya Mehta,North America,Customer,2256250,2028-08,Healthy,Riya Pillai,contact107@account107.example.test
+PX-ACCT-0108,Indigo Services,Professional Services,Strategic,Naveen Banerjee,India,Customer,2275000,2027-01,Healthy,Sameer Bhat,contact108@account108.example.test
+PX-ACCT-0109,Indigo Digital,Technology,Growth,Sameer Verma,APAC,Customer,2293750,2028-06,Healthy,Tanvi Mishra,contact109@account109.example.test
+PX-ACCT-0110,Juniper Systems,Education,Scale,Kavya Das,EMEA,Customer,2312500,2027-11,Healthy,Varun Sharma,contact110@account110.example.test
+PX-ACCT-0111,Juniper Networks,Logistics,Strategic,Kavya Pillai,North America,Customer,2331250,2028-04,Healthy,Ishita Iyer,contact111@account111.example.test
+PX-ACCT-0112,Juniper Industries,Financial Services,Growth,Aditya Mehta,India,Customer,2350000,2027-09,Healthy,Aditya Nair,contact112@account112.example.test
+PX-ACCT-0113,Juniper Partners,Healthcare,Scale,Sameer Thomas,APAC,Customer,2368750,2028-02,Healthy,Pooja Das,contact113@account113.example.test
+PX-ACCT-0114,Juniper Works,Retail,Strategic,Sana Sharma,EMEA,Customer,2387500,2027-07,Healthy,Rahul Reddy,contact114@account114.example.test
+PX-ACCT-0115,Juniper Labs,Manufacturing,Growth,Kunal Kapoor,North America,Customer,2406250,2028-12,Healthy,Sahil Chopra,contact115@account115.example.test
+PX-ACCT-0116,Juniper Holdings,Professional Services,Scale,Kavya Iyer,India,Customer,2425000,2027-05,Healthy,Simran Banerjee,contact116@account116.example.test
+PX-ACCT-0117,Juniper Solutions,Technology,Strategic,Aarav Reddy,APAC,Customer,2443750,2028-10,Healthy,Karan Pillai,contact117@account117.example.test
+PX-ACCT-0118,Juniper Collective,Education,Growth,Nikhil Pillai,EMEA,Customer,2462500,2027-03,Healthy,Anika Bhat,contact118@account118.example.test
+PX-ACCT-0119,Juniper Services,Logistics,Scale,Aarav Khanna,North America,Customer,2481250,2028-08,Healthy,Manav Mishra,contact119@account119.example.test
+PX-ACCT-0120,Juniper Digital,Financial Services,Strategic,Sana Saxena,India,Customer,2500000,2027-01,Healthy,Aarav Sharma,contact120@account120.example.test
+PX-ACCT-0121,Kestrel Systems,Healthcare,Growth,Mira Mehta,APAC,Customer,2518750,2028-06,Healthy,Aditi Iyer,contact121@account121.example.test
+PX-ACCT-0122,Kestrel Networks,Retail,Scale,Pooja Saxena,EMEA,Customer,2537500,2027-11,Healthy,Akash Nair,contact122@account122.example.test
+PX-ACCT-0123,Kestrel Group,Manufacturing,Strategic,Reyansh Pillai,North America,Customer,2556250,2028-04,Healthy,Ananya Das,contact123@account123.example.test
+PX-ACCT-0124,Kestrel Industries,Professional Services,Growth,Sahil Desai,India,Customer,2575000,2027-09,Healthy,Arjun Reddy,contact124@account124.example.test
+PX-ACCT-0125,Kestrel Partners,Technology,Scale,Ishita Banerjee,APAC,Customer,2593750,2028-02,Healthy,Diya Chopra,contact125@account125.example.test
+PX-ACCT-0126,Kestrel Works,Education,Strategic,Yash Ghosh,EMEA,Customer,2612500,2027-07,Healthy,Ishaan Banerjee,contact126@account126.example.test
+PX-ACCT-0127,Kestrel Labs,Logistics,Growth,Kabir Bose,North America,Onboarding,2631250,2028-12,Healthy,Kavya Pillai,contact127@account127.example.test
+PX-ACCT-0128,Kestrel Holdings,Financial Services,Scale,Simran Iyer,India,Onboarding,2650000,2027-05,Healthy,Kabir Bhat,contact128@account128.example.test
+PX-ACCT-0129,Kestrel Solutions,Healthcare,Strategic,Simran Khanna,APAC,Onboarding,2668750,2028-10,Healthy,Meera Mishra,contact129@account129.example.test
+PX-ACCT-0130,Kestrel Collective,Retail,Growth,Sana Banerjee,EMEA,Onboarding,2687500,2027-03,Healthy,Neha Sharma,contact130@account130.example.test
+PX-ACCT-0131,Kestrel Services,Manufacturing,Scale,Kabir Chopra,North America,Onboarding,2706250,2028-08,Healthy,Rohan Iyer,contact131@account131.example.test
+PX-ACCT-0132,Kestrel Digital,Professional Services,Strategic,Akash Kulkarni,India,Onboarding,2725000,2027-01,Healthy,Sana Nair,contact132@account132.example.test
+PX-ACCT-0133,Lumen Systems,Technology,Growth,Arjun Gupta,APAC,Onboarding,2743750,2028-06,Healthy,Vikram Das,contact133@account133.example.test
+PX-ACCT-0134,Lumen Networks,Education,Scale,Anika Sharma,EMEA,Onboarding,2762500,2027-11,Healthy,Zoya Reddy,contact134@account134.example.test
+PX-ACCT-0135,Lumen Group,Logistics,Strategic,Sana Shah,North America,Onboarding,2781250,2028-04,Healthy,Dev Chopra,contact135@account135.example.test
+PX-ACCT-0136,Lumen Industries,Financial Services,Growth,Arjun Mishra,India,Onboarding,2800000,2027-09,Healthy,Ira Banerjee,contact136@account136.example.test
+PX-ACCT-0137,Lumen Partners,Healthcare,Scale,Ira Khan,APAC,Onboarding,2818750,2028-02,Healthy,Nikhil Pillai,contact137@account137.example.test
+PX-ACCT-0138,Lumen Works,Retail,Strategic,Nikhil Nair,EMEA,Onboarding,2837500,2027-07,Healthy,Priya Bhat,contact138@account138.example.test
+PX-ACCT-0139,Lumen Labs,Manufacturing,Growth,Ananya Patel,North America,Onboarding,2856250,2028-12,Healthy,Reyansh Mishra,contact139@account139.example.test
+PX-ACCT-0140,Lumen Holdings,Professional Services,Scale,Varun Sharma,India,Onboarding,2875000,2027-05,Healthy,Tara Sharma,contact140@account140.example.test
+PX-ACCT-0141,Lumen Solutions,Technology,Strategic,Sana Das,APAC,Onboarding,2893750,2028-10,Healthy,Yash Iyer,contact141@account141.example.test
+PX-ACCT-0142,Lumen Collective,Education,Growth,Simran Kapoor,EMEA,Onboarding,2912500,2027-03,Healthy,Mira Nair,contact142@account142.example.test
+PX-ACCT-0143,Lumen Services,Logistics,Scale,Tara Pillai,North America,Onboarding,2931250,2028-08,Healthy,Asha Das,contact143@account143.example.test
+PX-ACCT-0144,Lumen Digital,Financial Services,Strategic,Kabir Bhat,India,Onboarding,2950000,2027-01,Healthy,Kunal Reddy,contact144@account144.example.test
+PX-ACCT-0145,Maple Systems,Healthcare,Growth,Sana Menon,APAC,Renewal,2968750,2028-06,Healthy,Leela Chopra,contact145@account145.example.test
+PX-ACCT-0146,Maple Networks,Retail,Scale,Manav Kulkarni,EMEA,Renewal,2987500,2027-11,Healthy,Naveen Banerjee,contact146@account146.example.test
+PX-ACCT-0147,Maple Group,Manufacturing,Strategic,Diya Ghosh,North America,Renewal,3006250,2028-04,Healthy,Riya Pillai,contact147@account147.example.test
+PX-ACCT-0148,Maple Industries,Professional Services,Growth,Kunal Ghosh,India,Renewal,3025000,2027-09,Healthy,Sameer Bhat,contact148@account148.example.test
+PX-ACCT-0149,Maple Partners,Technology,Scale,Nikhil Shah,APAC,Renewal,3043750,2028-02,Healthy,Tanvi Mishra,contact149@account149.example.test
+PX-ACCT-0150,Maple Works,Education,Strategic,Naveen Khan,EMEA,Renewal,3062500,2027-07,Healthy,Varun Sharma,contact150@account150.example.test
+PX-ACCT-0151,Maple Labs,Logistics,Growth,Riya Khan,North America,Renewal,3081250,2028-12,Healthy,Ishita Iyer,contact151@account151.example.test
+PX-ACCT-0152,Maple Holdings,Financial Services,Scale,Vikram Joshi,India,Renewal,3100000,2027-05,Healthy,Aditya Nair,contact152@account152.example.test
+PX-ACCT-0153,Maple Solutions,Healthcare,Strategic,Sana Sen,APAC,Renewal,3118750,2028-10,Healthy,Pooja Das,contact153@account153.example.test
+PX-ACCT-0154,Maple Collective,Retail,Growth,Diya Mehta,EMEA,Renewal,3137500,2027-03,Healthy,Rahul Reddy,contact154@account154.example.test
+PX-ACCT-0155,Maple Services,Manufacturing,Scale,Ira Shah,North America,Renewal,3156250,2028-08,Healthy,Sahil Chopra,contact155@account155.example.test
+PX-ACCT-0156,Maple Digital,Professional Services,Strategic,Rohan Sen,India,Renewal,3175000,2027-01,Healthy,Simran Banerjee,contact156@account156.example.test
+PX-ACCT-0157,Noble Systems,Technology,Growth,Varun Patel,APAC,Renewal,3193750,2028-06,Healthy,Karan Pillai,contact157@account157.example.test
+PX-ACCT-0158,Noble Networks,Education,Scale,Kabir Mishra,EMEA,Renewal,3212500,2027-11,Healthy,Anika Bhat,contact158@account158.example.test
+PX-ACCT-0159,Noble Group,Logistics,Strategic,Ananya Sen,North America,Renewal,3231250,2028-04,Healthy,Manav Mishra,contact159@account159.example.test
+PX-ACCT-0160,Noble Industries,Financial Services,Growth,Nikhil Sethi,India,Renewal,3250000,2027-09,Healthy,Aarav Sharma,contact160@account160.example.test
+PX-ACCT-0161,Noble Partners,Healthcare,Scale,Kavya Gupta,APAC,Renewal,3268750,2028-02,Healthy,Aditi Iyer,contact161@account161.example.test
+PX-ACCT-0162,Noble Works,Retail,Strategic,Meera Saxena,EMEA,Renewal,3287500,2027-07,Healthy,Akash Nair,contact162@account162.example.test
+PX-ACCT-0163,Noble Labs,Manufacturing,Growth,Aarav Mishra,North America,Renewal,3306250,2028-12,Healthy,Ananya Das,contact163@account163.example.test
+PX-ACCT-0164,Noble Holdings,Professional Services,Scale,Naveen Verma,India,Renewal,3325000,2027-05,Healthy,Arjun Reddy,contact164@account164.example.test
+PX-ACCT-0165,Noble Solutions,Technology,Strategic,Meera Khanna,APAC,Renewal,3343750,2028-10,Healthy,Diya Chopra,contact165@account165.example.test
+PX-ACCT-0166,Noble Collective,Education,Growth,Yash Bhat,EMEA,Prospect,3362500,2027-03,Healthy,Ishaan Banerjee,contact166@account166.example.test
+PX-ACCT-0167,Noble Services,Logistics,Scale,Vikram Chopra,North America,Prospect,3381250,2028-08,Healthy,Kavya Pillai,contact167@account167.example.test
+PX-ACCT-0168,Noble Digital,Financial Services,Strategic,Asha Khan,India,Prospect,3400000,2027-01,Healthy,Kabir Bhat,contact168@account168.example.test
+PX-ACCT-0169,Oak Systems,Healthcare,Growth,Pooja Sen,APAC,Prospect,3418750,2028-06,Healthy,Meera Mishra,contact169@account169.example.test
+PX-ACCT-0170,Oak Networks,Retail,Scale,Manav Bhat,EMEA,Prospect,3437500,2027-11,Healthy,Neha Sharma,contact170@account170.example.test
+PX-ACCT-0171,Oak Group,Manufacturing,Strategic,Zoya Shah,North America,Prospect,3456250,2028-04,Healthy,Rohan Iyer,contact171@account171.example.test
+PX-ACCT-0172,Oak Industries,Professional Services,Growth,Yash Bose,India,Prospect,3475000,2027-09,Healthy,Sana Nair,contact172@account172.example.test
+PX-ACCT-0173,Oak Partners,Technology,Scale,Sahil Saxena,APAC,Prospect,3493750,2028-02,Healthy,Vikram Das,contact173@account173.example.test
+PX-ACCT-0174,Oak Works,Education,Strategic,Aditya Banerjee,EMEA,Prospect,3512500,2027-07,Healthy,Zoya Reddy,contact174@account174.example.test
+PX-ACCT-0175,Oak Labs,Logistics,Growth,Sameer Kapoor,North America,Prospect,3531250,2028-12,Healthy,Dev Chopra,contact175@account175.example.test
+PX-ACCT-0176,Oak Holdings,Financial Services,Scale,Mira Khan,India,Prospect,3550000,2027-05,Healthy,Ira Banerjee,contact176@account176.example.test
+PX-ACCT-0177,Oak Solutions,Healthcare,Strategic,Sahil Malhotra,APAC,Prospect,3568750,2028-10,Healthy,Nikhil Pillai,contact177@account177.example.test
+PX-ACCT-0178,Oak Collective,Retail,Growth,Pooja Shah,EMEA,Prospect,3587500,2027-03,Healthy,Priya Bhat,contact178@account178.example.test
+PX-ACCT-0179,Oak Services,Manufacturing,Scale,Riya Patel,North America,Prospect,3606250,2028-08,Healthy,Reyansh Mishra,contact179@account179.example.test
+PX-ACCT-0180,Oak Digital,Professional Services,Strategic,Mira Iyer,India,Prospect,3625000,2027-01,Healthy,Tara Sharma,contact180@account180.example.test

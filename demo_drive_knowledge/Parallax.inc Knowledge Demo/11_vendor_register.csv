@@ -1,0 +1,21 @@
+vendor_id,vendor_name,category,business_owner,department,contract_status,contract_start,renewal_date,annual_commitment_inr,purchase_order_required,risk_tier
+PX-VEND-001,Aster Cloud Services,Professional services,Sana Thomas,Data,Renewal Due,2023-02-01,2027-06-15,812500,Yes,Medium
+PX-VEND-002,BluePeak Consulting,Software,Reyansh Sen,Finance,Under Review,2024-03-01,2027-11-15,1125000,Yes,High
+PX-VEND-003,Cobalt Data Systems,Facilities,Nikhil Thomas,Operations,Onboarding,2025-04-01,2027-04-15,1437500,Yes,Low
+PX-VEND-004,Dovetail Design Studio,Security,Akash Kulkarni,Design,Active,2022-05-01,2027-09-15,1750000,Yes,Medium
+PX-VEND-005,Eastline Networks,People services,Naveen Rao,People Operations,Renewal Due,2023-06-01,2027-02-15,2062500,Yes,High
+PX-VEND-006,Fieldstone Security,Cloud infrastructure,Naveen Desai,Security,Under Review,2024-07-01,2027-07-15,2375000,Yes,Low
+PX-VEND-007,Greenway Facilities,Professional services,Zoya Shah,Product,Onboarding,2025-08-01,2027-12-15,2687500,Yes,Medium
+PX-VEND-008,Highland Research,Software,Riya Reddy,Customer Success,Active,2022-09-01,2027-05-15,3000000,Yes,High
+PX-VEND-009,Ionix Software,Facilities,Aarav Reddy,Sales,Renewal Due,2023-10-01,2027-10-15,3312500,Yes,Low
+PX-VEND-010,Juniper Legal Services,Security,Sameer Banerjee,Engineering,Under Review,2024-11-01,2027-03-15,3625000,Yes,Medium
+PX-VEND-011,Kinetic Payments,People services,Meera Ghosh,Data,Onboarding,2025-12-01,2027-08-15,3937500,Yes,High
+PX-VEND-012,Lighthouse Logistics,Cloud infrastructure,Rohan Sen,Finance,Active,2022-01-01,2027-01-15,4250000,Yes,Low
+PX-VEND-013,Mosaic Talent Partners,Professional services,Kunal Nair,Operations,Renewal Due,2023-02-01,2027-06-15,4562500,Yes,Medium
+PX-VEND-014,Northwind Hardware,Software,Priya Patel,Design,Under Review,2024-03-01,2027-11-15,4875000,Yes,High
+PX-VEND-015,OpenRoad Travel,Facilities,Priya Kapoor,People Operations,Onboarding,2025-04-01,2027-04-15,5187500,Yes,Low
+PX-VEND-016,Pioneer Learning,Security,Tanvi Iyer,Security,Active,2022-05-01,2027-09-15,5500000,Yes,Medium
+PX-VEND-017,Quartz Telecom,People services,Sana Das,Product,Renewal Due,2023-06-01,2027-02-15,5812500,Yes,High
+PX-VEND-018,Riverbank Audit,Cloud infrastructure,Ira Mishra,Customer Success,Under Review,2024-07-01,2027-07-15,6125000,Yes,Low
+PX-VEND-019,Summit Analytics,Professional services,Mira Desai,Sales,Onboarding,2025-08-01,2027-12-15,6437500,Yes,Medium
+PX-VEND-020,Tandem Creative,Software,Mira Iyer,Engineering,Active,2022-09-01,2027-05-15,6750000,Yes,High

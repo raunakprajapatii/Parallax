@@ -1,0 +1,12 @@
+PARALLAX.INC — FINANCE OPERATIONS REFERENCE
+
+Finance owner: Mira Sen, Chief Financial Officer.
+Reporting currency: INR. Fiscal year: April–March.
+Expense approval: Team leads approve expenses up to INR 50,000. Department heads approve INR 50,001–250,000. The CFO approves any larger spend or unbudgeted commitment.
+Purchase orders: A purchase order is required before a vendor begins work. Finance matches the PO, invoice, and delivery confirmation before payment.
+Reimbursements: Submit receipts within 30 days through the expense workflow.
+Monthly close: Department cost owners certify their lines by the third business day; Finance publishes the consolidated review by the seventh business day.
+
+Internal tax reference: PXINC-TAX-REF-2026. This is a demonstration reference and is not a PAN or other statutory identifier. Use approved finance records for any real filing or transaction.
+
+Vendor and contract records are maintained in 11_vendor_register.csv. Customer accounts and renewals are recorded in 08_customer_accounts.csv.

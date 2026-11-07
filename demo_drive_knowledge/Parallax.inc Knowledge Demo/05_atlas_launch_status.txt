@@ -1,0 +1,12 @@
+PARALLAX.INC — ATLAS PROGRAM STATUS
+
+Program: Atlas customer knowledge assistant
+Executive sponsor: Dev Mehta, Chief Technology Officer
+Target launch review: 18 November 2026
+Overall status: At risk
+
+Current critical blocker: PX-ATLAS-042 — final sign-off on the access-control permission matrix. Kabir Shah, Security, owns the review. Dev Mehta owns the Atlas launch plan.
+
+Latest update: Security review is waiting for final permission-matrix approval. Kabir will send review notes to Dev by 12 November 2026. Engineering will update the launch checklist after sign-off.
+
+Other program work is tracked in 07_project_work_items.csv. Customer support issues are tracked in 09_support_tickets.csv. The program status was last reviewed on 5 November 2026.

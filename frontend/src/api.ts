@@ -8,7 +8,7 @@ export type Citation = {
   number: number
   recordId: string
   title: string
-  source: 'gmail' | 'jira' | 'notion'
+  source: 'gmail' | 'jira' | 'notion' | 'calendar' | 'drive'
   url?: string
 }
 
@@ -76,4 +76,29 @@ export async function createCalendarEvent(event: CalendarEventDraft): Promise<{ 
     throw new Error(message)
   }
   return response.json()
+}
+
+export type DriveFolder = { id: string; name: string }
+export type DriveKnowledgeStatus = { connected: boolean; folders: DriveFolder[]; selectedFolderId: string | null }
+
+export async function getDriveKnowledgeStatus(): Promise<DriveKnowledgeStatus> {
+  const statusResponse = await getJson<Record<string, boolean>>('/api/oauth/status')
+  if (!statusResponse.drive) return { connected: false, folders: [], selectedFolderId: null }
+  const data = await getJson<{ folders: DriveFolder[]; selectedFolderId: string | null }>('/api/drive/folders')
+  return { connected: true, ...data }
+}
+
+export async function selectDriveFolder(folderId: string): Promise<void> {
+  const response = await fetch('/api/drive/folder', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ folderId }) })
+  if (!response.ok) throw new Error((await response.json()).detail ?? 'Could not select that folder.')
+}
+
+export async function clearDriveFolder(): Promise<void> {
+  const response = await fetch('/api/drive/folder', { method: 'DELETE' })
+  if (!response.ok) throw new Error('Could not clear the selected folder.')
+}
+
+export async function disconnectDrive(): Promise<void> {
+  const response = await fetch('/api/oauth/drive', { method: 'DELETE' })
+  if (!response.ok) throw new Error('Could not disconnect Google Drive.')
 }
