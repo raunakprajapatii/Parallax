@@ -1,0 +1,20 @@
+[
+  {
+    "id": "calendar:demo-atlas-review",
+    "source": "calendar",
+    "title": "Atlas launch readiness review",
+    "content": "Starts: 2026-11-12T10:00:00+05:30\nEnds: 2026-11-12T10:45:00+05:30\nAttendees: Dev Mehta, Kabir Shah, Rounak\nReview the access-control permission matrix and confirm launch readiness owners.",
+    "url": "https://demo.local/calendar/atlas-review",
+    "createdAt": "2026-11-12T10:00:00+05:30",
+    "metadata": {"start": "2026-11-12T10:00:00+05:30", "end": "2026-11-12T10:45:00+05:30", "status": "confirmed"}
+  },
+  {
+    "id": "calendar:demo-monthly-close",
+    "source": "calendar",
+    "title": "Finance monthly close check-in",
+    "content": "Starts: 2026-11-09T15:00:00+05:30\nEnds: 2026-11-09T15:30:00+05:30\nAttendees: Mira Sen, Rounak\nReview department cost-owner certifications and close actions.",
+    "url": "https://demo.local/calendar/monthly-close",
+    "createdAt": "2026-11-09T15:00:00+05:30",
+    "metadata": {"start": "2026-11-09T15:00:00+05:30", "end": "2026-11-09T15:30:00+05:30", "status": "confirmed"}
+  }
+]

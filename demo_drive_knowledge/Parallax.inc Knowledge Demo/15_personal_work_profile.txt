@@ -1,0 +1,69 @@
+PERSONAL WORK PROFILE — ROUNAK
+
+Profile status: Generated work details; review and verify before relying on them.
+Organization: Parallax.inc
+Employee record: PX-EMP-0241
+Role: Business Operations Manager
+Department: Operations
+Manager: Mira Sen, Chief Financial Officer
+Work email: rounak.241@parallax.example.test
+Office: Bengaluru, India
+Time zone: India Standard Time (UTC+05:30)
+Working hours: Monday–Friday, 09:30–18:00 IST
+Preferred name: Rounak
+Preferred routine contact: Work email or team chat
+Urgent escalation: Contact the manager or the relevant incident owner through the approved company channel.
+
+RESPONSIBILITIES
+- Coordinate operational planning, owners, milestones, and follow-ups across departments.
+- Maintain operating reviews and action logs for cross-functional initiatives.
+- Support Finance with vendor onboarding, purchase-order tracking, and monthly close coordination.
+- Help teams find the current policy or process owner; link to the source document instead of copying a policy into a message.
+- Escalate unresolved risks to the accountable department lead and track the decision to closure.
+
+KEY WORKING RELATIONSHIPS
+Mira Sen — CFO and manager — finance approvals, business operations, monthly close.
+Dev Mehta — CTO — Engineering and Atlas launch plan.
+Kabir Shah — CISO — security reviews, access controls, and incident escalation.
+Asha Rao — Chief People Officer — employee policies and People Operations.
+Neha Patel — VP Customer Success — customer account health and support operations.
+Rohan Kapoor — VP Sales — pipeline, renewals, and account ownership.
+
+CURRENT PRIORITIES
+1. Atlas launch readiness: coordinate work-item owners and decision dates. The access-control permission-matrix sign-off is owned by Kabir Shah; Dev Mehta owns the launch plan.
+2. Operating metrics: reconcile the monthly business review with customer, support, and finance source records before circulation.
+3. Vendor operations: confirm a purchase order and business owner are recorded before a vendor begins work.
+4. Process knowledge: keep policy links and accountable owners current; escalate outdated or conflicting records to the document owner.
+
+DECISION AND APPROVAL BOUNDARIES
+- Can coordinate work, request status updates, maintain action logs, and prepare operating summaries.
+- Cannot approve security exceptions, employment decisions, customer contract changes, or unbudgeted spend.
+- Expense approval follows the Finance Operations Reference: team leads up to INR 50,000; department heads INR 50,001–250,000; CFO above INR 250,000 or for unbudgeted commitments.
+- Do not share customer or employee records outside the approved audience.
+
+WORK PREFERENCES
+- Send routine requests with the decision needed, owner, and due date.
+- Put decisions and follow-up actions in the relevant project or operating record.
+- Reserve 10:00–12:00 IST for focused work when calendars allow.
+- Schedule cross-region meetings with at least one business day of notice when practical.
+- For a blocked item, include impact, accountable owner, and the date a decision is needed.
+
+REFERENCE RECORDS
+Employee details: 06_employee_directory.csv
+Projects and owners: 07_project_work_items.csv
+Customers: 08_customer_accounts.csv
+Support queue: 09_support_tickets.csv
+Leave process: 03_people_operations_policy.txt
+Vendors: 11_vendor_register.csv
+Monthly metrics: 12_monthly_operating_metrics.csv
+Security and customer-data guidance: 13_product_and_security_handbook.txt
+
+IDENTITY AND PRIVATE INFORMATION
+Internal identity reference (not an Aadhaar number): PX-IDENTITY-REF-0241
+Internal tax reference (not a PAN): PX-TAX-REF-0241
+Government identity numbers, bank/payroll details, home address, date of birth, personal phone, health information, and emergency contacts are not included in this shared knowledge profile. Use the approved restricted HR or identity system for those records.
+
+PROFILE REVIEW
+Last verified: Not yet verified
+Review owner: Rounak and the assigned manager
+Next review: Confirm role, reporting line, responsibilities, and preferences before operational use.

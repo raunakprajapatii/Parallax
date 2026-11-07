@@ -12,7 +12,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from app.connectors.oauth import OAuthStore, authorization_url, exchange_code
 
 router = APIRouter(prefix="/api/oauth", tags=["integrations"])
-PROVIDERS = {"jira", "notion", "gmail", "calendar"}
+PROVIDERS = {"jira", "notion", "gmail", "calendar", "drive"}
 
 
 def _settings(provider: str) -> tuple[str, str, str, list[str]]:
@@ -24,6 +24,10 @@ def _settings(provider: str) -> tuple[str, str, str, list[str]]:
         return (os.getenv("GOOGLE_CLIENT_ID", ""), os.getenv("GOOGLE_CLIENT_SECRET", ""),
                 os.getenv("GOOGLE_CALENDAR_OAUTH_REDIRECT_URI", "http://localhost:8000/api/oauth/calendar/callback"),
                 ["https://www.googleapis.com/auth/calendar.events"])
+    if provider == "drive":
+        return (os.getenv("GOOGLE_CLIENT_ID", ""), os.getenv("GOOGLE_CLIENT_SECRET", ""),
+                os.getenv("GOOGLE_DRIVE_OAUTH_REDIRECT_URI", "http://localhost:8000/api/oauth/drive/callback"),
+                ["https://www.googleapis.com/auth/drive.readonly"])
     if provider == "jira":
         return (os.getenv("JIRA_OAUTH_CLIENT_ID", ""), os.getenv("JIRA_OAUTH_CLIENT_SECRET", ""),
                 os.getenv("JIRA_OAUTH_REDIRECT_URI", "http://localhost:8000/api/oauth/jira/callback"),
@@ -39,11 +43,12 @@ def _store(request: Request) -> OAuthStore:
 @router.get("/{provider}/connect")
 def connect(provider: str, request: Request):
     if provider not in PROVIDERS:
-        raise HTTPException(404, "Provider must be jira, notion, gmail, or calendar")
+        raise HTTPException(404, "Unknown provider")
     client_id, secret, redirect_uri, scopes = _settings(provider)
     if not client_id or not secret:
         names = {"gmail": "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET",
                  "calendar": "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET",
+                 "drive": "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET",
                  "jira": "JIRA_OAUTH_CLIENT_ID and JIRA_OAUTH_CLIENT_SECRET",
                  "notion": "NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET"}
         raise HTTPException(503, f"Configure {names[provider]}")
@@ -55,7 +60,7 @@ def connect(provider: str, request: Request):
 def callback(provider: str, request: Request, code: str | None = None,
              state: str | None = None, error: str | None = None):
     if provider not in PROVIDERS:
-        raise HTTPException(404, "Provider must be jira, notion, gmail, or calendar")
+        raise HTTPException(404, "Unknown provider")
     if error:
         return HTMLResponse(f"<h2>{provider.title()} connection was not authorized.</h2><p>{escape(error)}</p>", status_code=400)
     if not code or not state or not _store(request).consume_state(state, provider):
@@ -76,12 +81,14 @@ def callback(provider: str, request: Request, code: str | None = None,
 
 @router.get("/status")
 def status(request: Request):
-    return _store(request).status()
+    result = _store(request).status()
+    result["drive"] = bool(_store(request).get("drive"))
+    return result
 
 
 @router.delete("/{provider}")
 def disconnect(provider: str, request: Request):
     if provider not in PROVIDERS:
-        raise HTTPException(404, "Provider must be jira, notion, gmail, or calendar")
+        raise HTTPException(404, "Unknown provider")
     _store(request).delete(provider)
     return {"provider": provider, "connected": False}

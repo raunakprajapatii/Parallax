@@ -1,0 +1,13 @@
+PARALLAX.INC — PRODUCT, SECURITY, AND CUSTOMER DATA HANDBOOK
+
+Customer data: Use customer workspaces only for the purpose agreed in the contract. Do not copy production customer content into a personal account or an unapproved demo workspace.
+
+Access control: Workspace access follows least privilege. The workspace owner approves role changes; Security reviews privileged roles quarterly. Shared links should be limited to the intended audience and revoked when no longer needed.
+
+Incident response: Report suspected account compromise, unintended disclosure, or data loss to Security immediately. Security assigns an incident lead, preserves relevant logs, and coordinates customer communication with Legal and Customer Success.
+
+Data retention: Customer admins configure workspace retention within their contracted plan. Legal holds override normal deletion schedules. Contact Security for a deletion or export request that affects a legal hold.
+
+Product release: Product owns release criteria, Engineering owns implementation and rollback readiness, and Customer Success owns customer readiness. A launch with an open critical access-control finding requires executive risk acceptance.
+
+Atlas launch gate: No production customer data may be loaded into Atlas until the permission-matrix review is signed off and the privacy review is complete.

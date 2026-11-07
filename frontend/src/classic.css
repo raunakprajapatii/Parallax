@@ -20,19 +20,21 @@
 .nav-item,.recent-title,.breadcrumb,.demo-pill{color:#909090;border-radius:0}
 .nav-item.active,.recent-title.selected{background:#141414;color:#fff;border-left:2px solid #f2f2f2}
 .topbar{background:#070707;border-color:#222;backdrop-filter:none}
-.topbar{position:relative}
+.topbar{position:relative;height:60px}
 .mobile-history-toggle,.mobile-history-menu{display:none}
 .breadcrumb strong,.intro h1,.answer-head strong{color:#f3f3f3}
+.breadcrumb{font-size:10px;gap:7px;letter-spacing:.015em}
+.breadcrumb strong{font-size:11px;font-weight:700}
 .intro h1,.modal-title{font-family:'DotGothic16','Space Mono',monospace;letter-spacing:.035em;font-weight:400}
 .intro p,.answer-body{color:#b8b8b8}
 .eyebrow{color:#c8c8c8}
 .prompt-icon{background:#161616;color:#ddd;border-radius:2px}
 .user-message,.send-button{background:#eee;color:#050505;border-radius:2px;box-shadow:none}
-.user-message{border-radius:2px;}
+.user-message{border-radius:2px;font-size:14px;line-height:1.65;transition:transform .18s ease,background .18s ease}
 .send-button:hover{background:#cfcfcf}
 .send-button:disabled{background:#555;color:#aaa}
 .answer-head,.answer-foot,.trace-content,.modal-head{border-color:#242424}
-.answer-body{line-height:1.9}
+.answer-body{font-size:14px;line-height:1.85}
 .answer-body{white-space:normal;overflow-wrap:anywhere}
 .answer-body>*:first-child{margin-top:0}
 .answer-body>*:last-child{margin-bottom:0}
@@ -76,27 +78,54 @@ body,#root{height:100%;min-height:0;overflow:hidden}
 .saved-chat:hover,.saved-chat.selected{background:#121212;border-color:#292929;color:#f1f1f1}
 .no-saved-chats{padding:5px 9px;color:#666;font-size:10px;line-height:1.6}
 .workspace{height:100%;min-height:0;overflow:hidden}
-.main-content{height:calc(100dvh - 72px);min-height:0;overflow:hidden;padding-top:28px;padding-bottom:18px}
+.main-content{width:min(1120px,100%);height:calc(100dvh - 60px);min-height:0;overflow:hidden;padding-top:18px;padding-bottom:16px}
 .intro,.prompt-grid{flex:none}
-.intro{margin-bottom:22px}
+.intro{margin-bottom:16px}
 .conversation{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#444 transparent;padding:0 3px 18px;scroll-behavior:smooth}
 .composer-wrap{position:static;flex:none;margin-top:0;padding-top:12px;background:transparent}
-.composer{border:1px solid #f1f1f1;border-radius:18px;background:#050505;box-shadow:none;padding:12px 14px}
+.composer{border:1px solid #f1f1f1;border-radius:18px;background:#050505;box-shadow:none;padding:12px 14px;transition:border-color .2s ease,background .2s ease,transform .2s ease}
 .composer:focus-within{border-color:#fff;box-shadow:none}
-.composer textarea{resize:none;min-height:48px;max-height:140px}
+.composer textarea{resize:none;min-height:48px;max-height:140px;font-size:14px}
 .composer-hint{font-size:9px}
 .disclaimer{display:none}
+.prompt-grid{grid-template-columns:1fr;max-width:760px;margin-bottom:14px}
+.prompt-card{align-items:center;min-height:58px}
+.example-label{display:block;color:#858585;font-size:9px;letter-spacing:.08em;margin-bottom:3px}
+.conversation-wrap{position:relative;display:flex;flex:1;min-height:0}
+.conversation{width:100%}
+.new-messages-cue{position:absolute;z-index:2;left:50%;bottom:12px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid #777;border-radius:999px;background:#eee;color:#050505;font:11px 'Space Mono',monospace;box-shadow:0 6px 20px #0009;cursor:pointer;animation:turn-enter .18s ease-out both}
+.new-messages-cue:hover{background:#fff;transform:translate(-50%,-2px)}
+.citation-list{padding:0 19px 16px;gap:7px}
+.citation-chip{min-width:0;max-width:100%;padding:7px 9px;gap:7px;color:#ddd;border-color:#303030;background:#101010;text-align:left}
+.citation-chip:hover{color:#fff;border-color:#888;background:#171717}
+.citation-ref{flex:none;color:#aaa;font-size:10px}
+.citation-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.citation-open{flex:none;color:#888;font-size:9px;text-transform:uppercase;letter-spacing:.04em}
+.answer-head small{line-height:1.6}
+.search-status{animation:turn-enter .2s ease-out both}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+.turn{animation:turn-enter .24s ease-out both}
+.answer-card{transition:border-color .2s ease,background .2s ease,transform .2s ease}
+.answer-card:hover{border-color:#555;background:#0c0c0c;transform:translateY(-1px)}
+.user-message:hover{transform:translateY(-1px);background:#fff}
+.send-button:not(:disabled):hover{transform:translateY(-1px)}
+.composer:focus-within{background:#080808}
+.citation-chip:hover,.saved-chat:hover{transform:translateY(-1px)}
+.send-button:focus-visible,.citation-chip:focus-visible,.saved-chat:focus-visible,.composer textarea:focus-visible{outline:2px solid #aaa;outline-offset:3px}
+@keyframes turn-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:650px){
   .app-shell{height:100dvh}
   .workspace{height:100dvh}
-  .main-content{height:calc(100dvh - 60px);padding:22px 16px 12px}
+  .main-content{width:100%;height:calc(100dvh - 60px);padding:18px 16px 12px}
   .intro{margin-bottom:16px}
+  .prompt-grid{max-width:none;margin-bottom:10px}
   .prompt-grid{gap:7px;margin-bottom:14px}
   .prompt-card{padding:9px 11px}
   .composer-wrap{padding-top:9px}
   .composer{border-radius:16px;padding:9px 11px}
   .composer textarea{min-height:42px}
+  .citation-list{padding:0 13px 13px}
+  .citation-chip{width:100%}
   .mobile-history-toggle{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1px solid #333;border-radius:6px;padding:6px 8px;color:#ccc;font-size:10px;cursor:pointer}
   .mobile-history-menu{display:block;position:absolute;z-index:5;right:12px;top:calc(100% + 6px);width:min(340px,calc(100vw - 24px));max-height:50dvh;overflow-y:auto;padding:9px;background:#090909;border:1px solid #444;border-radius:10px;box-shadow:0 12px 35px #000b}
   .mobile-history-menu .saved-chat{padding:10px 9px}

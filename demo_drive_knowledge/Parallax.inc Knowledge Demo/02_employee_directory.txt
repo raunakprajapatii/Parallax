@@ -1,0 +1,13 @@
+PARALLAX.INC — EMPLOYEE DIRECTORY GUIDE
+
+The employee directory is maintained in 06_employee_directory.csv. Search by employee ID, name, team, job title, manager, email address, or office location. Each employee has a unique PX-EMP identifier.
+
+Department contacts:
+Engineering — Dev Mehta, CTO
+Finance — Mira Sen, CFO
+Security — Kabir Shah, CISO
+People Operations — Asha Rao, Chief People Officer
+Customer Success — Neha Patel, VP Customer Success
+Sales — Rohan Kapoor, VP Sales
+
+Work email addresses in the employee register use the reserved example.test domain.

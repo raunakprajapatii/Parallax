@@ -1,0 +1,15 @@
+PARALLAX.INC — PEOPLE OPERATIONS HANDBOOK
+
+Annual leave: Full-time employees receive 20 annual leave days per fiscal year. Planned leave requests should be submitted at least five business days before the first day away. The direct manager reviews requests; People Operations records the decision and updates the balance.
+
+Sick leave: Notify the manager as soon as practical. For absences longer than three consecutive working days, People Operations may request supporting documentation through the approved HR channel. Do not send health details in general team chat.
+
+Parental leave: Contact People Operations to review the current eligibility and transition plan. Individual circumstances are handled privately.
+
+Flexible work: Teams may agree to hybrid schedules based on customer coverage and role requirements. Managers publish team schedules in the shared workspace.
+
+Performance cycle: Goals are set in April and reviewed quarterly. Year-end reviews are calibrated by department leadership and People Operations.
+
+Policy exceptions: The manager provides a recommendation and the Chief People Officer records the final decision. Contact People Operations for case-specific guidance.
+
+The leave request log is maintained in 10_leave_requests.csv. It contains operational request status only; it is not a substitute for the HR system of record.

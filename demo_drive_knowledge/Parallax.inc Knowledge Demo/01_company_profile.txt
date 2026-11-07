@@ -1,0 +1,23 @@
+PARALLAX.INC — COMPANY PROFILE
+
+Company: Parallax.inc
+Head office: Bengaluru, India
+Founded: 2019
+Employees: 241
+Business: Enterprise work intelligence and knowledge operations software
+Product suite: Parallax Workspace, Parallax Search, Parallax Connect, and Parallax Insights
+Operating regions: India, APAC, EMEA, and North America
+Fiscal year: April through March
+Company reporting currency: INR
+
+Company records list the internal tax reference PXINC-TAX-REF-2026. This is an internal demonstration reference, not a government-issued PAN or filing identifier. For questions on statutory registrations, contact Finance.
+
+Leadership contacts:
+Asha Rao — Chief People Officer — People Operations
+Dev Mehta — Chief Technology Officer — Engineering and Product
+Mira Sen — Chief Financial Officer — Finance and Business Operations
+Kabir Shah — Chief Information Security Officer — Security and Trust
+Neha Patel — VP Customer Success
+Rohan Kapoor — VP Sales
+
+Employee, department, customer, vendor, project, and support records are maintained in their respective CSV registers in this folder.

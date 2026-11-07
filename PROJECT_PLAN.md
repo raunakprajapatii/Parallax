@@ -2,7 +2,7 @@
 
 ## 1. Project in one sentence
 
-Build a web application where a user asks a work question (for example, “What is blocking the Q4 launch?”), and an AI agent retrieves live or mocked information from Gmail, Jira, and Notion, combines the evidence, and returns a concise answer with source citations, memory, and a visible execution trace.
+Build a web application where a user asks a work question (for example, “What is blocking the Q4 launch?”), and an AI agent retrieves live or sample information from Gmail, Jira, Notion, Google Calendar, and Google Drive, combines the evidence, and returns a concise answer with source citations, memory, and a visible execution trace.
 
 ## 2. Goal and resume value
 
@@ -125,7 +125,7 @@ Every connector returns this shape. Do not return provider-specific data directl
 ```ts
 type SourceRecord = {
   id: string;                         // e.g. "jira:ATL-42"
-  source: "gmail" | "jira" | "notion";
+  source: "gmail" | "jira" | "notion" | "calendar" | "drive";
   title: string;
   content: string;                    // clean, relevant text
   url?: string;
@@ -139,7 +139,7 @@ type SourceRecord = {
 
 ```ts
 type ToolResult = {
-  toolName: "search_gmail" | "search_jira" | "search_notion";
+  toolName: "search_gmail" | "search_jira" | "search_notion" | "search_calendar" | "search_drive";
   query: string;
   records: SourceRecord[];
   latencyMs: number;
@@ -177,7 +177,8 @@ Keep the agent workflow constrained. A reliable state machine is more impressive
 
 ```text
 User query
-  → classify intent and select 1–3 sources
+  → classify intent and use a compact, validated LLM plan to select 1–3 sources
+  → rewrite a short query for each selected connector (deterministic fallback)
   → retrieve records (max 5/source)
   → rank/deduplicate evidence
   → synthesize answer only from records

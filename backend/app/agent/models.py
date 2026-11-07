@@ -5,8 +5,8 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
-SourceName = Literal["gmail", "jira", "notion"]
-ToolName = Literal["search_gmail", "search_jira", "search_notion"]
+SourceName = Literal["gmail", "jira", "notion", "calendar", "drive"]
+ToolName = Literal["search_gmail", "search_jira", "search_notion", "search_calendar", "search_drive"]
 
 
 class SourceRecord(BaseModel):

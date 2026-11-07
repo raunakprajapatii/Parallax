@@ -26,7 +26,15 @@ Keep module implementations in their owned folders. Coordinate changes to shared
 
 4. In another terminal, run `cd frontend`, `npm install`, then `npm run dev`. Open `http://localhost:3000` for Parallax or `http://localhost:8000/docs` for the API.
 
-To schedule meetings, configure the Google OAuth client and register both the Gmail and Calendar callback URLs in Google Cloud. Calendar uses the separate `calendar.events` permission; connect it from the Calendar prompt in chat. Parallax prepares a draft first and creates the event only after you select **Create event**.
+To search or schedule with Google Calendar, configure the Google OAuth client and register both the Gmail and Calendar callback URLs in Google Cloud. Calendar uses the `calendar.events` permission. Event creation still prepares a draft and requires you to select **Create event**.
+
+### Google Drive knowledge source
+
+To demo Drive retrieval, upload the prepared [`Parallax.inc Knowledge Demo` folder](demo_drive_knowledge/Parallax.inc%20Knowledge%20Demo) into the Google account you will connect. It contains 15 plain-text and CSV documents with 241 employee records, 360 work items, 180 customer accounts, 500 support tickets, and supporting policy, finance, leave, vendor, and operating data. The records are generated for demonstration; email addresses use the reserved `example.test` domain, and the internal tax reference is not a valid PAN or statutory identifier. See the [upload guide](demo_drive_knowledge/README.md).
+
+For live Drive search, configure `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, register `http://localhost:8000/api/oauth/drive/callback` as an authorized redirect URI, and set `GOOGLE_DRIVE_OAUTH_REDIRECT_URI` if using a different host. Set `CONNECTOR_ENABLE_LIVE=true` and restart the backend. In Parallax, open **Knowledge sources**, choose **Connected sources**, connect Google Drive, and select `Parallax.inc Knowledge Demo`. Retrieval searches full text/CSV content, ranks matching passages, and cites the original Drive file. It does not recurse into subfolders or ingest PDF/binary formats yet. Disconnect Drive or clear the selected folder from the app to stop using this source.
+
+Use synthetic documents for demos. A selected folder is read at query time; Parallax does not make a separate vector database or retain document contents in its local database.
 
 ## Working together
 
@@ -50,4 +58,4 @@ load context → route to work retrieval or general chat
              → persist the response
 ```
 
-The graph carries turn state between nodes. The existing SQLite memory service remains the durable transcript store, so the graph does not keep a second copy of conversation history. Read-only connector requests retry once for transient 429/5xx or timeout errors; permission and authentication failures are reported without retry. The application-specific router still chooses sources, while LangGraph owns the workflow and branching.
+The graph carries turn state between nodes. A compact structured LLM plan selects up to three allow-listed sources and gives each a query of at most 12 words; deterministic routing is the fallback. Connector requests retry once for transient 429/5xx or timeout errors. Answers are grounded in retrieved evidence and sized to the question. The SQLite memory service remains the durable transcript store.

@@ -87,7 +87,7 @@ class OAuthStore:
 
 def authorization_url(provider: str, state: str, client_id: str, redirect_uri: str,
                       scopes: list[str]) -> str:
-    if provider in {"gmail", "calendar"}:
+    if provider in {"gmail", "calendar", "drive"}:
         params = {"client_id": client_id, "redirect_uri": redirect_uri,
                   "response_type": "code", "scope": " ".join(scopes),
                   "state": state, "access_type": "offline", "prompt": "consent"}
@@ -106,7 +106,7 @@ def authorization_url(provider: str, state: str, client_id: str, redirect_uri: s
 
 def exchange_code(provider: str, code: str, client_id: str, client_secret: str,
                   redirect_uri: str) -> dict:
-    if provider in {"gmail", "calendar"}:
+    if provider in {"gmail", "calendar", "drive"}:
         response = httpx.post("https://oauth2.googleapis.com/token", data={
             "grant_type": "authorization_code", "client_id": client_id,
             "client_secret": client_secret, "code": code, "redirect_uri": redirect_uri,
@@ -130,10 +130,11 @@ def refresh_token(provider: str, token: dict, client_id: str, client_secret: str
         return token
     url = ({"gmail": "https://oauth2.googleapis.com/token",
             "calendar": "https://oauth2.googleapis.com/token",
+            "drive": "https://oauth2.googleapis.com/token",
             "jira": "https://auth.atlassian.com/oauth/token",
             "notion": "https://api.notion.com/v1/oauth/token"}[provider])
     payload = {"grant_type": "refresh_token", "refresh_token": refresh}
-    if provider in {"gmail", "calendar"}:
+    if provider in {"gmail", "calendar", "drive"}:
         payload.update(client_id=client_id, client_secret=client_secret)
         response = httpx.post(url, data=payload, timeout=20)
     elif provider == "jira":

@@ -1,0 +1,242 @@
+employee_id,name,job_title,department,manager,work_email,office_location,employment_status,start_date
+PX-EMP-0001,Dev Mehta,Chief Technology Officer,Engineering,Executive Leadership Team,dev.mehta.001@parallax.example.test,Mumbai,Active,2020-06-12
+PX-EMP-0002,Mira Sen,Chief Financial Officer,Finance,Executive Leadership Team,mira.sen.002@parallax.example.test,Hyderabad,Active,2021-11-23
+PX-EMP-0003,Kabir Shah,Chief Information Security Officer,Security,Executive Leadership Team,kabir.shah.003@parallax.example.test,Pune,Active,2022-04-07
+PX-EMP-0004,Asha Rao,Chief People Officer,People Operations,Executive Leadership Team,asha.rao.004@parallax.example.test,Delhi NCR,Active,2023-09-18
+PX-EMP-0005,Neha Patel,VP Customer Success,Customer Success,Executive Leadership Team,neha.patel.005@parallax.example.test,Chennai,Active,2024-02-02
+PX-EMP-0006,Rohan Kapoor,VP Sales,Sales,Executive Leadership Team,rohan.kapoor.006@parallax.example.test,Remote — India,Active,2025-07-13
+PX-EMP-0007,Diya Bhat,Program Manager,Operations,Executive Leadership Team,diya.bhat.007@parallax.example.test,Bengaluru,Active,2019-12-24
+PX-EMP-0008,Priya Mishra,Payroll Specialist,Finance,Mira Sen,priya.mishra.008@parallax.example.test,Mumbai,Active,2020-05-08
+PX-EMP-0009,Anika Sen,Customer Success Manager,Customer Success,Neha Patel,anika.sen.009@parallax.example.test,Hyderabad,Active,2021-10-19
+PX-EMP-0010,Sana Thomas,Product Analyst,Product,Executive Leadership Team,sana.thomas.010@parallax.example.test,Pune,Active,2022-03-03
+PX-EMP-0011,Sana Banerjee,Security Lead,Security,Kabir Shah,sana.banerjee.011@parallax.example.test,Delhi NCR,Active,2023-08-14
+PX-EMP-0012,Vikram Chopra,People Partner,People Operations,Asha Rao,vikram.chopra.012@parallax.example.test,Chennai,Active,2024-01-25
+PX-EMP-0013,Mira Malhotra,UX Researcher,Design,Executive Leadership Team,mira.malhotra.013@parallax.example.test,Remote — India,Active,2025-06-09
+PX-EMP-0014,Ishaan Saxena,Business Operations Manager,Operations,Executive Leadership Team,ishaan.saxena.014@parallax.example.test,Bengaluru,Active,2019-11-20
+PX-EMP-0015,Kavya Saxena,Financial Analyst,Finance,Mira Sen,kavya.saxena.015@parallax.example.test,Mumbai,Active,2020-04-04
+PX-EMP-0016,Leela Mishra,Machine Learning Engineer,Data,Executive Leadership Team,leela.mishra.016@parallax.example.test,Hyderabad,Active,2021-09-15
+PX-EMP-0017,Aditya Mehta,Engineering Manager,Engineering,Dev Mehta,aditya.mehta.017@parallax.example.test,Pune,Active,2022-02-26
+PX-EMP-0018,Nikhil Shah,Security Engineer,Security,Kabir Shah,nikhil.shah.018@parallax.example.test,Delhi NCR,Active,2023-07-10
+PX-EMP-0019,Reyansh Sen,Recruiter,People Operations,Asha Rao,reyansh.sen.019@parallax.example.test,Chennai,Active,2024-12-21
+PX-EMP-0020,Yash Sethi,Design Lead,Design,Executive Leadership Team,yash.sethi.020@parallax.example.test,Remote — India,Active,2025-05-05
+PX-EMP-0021,Naveen Sethi,Operations Analyst,Operations,Executive Leadership Team,naveen.sethi.021@parallax.example.test,Bengaluru,Active,2019-10-16
+PX-EMP-0022,Leela Shah,Finance Manager,Finance,Mira Sen,leela.shah.022@parallax.example.test,Mumbai,Active,2020-03-27
+PX-EMP-0023,Pooja Bose,Analytics Lead,Data,Executive Leadership Team,pooja.bose.023@parallax.example.test,Hyderabad,Active,2021-08-11
+PX-EMP-0024,Kabir Chopra,QA Engineer,Engineering,Dev Mehta,kabir.chopra.024@parallax.example.test,Pune,Active,2022-01-22
+PX-EMP-0025,Asha Khan,Sales Development Representative,Sales,Rohan Kapoor,asha.khan.025@parallax.example.test,Delhi NCR,Active,2023-06-06
+PX-EMP-0026,Tara Kulkarni,Implementation Lead,Customer Success,Neha Patel,tara.kulkarni.026@parallax.example.test,Chennai,Active,2024-11-17
+PX-EMP-0027,Manav Verma,Product Designer,Design,Executive Leadership Team,manav.verma.027@parallax.example.test,Remote — India,Active,2025-04-01
+PX-EMP-0028,Nikhil Thomas,Program Manager,Operations,Executive Leadership Team,nikhil.thomas.028@parallax.example.test,Bengaluru,Active,2019-09-12
+PX-EMP-0029,Meera Thomas,Payroll Specialist,Finance,Mira Sen,meera.thomas.029@parallax.example.test,Mumbai,On leave,2020-02-23
+PX-EMP-0030,Sameer Thomas,Data Analyst,Data,Executive Leadership Team,sameer.thomas.030@parallax.example.test,Hyderabad,Active,2021-07-07
+PX-EMP-0031,Naveen Khan,Senior Software Engineer,Engineering,Dev Mehta,naveen.khan.031@parallax.example.test,Pune,Active,2022-12-18
+PX-EMP-0032,Priya Nair,Solutions Consultant,Sales,Rohan Kapoor,priya.nair.032@parallax.example.test,Delhi NCR,Active,2023-05-02
+PX-EMP-0033,Aditi Desai,Customer Success Manager,Customer Success,Neha Patel,aditi.desai.033@parallax.example.test,Chennai,Active,2024-10-13
+PX-EMP-0034,Mira Chopra,Product Analyst,Product,Executive Leadership Team,mira.chopra.034@parallax.example.test,Remote — India,Active,2025-03-24
+PX-EMP-0035,Ananya Joshi,Security Lead,Security,Kabir Shah,ananya.joshi.035@parallax.example.test,Bengaluru,Active,2019-08-08
+PX-EMP-0036,Naveen Sharma,Financial Analyst,Finance,Mira Sen,naveen.sharma.036@parallax.example.test,Mumbai,Active,2020-01-19
+PX-EMP-0037,Akash Kulkarni,Machine Learning Engineer,Data,Executive Leadership Team,akash.kulkarni.037@parallax.example.test,Hyderabad,Active,2021-06-03
+PX-EMP-0038,Pooja Sen,Platform Engineer,Engineering,Dev Mehta,pooja.sen.038@parallax.example.test,Pune,Active,2022-11-14
+PX-EMP-0039,Diya Kapoor,Account Executive,Sales,Rohan Kapoor,diya.kapoor.039@parallax.example.test,Delhi NCR,Active,2023-04-25
+PX-EMP-0040,Varun Shah,Support Specialist,Customer Success,Neha Patel,varun.shah.040@parallax.example.test,Chennai,Active,2024-09-09
+PX-EMP-0041,Ira Kapoor,Product Operations Manager,Product,Executive Leadership Team,ira.kapoor.041@parallax.example.test,Remote — India,Active,2025-02-20
+PX-EMP-0042,Akash Sharma,Security Engineer,Security,Kabir Shah,akash.sharma.042@parallax.example.test,Bengaluru,Active,2019-07-04
+PX-EMP-0043,Sana Sharma,Recruiter,People Operations,Asha Rao,sana.sharma.043@parallax.example.test,Mumbai,Active,2020-12-15
+PX-EMP-0044,Riya Khan,Design Lead,Design,Executive Leadership Team,riya.khan.044@parallax.example.test,Hyderabad,Active,2021-05-26
+PX-EMP-0045,Ananya Sethi,Software Engineer,Engineering,Dev Mehta,ananya.sethi.045@parallax.example.test,Pune,Active,2022-10-10
+PX-EMP-0046,Naveen Rao,Sales Development Representative,Sales,Rohan Kapoor,naveen.rao.046@parallax.example.test,Delhi NCR,Active,2023-03-21
+PX-EMP-0047,Akash Verma,Implementation Lead,Customer Success,Neha Patel,akash.verma.047@parallax.example.test,Chennai,Active,2024-08-05
+PX-EMP-0048,Sana Khanna,Product Manager,Product,Executive Leadership Team,sana.khanna.048@parallax.example.test,Remote — India,Active,2025-01-16
+PX-EMP-0049,Kavya Ghosh,Security Analyst,Security,Kabir Shah,kavya.ghosh.049@parallax.example.test,Bengaluru,Active,2019-06-27
+PX-EMP-0050,Arjun Gupta,People Operations Manager,People Operations,Asha Rao,arjun.gupta.050@parallax.example.test,Mumbai,Active,2020-11-11
+PX-EMP-0051,Manav Bhat,Product Designer,Design,Executive Leadership Team,manav.bhat.051@parallax.example.test,Hyderabad,Active,2021-04-22
+PX-EMP-0052,Kunal Menon,Program Manager,Operations,Executive Leadership Team,kunal.menon.052@parallax.example.test,Pune,Active,2022-09-06
+PX-EMP-0053,Leela Menon,Payroll Specialist,Finance,Mira Sen,leela.menon.053@parallax.example.test,Delhi NCR,Active,2023-02-17
+PX-EMP-0054,Naveen Joshi,Customer Success Manager,Customer Success,Neha Patel,naveen.joshi.054@parallax.example.test,Chennai,Active,2024-07-01
+PX-EMP-0055,Naveen Desai,Product Analyst,Product,Executive Leadership Team,naveen.desai.055@parallax.example.test,Remote — India,Active,2025-12-12
+PX-EMP-0056,Kunal Kapoor,Security Lead,Security,Kabir Shah,kunal.kapoor.056@parallax.example.test,Bengaluru,Active,2019-05-23
+PX-EMP-0057,Vikram Joshi,People Partner,People Operations,Asha Rao,vikram.joshi.057@parallax.example.test,Mumbai,Active,2020-10-07
+PX-EMP-0058,Simran Menon,UX Researcher,Design,Executive Leadership Team,simran.menon.058@parallax.example.test,Hyderabad,On leave,2021-03-18
+PX-EMP-0059,Neha Mishra,Business Operations Manager,Operations,Executive Leadership Team,neha.mishra.059@parallax.example.test,Pune,Active,2022-08-02
+PX-EMP-0060,Dev Desai,Financial Analyst,Finance,Mira Sen,dev.desai.060@parallax.example.test,Delhi NCR,Active,2023-01-13
+PX-EMP-0061,Vikram Rao,Machine Learning Engineer,Data,Executive Leadership Team,vikram.rao.061@parallax.example.test,Chennai,Active,2024-06-24
+PX-EMP-0062,Asha Gupta,Engineering Manager,Engineering,Dev Mehta,asha.gupta.062@parallax.example.test,Remote — India,Active,2025-11-08
+PX-EMP-0063,Anika Sharma,Security Engineer,Security,Kabir Shah,anika.sharma.063@parallax.example.test,Bengaluru,Active,2019-04-19
+PX-EMP-0064,Zoya Shah,Recruiter,People Operations,Asha Rao,zoya.shah.064@parallax.example.test,Mumbai,Active,2020-09-03
+PX-EMP-0065,Aarav Menon,Design Lead,Design,Executive Leadership Team,aarav.menon.065@parallax.example.test,Hyderabad,Active,2021-02-14
+PX-EMP-0066,Aditya Rao,Operations Analyst,Operations,Executive Leadership Team,aditya.rao.066@parallax.example.test,Pune,Active,2022-07-25
+PX-EMP-0067,Simran Gupta,Finance Manager,Finance,Mira Sen,simran.gupta.067@parallax.example.test,Delhi NCR,Active,2023-12-09
+PX-EMP-0068,Simran Malhotra,Analytics Lead,Data,Executive Leadership Team,simran.malhotra.068@parallax.example.test,Chennai,Active,2024-05-20
+PX-EMP-0069,Kavya Iyer,QA Engineer,Engineering,Dev Mehta,kavya.iyer.069@parallax.example.test,Remote — India,Active,2025-10-04
+PX-EMP-0070,Sana Sen,Sales Development Representative,Sales,Rohan Kapoor,sana.sen.070@parallax.example.test,Bengaluru,Active,2019-03-15
+PX-EMP-0071,Varun Chopra,Implementation Lead,Customer Success,Neha Patel,varun.chopra.071@parallax.example.test,Mumbai,Active,2020-08-26
+PX-EMP-0072,Neha Rao,Product Designer,Design,Executive Leadership Team,neha.rao.072@parallax.example.test,Hyderabad,Active,2021-01-10
+PX-EMP-0073,Riya Reddy,Program Manager,Operations,Executive Leadership Team,riya.reddy.073@parallax.example.test,Pune,Active,2022-06-21
+PX-EMP-0074,Tanvi Joshi,Payroll Specialist,Finance,Mira Sen,tanvi.joshi.074@parallax.example.test,Delhi NCR,Active,2023-11-05
+PX-EMP-0075,Aditi Sethi,Data Analyst,Data,Executive Leadership Team,aditi.sethi.075@parallax.example.test,Chennai,Active,2024-04-16
+PX-EMP-0076,Sana Shah,Senior Software Engineer,Engineering,Dev Mehta,sana.shah.076@parallax.example.test,Remote — India,Active,2025-09-27
+PX-EMP-0077,Yash Bose,Solutions Consultant,Sales,Rohan Kapoor,yash.bose.077@parallax.example.test,Bengaluru,Active,2019-02-11
+PX-EMP-0078,Ishaan Desai,Customer Success Manager,Customer Success,Neha Patel,ishaan.desai.078@parallax.example.test,Mumbai,Active,2020-07-22
+PX-EMP-0079,Aditi Pillai,Product Analyst,Product,Executive Leadership Team,aditi.pillai.079@parallax.example.test,Hyderabad,Active,2021-12-06
+PX-EMP-0080,Riya Pillai,Security Lead,Security,Kabir Shah,riya.pillai.080@parallax.example.test,Pune,Active,2022-05-17
+PX-EMP-0081,Tanvi Pillai,Financial Analyst,Finance,Mira Sen,tanvi.pillai.081@parallax.example.test,Delhi NCR,Active,2023-10-01
+PX-EMP-0082,Aarav Reddy,Machine Learning Engineer,Data,Executive Leadership Team,aarav.reddy.082@parallax.example.test,Chennai,Active,2024-03-12
+PX-EMP-0083,Diya Mehta,Platform Engineer,Engineering,Dev Mehta,diya.mehta.083@parallax.example.test,Remote — India,Active,2025-08-23
+PX-EMP-0084,Naveen Mishra,Account Executive,Sales,Rohan Kapoor,naveen.mishra.084@parallax.example.test,Bengaluru,Active,2019-01-07
+PX-EMP-0085,Reyansh Verma,Support Specialist,Customer Success,Neha Patel,reyansh.verma.085@parallax.example.test,Mumbai,Active,2020-06-18
+PX-EMP-0086,Kabir Desai,Product Operations Manager,Product,Executive Leadership Team,kabir.desai.086@parallax.example.test,Hyderabad,Active,2021-11-02
+PX-EMP-0087,Karan Khan,Security Engineer,Security,Kabir Shah,karan.khan.087@parallax.example.test,Pune,On leave,2022-04-13
+PX-EMP-0088,Manav Sharma,Recruiter,People Operations,Asha Rao,manav.sharma.088@parallax.example.test,Delhi NCR,Active,2023-09-24
+PX-EMP-0089,Arjun Mishra,Design Lead,Design,Executive Leadership Team,arjun.mishra.089@parallax.example.test,Chennai,Active,2024-02-08
+PX-EMP-0090,Sahil Saxena,Software Engineer,Engineering,Dev Mehta,sahil.saxena.090@parallax.example.test,Remote — India,Active,2025-07-19
+PX-EMP-0091,Sameer Banerjee,Sales Development Representative,Sales,Rohan Kapoor,sameer.banerjee.091@parallax.example.test,Bengaluru,Active,2019-12-03
+PX-EMP-0092,Nikhil Bose,Implementation Lead,Customer Success,Neha Patel,nikhil.bose.092@parallax.example.test,Mumbai,Active,2020-05-14
+PX-EMP-0093,Pooja Iyer,Product Manager,Product,Executive Leadership Team,pooja.iyer.093@parallax.example.test,Hyderabad,Active,2021-10-25
+PX-EMP-0094,Rohan Iyer,Security Analyst,Security,Kabir Shah,rohan.iyer.094@parallax.example.test,Pune,Active,2022-03-09
+PX-EMP-0095,Nikhil Pillai,People Operations Manager,People Operations,Asha Rao,nikhil.pillai.095@parallax.example.test,Delhi NCR,Active,2023-08-20
+PX-EMP-0096,Ira Shah,Product Designer,Design,Executive Leadership Team,ira.shah.096@parallax.example.test,Chennai,Active,2024-01-04
+PX-EMP-0097,Neha Iyer,Program Manager,Operations,Executive Leadership Team,neha.iyer.097@parallax.example.test,Remote — India,Active,2025-06-15
+PX-EMP-0098,Ananya Das,Payroll Specialist,Finance,Mira Sen,ananya.das.098@parallax.example.test,Bengaluru,Active,2019-11-26
+PX-EMP-0099,Karan Patel,Customer Success Manager,Customer Success,Neha Patel,karan.patel.099@parallax.example.test,Mumbai,Active,2020-04-10
+PX-EMP-0100,Meera Ghosh,Product Analyst,Product,Executive Leadership Team,meera.ghosh.100@parallax.example.test,Hyderabad,Active,2021-09-21
+PX-EMP-0101,Neha Sen,Security Lead,Security,Kabir Shah,neha.sen.101@parallax.example.test,Pune,Active,2022-02-05
+PX-EMP-0102,Ira Khan,People Partner,People Operations,Asha Rao,ira.khan.102@parallax.example.test,Delhi NCR,Active,2023-07-16
+PX-EMP-0103,Aditya Banerjee,UX Researcher,Design,Executive Leadership Team,aditya.banerjee.103@parallax.example.test,Chennai,Active,2024-12-27
+PX-EMP-0104,Diya Khan,Business Operations Manager,Operations,Executive Leadership Team,diya.khan.104@parallax.example.test,Remote — India,Active,2025-05-11
+PX-EMP-0105,Mira Sharma,Financial Analyst,Finance,Mira Sen,mira.sharma.105@parallax.example.test,Bengaluru,Active,2019-10-22
+PX-EMP-0106,Karan Rao,Machine Learning Engineer,Data,Executive Leadership Team,karan.rao.106@parallax.example.test,Mumbai,Active,2020-03-06
+PX-EMP-0107,Diya Saxena,Engineering Manager,Engineering,Dev Mehta,diya.saxena.107@parallax.example.test,Hyderabad,Active,2021-08-17
+PX-EMP-0108,Aarav Khanna,Security Engineer,Security,Kabir Shah,aarav.khanna.108@parallax.example.test,Pune,Active,2022-01-01
+PX-EMP-0109,Rohan Sen,Recruiter,People Operations,Asha Rao,rohan.sen.109@parallax.example.test,Delhi NCR,Active,2023-06-12
+PX-EMP-0110,Dev Reddy,Design Lead,Design,Executive Leadership Team,dev.reddy.110@parallax.example.test,Chennai,Active,2024-11-23
+PX-EMP-0111,Kabir Verma,Operations Analyst,Operations,Executive Leadership Team,kabir.verma.111@parallax.example.test,Remote — India,Active,2025-04-07
+PX-EMP-0112,Ishaan Pillai,Finance Manager,Finance,Mira Sen,ishaan.pillai.112@parallax.example.test,Bengaluru,Active,2019-09-18
+PX-EMP-0113,Ishaan Mishra,Analytics Lead,Data,Executive Leadership Team,ishaan.mishra.113@parallax.example.test,Mumbai,Active,2020-02-02
+PX-EMP-0114,Varun Menon,QA Engineer,Engineering,Dev Mehta,varun.menon.114@parallax.example.test,Hyderabad,Active,2021-07-13
+PX-EMP-0115,Nikhil Nair,Sales Development Representative,Sales,Rohan Kapoor,nikhil.nair.115@parallax.example.test,Pune,Active,2022-12-24
+PX-EMP-0116,Sameer Kapoor,Implementation Lead,Customer Success,Neha Patel,sameer.kapoor.116@parallax.example.test,Delhi NCR,On leave,2023-05-08
+PX-EMP-0117,Aditya Sharma,Product Designer,Design,Executive Leadership Team,aditya.sharma.117@parallax.example.test,Chennai,Active,2024-10-19
+PX-EMP-0118,Kunal Nair,Program Manager,Operations,Executive Leadership Team,kunal.nair.118@parallax.example.test,Remote — India,Active,2025-03-03
+PX-EMP-0119,Reyansh Desai,Payroll Specialist,Finance,Mira Sen,reyansh.desai.119@parallax.example.test,Bengaluru,Active,2019-08-14
+PX-EMP-0120,Ananya Shah,Data Analyst,Data,Executive Leadership Team,ananya.shah.120@parallax.example.test,Mumbai,Active,2020-01-25
+PX-EMP-0121,Sana Saxena,Senior Software Engineer,Engineering,Dev Mehta,sana.saxena.121@parallax.example.test,Hyderabad,Active,2021-06-09
+PX-EMP-0122,Varun Patel,Solutions Consultant,Sales,Rohan Kapoor,varun.patel.122@parallax.example.test,Pune,Active,2022-11-20
+PX-EMP-0123,Kavya Joshi,Customer Success Manager,Customer Success,Neha Patel,kavya.joshi.123@parallax.example.test,Delhi NCR,Active,2023-04-04
+PX-EMP-0124,Karan Pillai,Product Analyst,Product,Executive Leadership Team,karan.pillai.124@parallax.example.test,Chennai,Active,2024-09-15
+PX-EMP-0125,Aditi Chopra,Security Lead,Security,Kabir Shah,aditi.chopra.125@parallax.example.test,Remote — India,Active,2025-02-26
+PX-EMP-0126,Kunal Thomas,Financial Analyst,Finance,Mira Sen,kunal.thomas.126@parallax.example.test,Bengaluru,Active,2019-07-10
+PX-EMP-0127,Priya Patel,Machine Learning Engineer,Data,Executive Leadership Team,priya.patel.127@parallax.example.test,Mumbai,Active,2020-12-21
+PX-EMP-0128,Ananya Patel,Platform Engineer,Engineering,Dev Mehta,ananya.patel.128@parallax.example.test,Hyderabad,Active,2021-05-05
+PX-EMP-0129,Mira Khan,Account Executive,Sales,Rohan Kapoor,mira.khan.129@parallax.example.test,Pune,Active,2022-10-16
+PX-EMP-0130,Arjun Sharma,Support Specialist,Customer Success,Neha Patel,arjun.sharma.130@parallax.example.test,Delhi NCR,Active,2023-03-27
+PX-EMP-0131,Karan Mehta,Product Operations Manager,Product,Executive Leadership Team,karan.mehta.131@parallax.example.test,Chennai,Active,2024-08-11
+PX-EMP-0132,Asha Chopra,Security Engineer,Security,Kabir Shah,asha.chopra.132@parallax.example.test,Remote — India,Active,2025-01-22
+PX-EMP-0133,Varun Das,Recruiter,People Operations,Asha Rao,varun.das.133@parallax.example.test,Bengaluru,Active,2019-06-06
+PX-EMP-0134,Mira Mehta,Design Lead,Design,Executive Leadership Team,mira.mehta.134@parallax.example.test,Mumbai,Active,2020-11-17
+PX-EMP-0135,Kabir Mishra,Software Engineer,Engineering,Dev Mehta,kabir.mishra.135@parallax.example.test,Hyderabad,Active,2021-04-01
+PX-EMP-0136,Priya Kapoor,Sales Development Representative,Sales,Rohan Kapoor,priya.kapoor.136@parallax.example.test,Pune,Active,2022-09-12
+PX-EMP-0137,Akash Patel,Implementation Lead,Customer Success,Neha Patel,akash.patel.137@parallax.example.test,Delhi NCR,Active,2023-02-23
+PX-EMP-0138,Asha Desai,Product Manager,Product,Executive Leadership Team,asha.desai.138@parallax.example.test,Chennai,Active,2024-07-07
+PX-EMP-0139,Riya Bose,Security Analyst,Security,Kabir Shah,riya.bose.139@parallax.example.test,Remote — India,Active,2025-12-18
+PX-EMP-0140,Kabir Malhotra,People Operations Manager,People Operations,Asha Rao,kabir.malhotra.140@parallax.example.test,Bengaluru,Active,2019-05-02
+PX-EMP-0141,Varun Sharma,Product Designer,Design,Executive Leadership Team,varun.sharma.141@parallax.example.test,Mumbai,Active,2020-10-13
+PX-EMP-0142,Sahil Malhotra,Program Manager,Operations,Executive Leadership Team,sahil.malhotra.142@parallax.example.test,Hyderabad,Active,2021-03-24
+PX-EMP-0143,Sameer Patel,Payroll Specialist,Finance,Mira Sen,sameer.patel.143@parallax.example.test,Pune,Active,2022-08-08
+PX-EMP-0144,Priya Shah,Customer Success Manager,Customer Success,Neha Patel,priya.shah.144@parallax.example.test,Delhi NCR,Active,2023-01-19
+PX-EMP-0145,Tanvi Iyer,Product Analyst,Product,Executive Leadership Team,tanvi.iyer.145@parallax.example.test,Chennai,On leave,2024-06-03
+PX-EMP-0146,Kunal Sharma,Security Lead,Security,Kabir Shah,kunal.sharma.146@parallax.example.test,Remote — India,Active,2025-11-14
+PX-EMP-0147,Pooja Saxena,People Partner,People Operations,Asha Rao,pooja.saxena.147@parallax.example.test,Bengaluru,Active,2019-04-25
+PX-EMP-0148,Ananya Sen,UX Researcher,Design,Executive Leadership Team,ananya.sen.148@parallax.example.test,Mumbai,Active,2020-09-09
+PX-EMP-0149,Vikram Pillai,Business Operations Manager,Operations,Executive Leadership Team,vikram.pillai.149@parallax.example.test,Hyderabad,Active,2021-02-20
+PX-EMP-0150,Rohan Chopra,Financial Analyst,Finance,Mira Sen,rohan.chopra.150@parallax.example.test,Pune,Active,2022-07-04
+PX-EMP-0151,Riya Sharma,Machine Learning Engineer,Data,Executive Leadership Team,riya.sharma.151@parallax.example.test,Delhi NCR,Active,2023-12-15
+PX-EMP-0152,Karan Ghosh,Engineering Manager,Engineering,Dev Mehta,karan.ghosh.152@parallax.example.test,Chennai,Active,2024-05-26
+PX-EMP-0153,Sahil Sharma,Security Engineer,Security,Kabir Shah,sahil.sharma.153@parallax.example.test,Remote — India,Active,2025-10-10
+PX-EMP-0154,Sana Das,Recruiter,People Operations,Asha Rao,sana.das.154@parallax.example.test,Bengaluru,Active,2019-03-21
+PX-EMP-0155,Pooja Shah,Design Lead,Design,Executive Leadership Team,pooja.shah.155@parallax.example.test,Mumbai,Active,2020-08-05
+PX-EMP-0156,Varun Reddy,Operations Analyst,Operations,Executive Leadership Team,varun.reddy.156@parallax.example.test,Hyderabad,Active,2021-01-16
+PX-EMP-0157,Sahil Reddy,Finance Manager,Finance,Mira Sen,sahil.reddy.157@parallax.example.test,Pune,Active,2022-06-27
+PX-EMP-0158,Kunal Das,Analytics Lead,Data,Executive Leadership Team,kunal.das.158@parallax.example.test,Delhi NCR,Active,2023-11-11
+PX-EMP-0159,Akash Banerjee,QA Engineer,Engineering,Dev Mehta,akash.banerjee.159@parallax.example.test,Chennai,Active,2024-04-22
+PX-EMP-0160,Reyansh Pillai,Sales Development Representative,Sales,Rohan Kapoor,reyansh.pillai.160@parallax.example.test,Remote — India,Active,2025-09-06
+PX-EMP-0161,Nikhil Sethi,Implementation Lead,Customer Success,Neha Patel,nikhil.sethi.161@parallax.example.test,Bengaluru,Active,2019-02-17
+PX-EMP-0162,Sahil Das,Product Designer,Design,Executive Leadership Team,sahil.das.162@parallax.example.test,Mumbai,Active,2020-07-01
+PX-EMP-0163,Ira Mishra,Program Manager,Operations,Executive Leadership Team,ira.mishra.163@parallax.example.test,Hyderabad,Active,2021-12-12
+PX-EMP-0164,Sana Chopra,Payroll Specialist,Finance,Mira Sen,sana.chopra.164@parallax.example.test,Pune,Active,2022-05-23
+PX-EMP-0165,Kavya Bose,Data Analyst,Data,Executive Leadership Team,kavya.bose.165@parallax.example.test,Delhi NCR,Active,2023-10-07
+PX-EMP-0166,Zoya Bhat,Senior Software Engineer,Engineering,Dev Mehta,zoya.bhat.166@parallax.example.test,Chennai,Active,2024-03-18
+PX-EMP-0167,Simran Kapoor,Solutions Consultant,Sales,Rohan Kapoor,simran.kapoor.167@parallax.example.test,Remote — India,Active,2025-08-02
+PX-EMP-0168,Riya Patel,Customer Success Manager,Customer Success,Neha Patel,riya.patel.168@parallax.example.test,Bengaluru,Active,2019-01-13
+PX-EMP-0169,Neha Thomas,Product Analyst,Product,Executive Leadership Team,neha.thomas.169@parallax.example.test,Mumbai,Active,2020-06-24
+PX-EMP-0170,Kavya Nair,Security Lead,Security,Kabir Shah,kavya.nair.170@parallax.example.test,Hyderabad,Active,2021-11-08
+PX-EMP-0171,Aditya Khanna,Financial Analyst,Finance,Mira Sen,aditya.khanna.171@parallax.example.test,Pune,Active,2022-04-19
+PX-EMP-0172,Mira Desai,Machine Learning Engineer,Data,Executive Leadership Team,mira.desai.172@parallax.example.test,Delhi NCR,Active,2023-09-03
+PX-EMP-0173,Sahil Desai,Platform Engineer,Engineering,Dev Mehta,sahil.desai.173@parallax.example.test,Chennai,Active,2024-02-14
+PX-EMP-0174,Kavya Gupta,Account Executive,Sales,Rohan Kapoor,kavya.gupta.174@parallax.example.test,Remote — India,On leave,2025-07-25
+PX-EMP-0175,Rahul Thomas,Support Specialist,Customer Success,Neha Patel,rahul.thomas.175@parallax.example.test,Bengaluru,Active,2019-12-09
+PX-EMP-0176,Diya Menon,Product Operations Manager,Product,Executive Leadership Team,diya.menon.176@parallax.example.test,Mumbai,Active,2020-05-20
+PX-EMP-0177,Vikram Nair,Security Engineer,Security,Kabir Shah,vikram.nair.177@parallax.example.test,Hyderabad,Active,2021-10-04
+PX-EMP-0178,Dev Joshi,Recruiter,People Operations,Asha Rao,dev.joshi.178@parallax.example.test,Pune,Active,2022-03-15
+PX-EMP-0179,Ishita Iyer,Design Lead,Design,Executive Leadership Team,ishita.iyer.179@parallax.example.test,Delhi NCR,Active,2023-08-26
+PX-EMP-0180,Tara Pillai,Software Engineer,Engineering,Dev Mehta,tara.pillai.180@parallax.example.test,Chennai,Active,2024-01-10
+PX-EMP-0181,Mira Iyer,Sales Development Representative,Sales,Rohan Kapoor,mira.iyer.181@parallax.example.test,Remote — India,Active,2025-06-21
+PX-EMP-0182,Meera Joshi,Implementation Lead,Customer Success,Neha Patel,meera.joshi.182@parallax.example.test,Bengaluru,Active,2019-11-05
+PX-EMP-0183,Zoya Pillai,Product Manager,Product,Executive Leadership Team,zoya.pillai.183@parallax.example.test,Mumbai,Active,2020-04-16
+PX-EMP-0184,Ira Ghosh,Security Analyst,Security,Kabir Shah,ira.ghosh.184@parallax.example.test,Hyderabad,Active,2021-09-27
+PX-EMP-0185,Asha Patel,People Operations Manager,People Operations,Asha Rao,asha.patel.185@parallax.example.test,Pune,Active,2022-02-11
+PX-EMP-0186,Ishita Banerjee,Product Designer,Design,Executive Leadership Team,ishita.banerjee.186@parallax.example.test,Delhi NCR,Active,2023-07-22
+PX-EMP-0187,Meera Saxena,Program Manager,Operations,Executive Leadership Team,meera.saxena.187@parallax.example.test,Chennai,Active,2024-12-06
+PX-EMP-0188,Leela Kulkarni,Payroll Specialist,Finance,Mira Sen,leela.kulkarni.188@parallax.example.test,Remote — India,Active,2025-05-17
+PX-EMP-0189,Kavya Verma,Customer Success Manager,Customer Success,Neha Patel,kavya.verma.189@parallax.example.test,Bengaluru,Active,2019-10-01
+PX-EMP-0190,Rohan Sethi,Product Analyst,Product,Executive Leadership Team,rohan.sethi.190@parallax.example.test,Mumbai,Active,2020-03-12
+PX-EMP-0191,Leela Joshi,Security Lead,Security,Kabir Shah,leela.joshi.191@parallax.example.test,Hyderabad,Active,2021-08-23
+PX-EMP-0192,Riya Mehta,People Partner,People Operations,Asha Rao,riya.mehta.192@parallax.example.test,Pune,Active,2022-01-07
+PX-EMP-0193,Kabir Bhat,UX Researcher,Design,Executive Leadership Team,kabir.bhat.193@parallax.example.test,Delhi NCR,Active,2023-06-18
+PX-EMP-0194,Dev Sen,Business Operations Manager,Operations,Executive Leadership Team,dev.sen.194@parallax.example.test,Chennai,Active,2024-11-02
+PX-EMP-0195,Akash Reddy,Financial Analyst,Finance,Mira Sen,akash.reddy.195@parallax.example.test,Remote — India,Active,2025-04-13
+PX-EMP-0196,Kunal Sethi,Machine Learning Engineer,Data,Executive Leadership Team,kunal.sethi.196@parallax.example.test,Bengaluru,Active,2019-09-24
+PX-EMP-0197,Naveen Bhat,Engineering Manager,Engineering,Dev Mehta,naveen.bhat.197@parallax.example.test,Mumbai,Active,2020-02-08
+PX-EMP-0198,Varun Khanna,Security Engineer,Security,Kabir Shah,varun.khanna.198@parallax.example.test,Hyderabad,Active,2021-07-19
+PX-EMP-0199,Yash Ghosh,Recruiter,People Operations,Asha Rao,yash.ghosh.199@parallax.example.test,Pune,Active,2022-12-03
+PX-EMP-0200,Aarav Mishra,Design Lead,Design,Executive Leadership Team,aarav.mishra.200@parallax.example.test,Delhi NCR,Active,2023-05-14
+PX-EMP-0201,Aarav Rao,Operations Analyst,Operations,Executive Leadership Team,aarav.rao.201@parallax.example.test,Chennai,Active,2024-10-25
+PX-EMP-0202,Kunal Patel,Finance Manager,Finance,Mira Sen,kunal.patel.202@parallax.example.test,Remote — India,Active,2025-03-09
+PX-EMP-0203,Vikram Banerjee,Analytics Lead,Data,Executive Leadership Team,vikram.banerjee.203@parallax.example.test,Bengaluru,On leave,2019-08-20
+PX-EMP-0204,Riya Sen,QA Engineer,Engineering,Dev Mehta,riya.sen.204@parallax.example.test,Mumbai,Active,2020-01-04
+PX-EMP-0205,Naveen Banerjee,Sales Development Representative,Sales,Rohan Kapoor,naveen.banerjee.205@parallax.example.test,Hyderabad,Active,2021-06-15
+PX-EMP-0206,Sana Menon,Implementation Lead,Customer Success,Neha Patel,sana.menon.206@parallax.example.test,Pune,Active,2022-11-26
+PX-EMP-0207,Riya Desai,Product Designer,Design,Executive Leadership Team,riya.desai.207@parallax.example.test,Delhi NCR,Active,2023-04-10
+PX-EMP-0208,Reyansh Saxena,Program Manager,Operations,Executive Leadership Team,reyansh.saxena.208@parallax.example.test,Chennai,Active,2024-09-21
+PX-EMP-0209,Aditi Banerjee,Payroll Specialist,Finance,Mira Sen,aditi.banerjee.209@parallax.example.test,Remote — India,Active,2025-02-05
+PX-EMP-0210,Vikram Kapoor,Data Analyst,Data,Executive Leadership Team,vikram.kapoor.210@parallax.example.test,Bengaluru,Active,2019-07-16
+PX-EMP-0211,Vikram Gupta,Senior Software Engineer,Engineering,Dev Mehta,vikram.gupta.211@parallax.example.test,Mumbai,Active,2020-12-27
+PX-EMP-0212,Kabir Bose,Solutions Consultant,Sales,Rohan Kapoor,kabir.bose.212@parallax.example.test,Hyderabad,Active,2021-05-11
+PX-EMP-0213,Naveen Verma,Customer Success Manager,Customer Success,Neha Patel,naveen.verma.213@parallax.example.test,Pune,Active,2022-10-22
+PX-EMP-0214,Tara Mishra,Product Analyst,Product,Executive Leadership Team,tara.mishra.214@parallax.example.test,Delhi NCR,Active,2023-03-06
+PX-EMP-0215,Aditi Ghosh,Security Lead,Security,Kabir Shah,aditi.ghosh.215@parallax.example.test,Chennai,Active,2024-08-17
+PX-EMP-0216,Sameer Gupta,Financial Analyst,Finance,Mira Sen,sameer.gupta.216@parallax.example.test,Remote — India,Active,2025-01-01
+PX-EMP-0217,Nikhil Gupta,Machine Learning Engineer,Data,Executive Leadership Team,nikhil.gupta.217@parallax.example.test,Bengaluru,Active,2019-06-12
+PX-EMP-0218,Sameer Verma,Platform Engineer,Engineering,Dev Mehta,sameer.verma.218@parallax.example.test,Mumbai,Active,2020-11-23
+PX-EMP-0219,Manav Kulkarni,Account Executive,Sales,Rohan Kapoor,manav.kulkarni.219@parallax.example.test,Hyderabad,Active,2021-04-07
+PX-EMP-0220,Akash Mehta,Support Specialist,Customer Success,Neha Patel,akash.mehta.220@parallax.example.test,Pune,Active,2022-09-18
+PX-EMP-0221,Simran Saxena,Product Operations Manager,Product,Executive Leadership Team,simran.saxena.221@parallax.example.test,Delhi NCR,Active,2023-02-02
+PX-EMP-0222,Ishaan Reddy,Security Engineer,Security,Kabir Shah,ishaan.reddy.222@parallax.example.test,Chennai,Active,2024-07-13
+PX-EMP-0223,Aarav Iyer,Recruiter,People Operations,Asha Rao,aarav.iyer.223@parallax.example.test,Remote — India,Active,2025-12-24
+PX-EMP-0224,Dev Das,Design Lead,Design,Executive Leadership Team,dev.das.224@parallax.example.test,Bengaluru,Active,2019-05-08
+PX-EMP-0225,Simran Iyer,Software Engineer,Engineering,Dev Mehta,simran.iyer.225@parallax.example.test,Mumbai,Active,2020-10-19
+PX-EMP-0226,Meera Khanna,Sales Development Representative,Sales,Rohan Kapoor,meera.khanna.226@parallax.example.test,Hyderabad,Active,2021-03-03
+PX-EMP-0227,Tara Saxena,Implementation Lead,Customer Success,Neha Patel,tara.saxena.227@parallax.example.test,Pune,Active,2022-08-14
+PX-EMP-0228,Sahil Mishra,Product Manager,Product,Executive Leadership Team,sahil.mishra.228@parallax.example.test,Delhi NCR,Active,2023-01-25
+PX-EMP-0229,Neha Patel,Security Analyst,Security,Kabir Shah,neha.patel.229@parallax.example.test,Chennai,Active,2024-06-09
+PX-EMP-0230,Ishita Nair,People Operations Manager,People Operations,Asha Rao,ishita.nair.230@parallax.example.test,Remote — India,Active,2025-11-20
+PX-EMP-0231,Kavya Das,Product Designer,Design,Executive Leadership Team,kavya.das.231@parallax.example.test,Bengaluru,Active,2019-04-04
+PX-EMP-0232,Diya Ghosh,Program Manager,Operations,Executive Leadership Team,diya.ghosh.232@parallax.example.test,Mumbai,On leave,2020-09-15
+PX-EMP-0233,Anika Bose,Payroll Specialist,Finance,Mira Sen,anika.bose.233@parallax.example.test,Hyderabad,Active,2021-02-26
+PX-EMP-0234,Sana Mishra,Customer Success Manager,Customer Success,Neha Patel,sana.mishra.234@parallax.example.test,Pune,Active,2022-07-10
+PX-EMP-0235,Vikram Patel,Product Analyst,Product,Executive Leadership Team,vikram.patel.235@parallax.example.test,Delhi NCR,Active,2023-12-21
+PX-EMP-0236,Ananya Bhat,Security Lead,Security,Kabir Shah,ananya.bhat.236@parallax.example.test,Chennai,Active,2024-05-05
+PX-EMP-0237,Akash Gupta,People Partner,People Operations,Asha Rao,akash.gupta.237@parallax.example.test,Remote — India,Active,2025-10-16
+PX-EMP-0238,Simran Khanna,UX Researcher,Design,Executive Leadership Team,simran.khanna.238@parallax.example.test,Bengaluru,Active,2019-03-27
+PX-EMP-0239,Yash Bhat,Business Operations Manager,Operations,Executive Leadership Team,yash.bhat.239@parallax.example.test,Mumbai,Active,2020-08-11
+PX-EMP-0240,Anika Desai,Financial Analyst,Finance,Mira Sen,anika.desai.240@parallax.example.test,Hyderabad,Active,2021-01-22
+PX-EMP-0241,Rounak,Business Operations Manager,Operations,Mira Sen,rounak.241@parallax.example.test,Bengaluru,Active,2026-03-16

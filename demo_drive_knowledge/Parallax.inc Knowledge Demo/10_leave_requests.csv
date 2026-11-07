@@ -1,0 +1,181 @@
+request_id,employee_id,employee_name,department,leave_type,start_date,end_date,business_days,status,manager,submitted_date
+PX-LEAVE-0001,PX-EMP-0024,Kabir Chopra,Engineering,Sick Leave,2026-08-12,2026-08-14,2,Pending Manager Review,Nikhil Shah,2026-08-04
+PX-LEAVE-0002,PX-EMP-0047,Akash Verma,Customer Success,Personal Leave,2026-03-23,2026-03-25,3,Declined,Diya Bhat,2026-03-15
+PX-LEAVE-0003,PX-EMP-0070,Sana Sen,Sales,Annual Leave,2026-10-10,2026-10-12,4,Withdrawn,Leela Mishra,2026-10-02
+PX-LEAVE-0004,PX-EMP-0093,Pooja Iyer,Product,Sick Leave,2026-05-21,2026-05-23,5,Approved,Kunal Ghosh,2026-05-13
+PX-LEAVE-0005,PX-EMP-0116,Sameer Kapoor,Customer Success,Personal Leave,2026-12-08,2026-12-10,1,Pending Manager Review,Ishaan Saxena,2026-12-01
+PX-LEAVE-0006,PX-EMP-0139,Riya Bose,Security,Annual Leave,2026-07-19,2026-07-21,2,Declined,Vikram Khanna,2026-07-11
+PX-LEAVE-0007,PX-EMP-0162,Sahil Das,Design,Sick Leave,2026-02-06,2026-02-08,3,Withdrawn,Vikram Chopra,2026-02-01
+PX-LEAVE-0008,PX-EMP-0185,Asha Patel,People Operations,Personal Leave,2026-09-17,2026-09-19,4,Approved,Varun Banerjee,2026-09-09
+PX-LEAVE-0009,PX-EMP-0208,Reyansh Saxena,Operations,Annual Leave,2026-04-04,2026-04-06,5,Pending Manager Review,Sana Thomas,2026-04-01
+PX-LEAVE-0010,PX-EMP-0231,Kavya Das,Design,Sick Leave,2026-11-15,2026-11-17,1,Declined,Reyansh Sen,2026-11-07
+PX-LEAVE-0011,PX-EMP-0014,Ishaan Saxena,Operations,Personal Leave,2026-06-02,2026-06-04,2,Withdrawn,Executive Leadership Team,2026-06-01
+PX-LEAVE-0012,PX-EMP-0037,Akash Kulkarni,Data,Annual Leave,2026-01-13,2026-01-15,3,Approved,Aditya Mehta,2026-01-05
+PX-LEAVE-0013,PX-EMP-0060,Dev Desai,Finance,Sick Leave,2026-08-24,2026-08-26,4,Pending Manager Review,Pooja Patel,2026-08-16
+PX-LEAVE-0014,PX-EMP-0083,Diya Mehta,Engineering,Personal Leave,2026-03-11,2026-03-13,5,Declined,Kavya Saxena,2026-03-03
+PX-LEAVE-0015,PX-EMP-0106,Karan Rao,Data,Annual Leave,2026-10-22,2026-10-24,1,Withdrawn,Kavya Pillai,2026-10-14
+PX-LEAVE-0016,PX-EMP-0129,Mira Khan,Sales,Sick Leave,2026-05-09,2026-05-11,2,Approved,Mira Malhotra,2026-05-01
+PX-LEAVE-0017,PX-EMP-0152,Karan Ghosh,Engineering,Personal Leave,2026-12-20,2026-12-22,3,Pending Manager Review,Aarav Mehta,2026-12-12
+PX-LEAVE-0018,PX-EMP-0175,Rahul Thomas,Customer Success,Annual Leave,2026-07-07,2026-07-09,4,Declined,Sana Banerjee,2026-07-01
+PX-LEAVE-0019,PX-EMP-0198,Varun Khanna,Security,Sick Leave,2026-02-18,2026-02-20,5,Withdrawn,Yash Sethi,2026-02-10
+PX-LEAVE-0020,PX-EMP-0221,Simran Saxena,Product,Personal Leave,2026-09-05,2026-09-07,1,Approved,Anika Sen,2026-09-01
+PX-LEAVE-0021,PX-EMP-0004,Kavya Pillai,Security,Annual Leave,2026-04-16,2026-04-18,2,Pending Manager Review,Executive Leadership Team,2026-04-08
+PX-LEAVE-0022,PX-EMP-0027,Manav Verma,Design,Sick Leave,2026-11-03,2026-11-05,3,Declined,Diya Bhat,2026-11-01
+PX-LEAVE-0023,PX-EMP-0050,Arjun Gupta,People Operations,Personal Leave,2026-06-14,2026-06-16,4,Withdrawn,Leela Mishra,2026-06-06
+PX-LEAVE-0024,PX-EMP-0073,Riya Reddy,Operations,Annual Leave,2026-01-01,2026-01-03,5,Approved,Kunal Ghosh,2026-01-01
+PX-LEAVE-0025,PX-EMP-0096,Ira Shah,Design,Sick Leave,2026-08-12,2026-08-14,1,Pending Manager Review,Ishaan Saxena,2026-08-04
+PX-LEAVE-0026,PX-EMP-0119,Reyansh Desai,Finance,Personal Leave,2026-03-23,2026-03-25,2,Declined,Vikram Khanna,2026-03-15
+PX-LEAVE-0027,PX-EMP-0142,Sahil Malhotra,Operations,Annual Leave,2026-10-10,2026-10-12,3,Withdrawn,Vikram Chopra,2026-10-02
+PX-LEAVE-0028,PX-EMP-0165,Kavya Bose,Data,Sick Leave,2026-05-21,2026-05-23,4,Approved,Varun Banerjee,2026-05-13
+PX-LEAVE-0029,PX-EMP-0188,Leela Kulkarni,Finance,Personal Leave,2026-12-08,2026-12-10,5,Pending Manager Review,Sana Thomas,2026-12-01
+PX-LEAVE-0030,PX-EMP-0211,Vikram Gupta,Engineering,Annual Leave,2026-07-19,2026-07-21,1,Declined,Reyansh Sen,2026-07-11
+PX-LEAVE-0031,PX-EMP-0234,Sana Mishra,Customer Success,Sick Leave,2026-02-06,2026-02-08,2,Withdrawn,Priya Mishra,2026-02-01
+PX-LEAVE-0032,PX-EMP-0017,Aditya Mehta,Engineering,Personal Leave,2026-09-17,2026-09-19,3,Approved,Executive Leadership Team,2026-09-09
+PX-LEAVE-0033,PX-EMP-0040,Varun Shah,Customer Success,Annual Leave,2026-04-04,2026-04-06,4,Pending Manager Review,Pooja Patel,2026-04-01
+PX-LEAVE-0034,PX-EMP-0063,Anika Sharma,Security,Sick Leave,2026-11-15,2026-11-17,5,Declined,Kavya Saxena,2026-11-07
+PX-LEAVE-0035,PX-EMP-0086,Kabir Desai,Product,Personal Leave,2026-06-02,2026-06-04,1,Withdrawn,Kavya Pillai,2026-06-01
+PX-LEAVE-0036,PX-EMP-0109,Rohan Sen,People Operations,Annual Leave,2026-01-13,2026-01-15,2,Approved,Mira Malhotra,2026-01-05
+PX-LEAVE-0037,PX-EMP-0132,Asha Chopra,Security,Sick Leave,2026-08-24,2026-08-26,3,Pending Manager Review,Aarav Mehta,2026-08-16
+PX-LEAVE-0038,PX-EMP-0155,Pooja Shah,Design,Personal Leave,2026-03-11,2026-03-13,4,Declined,Sana Banerjee,2026-03-03
+PX-LEAVE-0039,PX-EMP-0178,Dev Joshi,People Operations,Annual Leave,2026-10-22,2026-10-24,5,Withdrawn,Yash Sethi,2026-10-14
+PX-LEAVE-0040,PX-EMP-0201,Aarav Rao,Operations,Sick Leave,2026-05-09,2026-05-11,1,Approved,Anika Sen,2026-05-01
+PX-LEAVE-0041,PX-EMP-0224,Dev Das,Design,Personal Leave,2026-12-20,2026-12-22,2,Pending Manager Review,Nikhil Shah,2026-12-12
+PX-LEAVE-0042,PX-EMP-0007,Diya Bhat,Operations,Annual Leave,2026-07-07,2026-07-09,3,Declined,Executive Leadership Team,2026-07-01
+PX-LEAVE-0043,PX-EMP-0030,Sameer Thomas,Data,Sick Leave,2026-02-18,2026-02-20,4,Withdrawn,Leela Mishra,2026-02-10
+PX-LEAVE-0044,PX-EMP-0053,Leela Menon,Finance,Personal Leave,2026-09-05,2026-09-07,5,Approved,Kunal Ghosh,2026-09-01
+PX-LEAVE-0045,PX-EMP-0076,Sana Shah,Engineering,Annual Leave,2026-04-16,2026-04-18,1,Pending Manager Review,Ishaan Saxena,2026-04-08
+PX-LEAVE-0046,PX-EMP-0099,Karan Patel,Customer Success,Sick Leave,2026-11-03,2026-11-05,2,Declined,Vikram Khanna,2026-11-01
+PX-LEAVE-0047,PX-EMP-0122,Varun Patel,Sales,Personal Leave,2026-06-14,2026-06-16,3,Withdrawn,Vikram Chopra,2026-06-06
+PX-LEAVE-0048,PX-EMP-0145,Tanvi Iyer,Product,Annual Leave,2026-01-01,2026-01-03,4,Approved,Varun Banerjee,2026-01-01
+PX-LEAVE-0049,PX-EMP-0168,Riya Patel,Customer Success,Sick Leave,2026-08-12,2026-08-14,5,Pending Manager Review,Sana Thomas,2026-08-04
+PX-LEAVE-0050,PX-EMP-0191,Leela Joshi,Security,Personal Leave,2026-03-23,2026-03-25,1,Declined,Reyansh Sen,2026-03-15
+PX-LEAVE-0051,PX-EMP-0214,Tara Mishra,Product,Annual Leave,2026-10-10,2026-10-12,2,Withdrawn,Priya Mishra,2026-10-02
+PX-LEAVE-0052,PX-EMP-0237,Akash Gupta,People Operations,Sick Leave,2026-05-21,2026-05-23,3,Approved,Aditya Mehta,2026-05-13
+PX-LEAVE-0053,PX-EMP-0020,Yash Sethi,Design,Personal Leave,2026-12-08,2026-12-10,4,Pending Manager Review,Executive Leadership Team,2026-12-01
+PX-LEAVE-0054,PX-EMP-0043,Sana Sharma,People Operations,Annual Leave,2026-07-19,2026-07-21,5,Declined,Kavya Saxena,2026-07-11
+PX-LEAVE-0055,PX-EMP-0066,Aditya Rao,Operations,Sick Leave,2026-02-06,2026-02-08,1,Withdrawn,Kavya Pillai,2026-02-01
+PX-LEAVE-0056,PX-EMP-0089,Arjun Mishra,Design,Personal Leave,2026-09-17,2026-09-19,2,Approved,Mira Malhotra,2026-09-09
+PX-LEAVE-0057,PX-EMP-0112,Ishaan Pillai,Finance,Annual Leave,2026-04-04,2026-04-06,3,Pending Manager Review,Aarav Mehta,2026-04-01
+PX-LEAVE-0058,PX-EMP-0135,Kabir Mishra,Engineering,Sick Leave,2026-11-15,2026-11-17,4,Declined,Sana Banerjee,2026-11-07
+PX-LEAVE-0059,PX-EMP-0158,Kunal Das,Data,Personal Leave,2026-06-02,2026-06-04,5,Withdrawn,Yash Sethi,2026-06-01
+PX-LEAVE-0060,PX-EMP-0181,Mira Iyer,Sales,Annual Leave,2026-01-13,2026-01-15,1,Approved,Anika Sen,2026-01-05
+PX-LEAVE-0061,PX-EMP-0204,Riya Sen,Engineering,Sick Leave,2026-08-24,2026-08-26,2,Pending Manager Review,Nikhil Shah,2026-08-16
+PX-LEAVE-0062,PX-EMP-0227,Tara Saxena,Customer Success,Personal Leave,2026-03-11,2026-03-13,3,Declined,Diya Bhat,2026-03-03
+PX-LEAVE-0063,PX-EMP-0010,Sana Thomas,Product,Annual Leave,2026-10-22,2026-10-24,4,Withdrawn,Executive Leadership Team,2026-10-14
+PX-LEAVE-0064,PX-EMP-0033,Aditi Desai,Customer Success,Sick Leave,2026-05-09,2026-05-11,5,Approved,Kunal Ghosh,2026-05-01
+PX-LEAVE-0065,PX-EMP-0056,Kunal Kapoor,Security,Personal Leave,2026-12-20,2026-12-22,1,Pending Manager Review,Ishaan Saxena,2026-12-12
+PX-LEAVE-0066,PX-EMP-0079,Aditi Pillai,Product,Annual Leave,2026-07-07,2026-07-09,2,Declined,Vikram Khanna,2026-07-01
+PX-LEAVE-0067,PX-EMP-0102,Ira Khan,People Operations,Sick Leave,2026-02-18,2026-02-20,3,Withdrawn,Vikram Chopra,2026-02-10
+PX-LEAVE-0068,PX-EMP-0125,Aditi Chopra,Security,Personal Leave,2026-09-05,2026-09-07,4,Approved,Varun Banerjee,2026-09-01
+PX-LEAVE-0069,PX-EMP-0148,Ananya Sen,Design,Annual Leave,2026-04-16,2026-04-18,5,Pending Manager Review,Sana Thomas,2026-04-08
+PX-LEAVE-0070,PX-EMP-0171,Aditya Khanna,Finance,Sick Leave,2026-11-03,2026-11-05,1,Declined,Reyansh Sen,2026-11-01
+PX-LEAVE-0071,PX-EMP-0194,Dev Sen,Operations,Personal Leave,2026-06-14,2026-06-16,2,Withdrawn,Priya Mishra,2026-06-06
+PX-LEAVE-0072,PX-EMP-0217,Nikhil Gupta,Data,Annual Leave,2026-01-01,2026-01-03,3,Approved,Aditya Mehta,2026-01-01
+PX-LEAVE-0073,PX-EMP-0240,Anika Desai,Finance,Sick Leave,2026-08-12,2026-08-14,4,Pending Manager Review,Pooja Patel,2026-08-04
+PX-LEAVE-0074,PX-EMP-0023,Pooja Bose,Data,Personal Leave,2026-03-23,2026-03-25,5,Declined,Kavya Saxena,2026-03-15
+PX-LEAVE-0075,PX-EMP-0046,Naveen Rao,Sales,Annual Leave,2026-10-10,2026-10-12,1,Withdrawn,Kavya Pillai,2026-10-02
+PX-LEAVE-0076,PX-EMP-0069,Kavya Iyer,Engineering,Sick Leave,2026-05-21,2026-05-23,2,Approved,Mira Malhotra,2026-05-13
+PX-LEAVE-0077,PX-EMP-0092,Nikhil Bose,Customer Success,Personal Leave,2026-12-08,2026-12-10,3,Pending Manager Review,Aarav Mehta,2026-12-01
+PX-LEAVE-0078,PX-EMP-0115,Nikhil Nair,Sales,Annual Leave,2026-07-19,2026-07-21,4,Declined,Sana Banerjee,2026-07-11
+PX-LEAVE-0079,PX-EMP-0138,Asha Desai,Product,Sick Leave,2026-02-06,2026-02-08,5,Withdrawn,Yash Sethi,2026-02-01
+PX-LEAVE-0080,PX-EMP-0161,Nikhil Sethi,Customer Success,Personal Leave,2026-09-17,2026-09-19,1,Approved,Anika Sen,2026-09-09
+PX-LEAVE-0081,PX-EMP-0184,Ira Ghosh,Security,Annual Leave,2026-04-04,2026-04-06,2,Pending Manager Review,Nikhil Shah,2026-04-01
+PX-LEAVE-0082,PX-EMP-0207,Riya Desai,Design,Sick Leave,2026-11-15,2026-11-17,3,Declined,Diya Bhat,2026-11-07
+PX-LEAVE-0083,PX-EMP-0230,Ishita Nair,People Operations,Personal Leave,2026-06-02,2026-06-04,4,Withdrawn,Leela Mishra,2026-06-01
+PX-LEAVE-0084,PX-EMP-0013,Mira Malhotra,Design,Annual Leave,2026-01-13,2026-01-15,5,Approved,Executive Leadership Team,2026-01-05
+PX-LEAVE-0085,PX-EMP-0036,Naveen Sharma,Finance,Sick Leave,2026-08-24,2026-08-26,1,Pending Manager Review,Ishaan Saxena,2026-08-16
+PX-LEAVE-0086,PX-EMP-0059,Neha Mishra,Operations,Personal Leave,2026-03-11,2026-03-13,2,Declined,Vikram Khanna,2026-03-03
+PX-LEAVE-0087,PX-EMP-0082,Aarav Reddy,Data,Annual Leave,2026-10-22,2026-10-24,3,Withdrawn,Vikram Chopra,2026-10-14
+PX-LEAVE-0088,PX-EMP-0105,Mira Sharma,Finance,Sick Leave,2026-05-09,2026-05-11,4,Approved,Varun Banerjee,2026-05-01
+PX-LEAVE-0089,PX-EMP-0128,Ananya Patel,Engineering,Personal Leave,2026-12-20,2026-12-22,5,Pending Manager Review,Sana Thomas,2026-12-12
+PX-LEAVE-0090,PX-EMP-0151,Riya Sharma,Data,Annual Leave,2026-07-07,2026-07-09,1,Declined,Reyansh Sen,2026-07-01
+PX-LEAVE-0091,PX-EMP-0174,Kavya Gupta,Sales,Sick Leave,2026-02-18,2026-02-20,2,Withdrawn,Priya Mishra,2026-02-10
+PX-LEAVE-0092,PX-EMP-0197,Naveen Bhat,Engineering,Personal Leave,2026-09-05,2026-09-07,3,Approved,Aditya Mehta,2026-09-01
+PX-LEAVE-0093,PX-EMP-0220,Akash Mehta,Customer Success,Annual Leave,2026-04-16,2026-04-18,4,Pending Manager Review,Pooja Patel,2026-04-08
+PX-LEAVE-0094,PX-EMP-0003,Vikram Khanna,Product,Sick Leave,2026-11-03,2026-11-05,5,Declined,Executive Leadership Team,2026-11-01
+PX-LEAVE-0095,PX-EMP-0026,Tara Kulkarni,Customer Success,Personal Leave,2026-06-14,2026-06-16,1,Withdrawn,Kavya Pillai,2026-06-06
+PX-LEAVE-0096,PX-EMP-0049,Kavya Ghosh,Security,Annual Leave,2026-01-01,2026-01-03,2,Approved,Mira Malhotra,2026-01-01
+PX-LEAVE-0097,PX-EMP-0072,Neha Rao,Design,Sick Leave,2026-08-12,2026-08-14,3,Pending Manager Review,Aarav Mehta,2026-08-04
+PX-LEAVE-0098,PX-EMP-0095,Nikhil Pillai,People Operations,Personal Leave,2026-03-23,2026-03-25,4,Declined,Sana Banerjee,2026-03-15
+PX-LEAVE-0099,PX-EMP-0118,Kunal Nair,Operations,Annual Leave,2026-10-10,2026-10-12,5,Withdrawn,Yash Sethi,2026-10-02
+PX-LEAVE-0100,PX-EMP-0141,Varun Sharma,Design,Sick Leave,2026-05-21,2026-05-23,1,Approved,Anika Sen,2026-05-13
+PX-LEAVE-0101,PX-EMP-0164,Sana Chopra,Finance,Personal Leave,2026-12-08,2026-12-10,2,Pending Manager Review,Nikhil Shah,2026-12-01
+PX-LEAVE-0102,PX-EMP-0187,Meera Saxena,Operations,Annual Leave,2026-07-19,2026-07-21,3,Declined,Diya Bhat,2026-07-11
+PX-LEAVE-0103,PX-EMP-0210,Vikram Kapoor,Data,Sick Leave,2026-02-06,2026-02-08,4,Withdrawn,Leela Mishra,2026-02-01
+PX-LEAVE-0104,PX-EMP-0233,Anika Bose,Finance,Personal Leave,2026-09-17,2026-09-19,5,Approved,Kunal Ghosh,2026-09-09
+PX-LEAVE-0105,PX-EMP-0016,Leela Mishra,Data,Annual Leave,2026-04-04,2026-04-06,1,Pending Manager Review,Executive Leadership Team,2026-04-01
+PX-LEAVE-0106,PX-EMP-0039,Diya Kapoor,Sales,Sick Leave,2026-11-15,2026-11-17,2,Declined,Vikram Khanna,2026-11-07
+PX-LEAVE-0107,PX-EMP-0062,Asha Gupta,Engineering,Personal Leave,2026-06-02,2026-06-04,3,Withdrawn,Vikram Chopra,2026-06-01
+PX-LEAVE-0108,PX-EMP-0085,Reyansh Verma,Customer Success,Annual Leave,2026-01-13,2026-01-15,4,Approved,Varun Banerjee,2026-01-05
+PX-LEAVE-0109,PX-EMP-0108,Aarav Khanna,Security,Sick Leave,2026-08-24,2026-08-26,5,Pending Manager Review,Sana Thomas,2026-08-16
+PX-LEAVE-0110,PX-EMP-0131,Karan Mehta,Product,Personal Leave,2026-03-11,2026-03-13,1,Declined,Reyansh Sen,2026-03-03
+PX-LEAVE-0111,PX-EMP-0154,Sana Das,People Operations,Annual Leave,2026-10-22,2026-10-24,2,Withdrawn,Priya Mishra,2026-10-14
+PX-LEAVE-0112,PX-EMP-0177,Vikram Nair,Security,Sick Leave,2026-05-09,2026-05-11,3,Approved,Aditya Mehta,2026-05-01
+PX-LEAVE-0113,PX-EMP-0200,Aarav Mishra,Design,Personal Leave,2026-12-20,2026-12-22,4,Pending Manager Review,Pooja Patel,2026-12-12
+PX-LEAVE-0114,PX-EMP-0223,Aarav Iyer,People Operations,Annual Leave,2026-07-07,2026-07-09,5,Declined,Kavya Saxena,2026-07-01
+PX-LEAVE-0115,PX-EMP-0006,Pooja Patel,Design,Sick Leave,2026-02-18,2026-02-20,1,Withdrawn,Executive Leadership Team,2026-02-10
+PX-LEAVE-0116,PX-EMP-0029,Meera Thomas,Finance,Personal Leave,2026-09-05,2026-09-07,2,Approved,Mira Malhotra,2026-09-01
+PX-LEAVE-0117,PX-EMP-0052,Kunal Menon,Operations,Annual Leave,2026-04-16,2026-04-18,3,Pending Manager Review,Aarav Mehta,2026-04-08
+PX-LEAVE-0118,PX-EMP-0075,Aditi Sethi,Data,Sick Leave,2026-11-03,2026-11-05,4,Declined,Sana Banerjee,2026-11-01
+PX-LEAVE-0119,PX-EMP-0098,Ananya Das,Finance,Personal Leave,2026-06-14,2026-06-16,5,Withdrawn,Yash Sethi,2026-06-06
+PX-LEAVE-0120,PX-EMP-0121,Sana Saxena,Engineering,Annual Leave,2026-01-01,2026-01-03,1,Approved,Anika Sen,2026-01-01
+PX-LEAVE-0121,PX-EMP-0144,Priya Shah,Customer Success,Sick Leave,2026-08-12,2026-08-14,2,Pending Manager Review,Nikhil Shah,2026-08-04
+PX-LEAVE-0122,PX-EMP-0167,Simran Kapoor,Sales,Personal Leave,2026-03-23,2026-03-25,3,Declined,Diya Bhat,2026-03-15
+PX-LEAVE-0123,PX-EMP-0190,Rohan Sethi,Product,Annual Leave,2026-10-10,2026-10-12,4,Withdrawn,Leela Mishra,2026-10-02
+PX-LEAVE-0124,PX-EMP-0213,Naveen Verma,Customer Success,Sick Leave,2026-05-21,2026-05-23,5,Approved,Kunal Ghosh,2026-05-13
+PX-LEAVE-0125,PX-EMP-0236,Ananya Bhat,Security,Personal Leave,2026-12-08,2026-12-10,1,Pending Manager Review,Ishaan Saxena,2026-12-01
+PX-LEAVE-0126,PX-EMP-0019,Reyansh Sen,People Operations,Annual Leave,2026-07-19,2026-07-21,2,Declined,Executive Leadership Team,2026-07-11
+PX-LEAVE-0127,PX-EMP-0042,Akash Sharma,Security,Sick Leave,2026-02-06,2026-02-08,3,Withdrawn,Vikram Chopra,2026-02-01
+PX-LEAVE-0128,PX-EMP-0065,Aarav Menon,Design,Personal Leave,2026-09-17,2026-09-19,4,Approved,Varun Banerjee,2026-09-09
+PX-LEAVE-0129,PX-EMP-0088,Manav Sharma,People Operations,Annual Leave,2026-04-04,2026-04-06,5,Pending Manager Review,Sana Thomas,2026-04-01
+PX-LEAVE-0130,PX-EMP-0111,Kabir Verma,Operations,Sick Leave,2026-11-15,2026-11-17,1,Declined,Reyansh Sen,2026-11-07
+PX-LEAVE-0131,PX-EMP-0134,Mira Mehta,Design,Personal Leave,2026-06-02,2026-06-04,2,Withdrawn,Priya Mishra,2026-06-01
+PX-LEAVE-0132,PX-EMP-0157,Sahil Reddy,Finance,Annual Leave,2026-01-13,2026-01-15,3,Approved,Aditya Mehta,2026-01-05
+PX-LEAVE-0133,PX-EMP-0180,Tara Pillai,Engineering,Sick Leave,2026-08-24,2026-08-26,4,Pending Manager Review,Pooja Patel,2026-08-16
+PX-LEAVE-0134,PX-EMP-0203,Vikram Banerjee,Data,Personal Leave,2026-03-11,2026-03-13,5,Declined,Kavya Saxena,2026-03-03
+PX-LEAVE-0135,PX-EMP-0226,Meera Khanna,Sales,Annual Leave,2026-10-22,2026-10-24,1,Withdrawn,Kavya Pillai,2026-10-14
+PX-LEAVE-0136,PX-EMP-0009,Anika Sen,Customer Success,Sick Leave,2026-05-09,2026-05-11,2,Approved,Executive Leadership Team,2026-05-01
+PX-LEAVE-0137,PX-EMP-0032,Priya Nair,Sales,Personal Leave,2026-12-20,2026-12-22,3,Pending Manager Review,Aarav Mehta,2026-12-12
+PX-LEAVE-0138,PX-EMP-0055,Naveen Desai,Product,Annual Leave,2026-07-07,2026-07-09,4,Declined,Sana Banerjee,2026-07-01
+PX-LEAVE-0139,PX-EMP-0078,Ishaan Desai,Customer Success,Sick Leave,2026-02-18,2026-02-20,5,Withdrawn,Yash Sethi,2026-02-10
+PX-LEAVE-0140,PX-EMP-0101,Neha Sen,Security,Personal Leave,2026-09-05,2026-09-07,1,Approved,Anika Sen,2026-09-01
+PX-LEAVE-0141,PX-EMP-0124,Karan Pillai,Product,Annual Leave,2026-04-16,2026-04-18,2,Pending Manager Review,Nikhil Shah,2026-04-08
+PX-LEAVE-0142,PX-EMP-0147,Pooja Saxena,People Operations,Sick Leave,2026-11-03,2026-11-05,3,Declined,Diya Bhat,2026-11-01
+PX-LEAVE-0143,PX-EMP-0170,Kavya Nair,Security,Personal Leave,2026-06-14,2026-06-16,4,Withdrawn,Leela Mishra,2026-06-06
+PX-LEAVE-0144,PX-EMP-0193,Kabir Bhat,Design,Annual Leave,2026-01-01,2026-01-03,5,Approved,Kunal Ghosh,2026-01-01
+PX-LEAVE-0145,PX-EMP-0216,Sameer Gupta,Finance,Sick Leave,2026-08-12,2026-08-14,1,Pending Manager Review,Ishaan Saxena,2026-08-04
+PX-LEAVE-0146,PX-EMP-0239,Yash Bhat,Operations,Personal Leave,2026-03-23,2026-03-25,2,Declined,Vikram Khanna,2026-03-15
+PX-LEAVE-0147,PX-EMP-0022,Leela Shah,Finance,Annual Leave,2026-10-10,2026-10-12,3,Withdrawn,Vikram Chopra,2026-10-02
+PX-LEAVE-0148,PX-EMP-0045,Ananya Sethi,Engineering,Sick Leave,2026-05-21,2026-05-23,4,Approved,Varun Banerjee,2026-05-13
+PX-LEAVE-0149,PX-EMP-0068,Simran Malhotra,Data,Personal Leave,2026-12-08,2026-12-10,5,Pending Manager Review,Sana Thomas,2026-12-01
+PX-LEAVE-0150,PX-EMP-0091,Sameer Banerjee,Sales,Annual Leave,2026-07-19,2026-07-21,1,Declined,Reyansh Sen,2026-07-11
+PX-LEAVE-0151,PX-EMP-0114,Varun Menon,Engineering,Sick Leave,2026-02-06,2026-02-08,2,Withdrawn,Priya Mishra,2026-02-01
+PX-LEAVE-0152,PX-EMP-0137,Akash Patel,Customer Success,Personal Leave,2026-09-17,2026-09-19,3,Approved,Aditya Mehta,2026-09-09
+PX-LEAVE-0153,PX-EMP-0160,Reyansh Pillai,Sales,Annual Leave,2026-04-04,2026-04-06,4,Pending Manager Review,Pooja Patel,2026-04-01
+PX-LEAVE-0154,PX-EMP-0183,Zoya Pillai,Product,Sick Leave,2026-11-15,2026-11-17,5,Declined,Kavya Saxena,2026-11-07
+PX-LEAVE-0155,PX-EMP-0206,Sana Menon,Customer Success,Personal Leave,2026-06-02,2026-06-04,1,Withdrawn,Kavya Pillai,2026-06-01
+PX-LEAVE-0156,PX-EMP-0229,Neha Patel,Security,Annual Leave,2026-01-13,2026-01-15,2,Approved,Mira Malhotra,2026-01-05
+PX-LEAVE-0157,PX-EMP-0012,Vikram Chopra,People Operations,Sick Leave,2026-08-24,2026-08-26,3,Pending Manager Review,Executive Leadership Team,2026-08-16
+PX-LEAVE-0158,PX-EMP-0035,Ananya Joshi,Security,Personal Leave,2026-03-11,2026-03-13,4,Declined,Sana Banerjee,2026-03-03
+PX-LEAVE-0159,PX-EMP-0058,Simran Menon,Design,Annual Leave,2026-10-22,2026-10-24,5,Withdrawn,Yash Sethi,2026-10-14
+PX-LEAVE-0160,PX-EMP-0081,Tanvi Pillai,Finance,Sick Leave,2026-05-09,2026-05-11,1,Approved,Anika Sen,2026-05-01
+PX-LEAVE-0161,PX-EMP-0104,Diya Khan,Operations,Personal Leave,2026-12-20,2026-12-22,2,Pending Manager Review,Nikhil Shah,2026-12-12
+PX-LEAVE-0162,PX-EMP-0127,Priya Patel,Data,Annual Leave,2026-07-07,2026-07-09,3,Declined,Diya Bhat,2026-07-01
+PX-LEAVE-0163,PX-EMP-0150,Rohan Chopra,Finance,Sick Leave,2026-02-18,2026-02-20,4,Withdrawn,Leela Mishra,2026-02-10
+PX-LEAVE-0164,PX-EMP-0173,Sahil Desai,Engineering,Personal Leave,2026-09-05,2026-09-07,5,Approved,Kunal Ghosh,2026-09-01
+PX-LEAVE-0165,PX-EMP-0196,Kunal Sethi,Data,Annual Leave,2026-04-16,2026-04-18,1,Pending Manager Review,Ishaan Saxena,2026-04-08
+PX-LEAVE-0166,PX-EMP-0219,Manav Kulkarni,Sales,Sick Leave,2026-11-03,2026-11-05,2,Declined,Vikram Khanna,2026-11-01
+PX-LEAVE-0167,PX-EMP-0002,Aarav Mehta,Customer Success,Personal Leave,2026-06-14,2026-06-16,3,Withdrawn,Executive Leadership Team,2026-06-06
+PX-LEAVE-0168,PX-EMP-0025,Asha Khan,Sales,Annual Leave,2026-01-01,2026-01-03,4,Approved,Varun Banerjee,2026-01-01
+PX-LEAVE-0169,PX-EMP-0048,Sana Khanna,Product,Sick Leave,2026-08-12,2026-08-14,5,Pending Manager Review,Sana Thomas,2026-08-04
+PX-LEAVE-0170,PX-EMP-0071,Varun Chopra,Customer Success,Personal Leave,2026-03-23,2026-03-25,1,Declined,Reyansh Sen,2026-03-15
+PX-LEAVE-0171,PX-EMP-0094,Rohan Iyer,Security,Annual Leave,2026-10-10,2026-10-12,2,Withdrawn,Priya Mishra,2026-10-02
+PX-LEAVE-0172,PX-EMP-0117,Aditya Sharma,Design,Sick Leave,2026-05-21,2026-05-23,3,Approved,Aditya Mehta,2026-05-13
+PX-LEAVE-0173,PX-EMP-0140,Kabir Malhotra,People Operations,Personal Leave,2026-12-08,2026-12-10,4,Pending Manager Review,Pooja Patel,2026-12-01
+PX-LEAVE-0174,PX-EMP-0163,Ira Mishra,Operations,Annual Leave,2026-07-19,2026-07-21,5,Declined,Kavya Saxena,2026-07-11
+PX-LEAVE-0175,PX-EMP-0186,Ishita Banerjee,Design,Sick Leave,2026-02-06,2026-02-08,1,Withdrawn,Kavya Pillai,2026-02-01
+PX-LEAVE-0176,PX-EMP-0209,Aditi Banerjee,Finance,Personal Leave,2026-09-17,2026-09-19,2,Approved,Mira Malhotra,2026-09-09
+PX-LEAVE-0177,PX-EMP-0232,Diya Ghosh,Operations,Annual Leave,2026-04-04,2026-04-06,3,Pending Manager Review,Aarav Mehta,2026-04-01
+PX-LEAVE-0178,PX-EMP-0015,Kavya Saxena,Finance,Sick Leave,2026-11-15,2026-11-17,4,Declined,Executive Leadership Team,2026-11-07
+PX-LEAVE-0179,PX-EMP-0038,Pooja Sen,Engineering,Personal Leave,2026-06-02,2026-06-04,5,Withdrawn,Yash Sethi,2026-06-01
+PX-LEAVE-0180,PX-EMP-0061,Vikram Rao,Data,Annual Leave,2026-01-13,2026-01-15,1,Approved,Anika Sen,2026-01-05
