@@ -3,5 +3,7 @@ uvicorn[standard]
 pydantic
 pytest
 httpx
+pypdf
 python-dotenv
 langgraph>=1.2.19,<2
+sentence-transformers>=5.1,<6

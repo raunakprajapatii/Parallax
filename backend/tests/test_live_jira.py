@@ -45,13 +45,14 @@ class _Client:
         return _Response()
 
 
-def test_live_jira_issue_key_search_handles_null_priority_and_includes_owner(monkeypatch):
+def test_live_jira_issue_key_search_handles_null_priority_and_includes_owner(monkeypatch, tmp_path):
     monkeypatch.setattr("app.connectors.live.httpx.Client", _Client)
     connector = LiveConnector("jira", ConnectorConfig(
         enable_live=True,
         jira_base_url="https://example.atlassian.net",
         jira_email="demo@example.com",
         jira_token="test-token",
+        oauth_db_path=str(tmp_path / "oauth.sqlite3"),
     ))
 
     result = connector.search("What is the status and assignee of Jira issue SCRUM-1")

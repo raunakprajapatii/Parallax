@@ -151,17 +151,25 @@ def build_agent_workflow(agent: Any):
         provider = agent.llm_provider
         api_key, model = ((agent.gemini_api_key, agent.gemini_model) if provider == "gemini"
                           else (agent.groq_api_key, agent.groq_model))
-        fixed_route = route.reason in {"explicit_sources", "jira_issue_key", "drive_record_id"}
+        # Keep issue IDs and Drive record IDs deterministic; explicit multi-source
+        # requests still benefit from distinct per-source query planning.
+        fixed_route = route.reason in {"jira_issue_key", "drive_record_id"}
         if not fixed_route and route.sources == ("drive",):
             fixed_route = True
         plan = None if fixed_route else plan_search(
             state["contextual_query"], api_key, model, provider, allowed_sources=route.sources)
         if plan:
-            sources, queries, reason = plan.sources, plan.queries, "llm_plan"
+            # An explicit source list is a user constraint. Let the planner
+            # tailor each connector query, but do not let it silently drop one.
+            sources = (tuple(dict.fromkeys((*route.sources, *plan.sources)))[:3]
+                       if route.reason == "explicit_sources" else plan.sources)
+            queries, reason = plan.queries, "llm_plan"
         else:
             sources, queries, reason = route.sources, {}, route.reason
         selected = list(sources[:3])
-        agent._trace(state["trace_id"], "route_complete", selectedSources=selected, reason=reason)
+        agent._trace(state["trace_id"], "route_complete", selectedSources=selected,
+                     sourceQueries={source: queries.get(source) or retrieval_query(state["contextual_query"], source)
+                                    for source in selected}, reason=reason)
         return {"selected_sources": selected, "source_queries": queries,
                 "tool_results": [], "records": []}
 
@@ -182,14 +190,16 @@ def build_agent_workflow(agent: Any):
             result: ToolResult | None = None
             retry_count = 0
             try:
-                for attempt in range(2):
+                attempts = 1 if source == "drive" else 2
+                timeout = max(agent.tool_timeout_seconds, 60.0) if source == "drive" else agent.tool_timeout_seconds
+                for attempt in range(attempts):
                     future = _TOOL_EXECUTOR.submit(
                         agent.connectors.search, source, query, limit=5, demo_mode=request.demoMode
                     )
                     try:
-                        result = future.result(timeout=agent.tool_timeout_seconds)
+                        result = future.result(timeout=timeout)
                     except FutureTimeout:
-                        if attempt == 0:
+                        if attempt + 1 < attempts:
                             retry_count += 1
                             sleep(0.15)
                             continue
@@ -210,7 +220,7 @@ def build_agent_workflow(agent: Any):
                     related_jira_terms.extend(record.title for record in result.records if record.title)
                 agent._trace(state["trace_id"], "tool_complete", tool=result.toolName,
                              durationMs=result.latencyMs, recordCount=len(result.records),
-                             retries=retry_count, error=result.error)
+                             retries=retry_count, query=query, error=result.error)
             except FutureTimeout:
                 elapsed = int((perf_counter() - started) * 1000)
                 results.append(ToolResult(toolName=f"search_{source}", query=query,
@@ -264,8 +274,8 @@ def build_agent_workflow(agent: Any):
                 if answer == SYNTHESIS_UNAVAILABLE:
                     answer, citations = synthesize(request.message, records, max_records=2)
             else:
-                # Never expose raw connector records as if they were a finished answer.
-                answer, citations = SYNTHESIS_UNAVAILABLE, []
+                # Keep a useful evidence-only answer available when no model key is configured.
+                answer, citations = synthesize(request.message, records)
         citations = validate_citations(citations, records)
         agent._trace(state["trace_id"], "citation_validation_complete", citationCount=len(citations), valid=True)
         memory_used: list[str] = []

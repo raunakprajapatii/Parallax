@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowDown, ArrowLeft, ArrowUp, ChevronRight, Clock3, HardDrive, Layers3, Link2, LoaderCircle, Plus, Sparkles, TriangleAlert, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowUp, CalendarDays, ChevronRight, Clock3, HardDrive, Layers3, Link2, LoaderCircle, Mail, Plus, RefreshCw, Sparkles, TriangleAlert, X } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
-import { clearDriveFolder, createCalendarEvent, disconnectDrive, getConversation, getConversations, getDriveKnowledgeStatus, postChat, selectDriveFolder, type ChatClient, type ChatRequest, type ChatResponse, type Citation, type ConversationSummary, type DriveKnowledgeStatus } from './api'
+import { clearDriveFolder, createCalendarEvent, disconnectDrive, disconnectGoogleIntegration, getConversation, getConversations, getDriveKnowledgeStatus, getGoogleIntegrationStatus, postChat, selectDriveFolder, type ChatClient, type ChatRequest, type ChatResponse, type Citation, type ConversationSummary, type DriveKnowledgeStatus, type GoogleIntegrationStatus } from './api'
 import { mockChat } from './mockApi'
 import './App.css'
 import './classic.css'
@@ -38,6 +38,7 @@ function App() {
   const [calendarCreating, setCalendarCreating] = useState<number | null>(null)
   const [knowledgeOpen, setKnowledgeOpen] = useState(false)
   const [driveKnowledge, setDriveKnowledge] = useState<DriveKnowledgeStatus>({ connected: false, folders: [], selectedFolderId: null })
+  const [googleStatus, setGoogleStatus] = useState<GoogleIntegrationStatus>({ gmail: false, calendar: false })
   const [knowledgeError, setKnowledgeError] = useState<string | null>(null)
   const conversationRef = useRef<HTMLDivElement>(null)
   const conversationAtBottomRef = useRef(true)
@@ -55,6 +56,21 @@ function App() {
   async function refreshDriveKnowledge() {
     try { setDriveKnowledge(await getDriveKnowledgeStatus()); setKnowledgeError(null) }
     catch (cause) { setKnowledgeError(cause instanceof Error ? cause.message : 'Could not load Drive folders.') }
+  }
+
+  async function refreshGoogleStatus() {
+    try { setGoogleStatus(await getGoogleIntegrationStatus()) }
+    catch (cause) { setKnowledgeError(cause instanceof Error ? cause.message : 'Could not load Google connection status.') }
+  }
+
+  async function disconnectGoogle(provider: 'gmail' | 'calendar') {
+    try {
+      await disconnectGoogleIntegration(provider)
+      await refreshGoogleStatus()
+      setKnowledgeError(null)
+    } catch (cause) {
+      setKnowledgeError(cause instanceof Error ? cause.message : `Could not disconnect Google ${provider}.`)
+    }
   }
 
   async function refreshConversations() {
@@ -114,6 +130,7 @@ function App() {
       void refreshConversations()
     } catch (cause) {
       setTurns((previous) => previous.slice(0, -1))
+      setDraft(message)
       setError(cause instanceof Error ? cause.message : 'Something went wrong. Please try again.')
     } finally { setLoading(false) }
   }
@@ -167,7 +184,14 @@ function App() {
         response: { ...turn.response, answer: `${turn.response.answer}\n\n**Scheduled:** ${created.htmlLink ? `[${created.summary}](${created.htmlLink})` : created.summary}`, calendarDraft: undefined, calendarConnectUrl: undefined },
       }))
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not create the calendar event.')
+      const message = cause instanceof Error ? cause.message : 'Could not create the calendar event.'
+      if (/(?:re)?connect Google Calendar/i.test(message)) {
+        setTurns((previous) => previous.map((turn, index) => index !== turnIndex || !turn.response ? turn : {
+          ...turn,
+          response: { ...turn.response, calendarConnectUrl: '/api/oauth/calendar/connect' },
+        }))
+      }
+      setError(message)
     } finally { setCalendarCreating(null) }
   }
 
@@ -201,13 +225,13 @@ function App() {
     </aside>
 
     <section className="workspace">
-      <header className="topbar"><div className="mobile-brand"><img className="mobile-brand-mark" src="/parallax-mark.svg" alt="" />PARALLAX</div><div className="breadcrumb"><span>Work intelligence</span><ChevronRight size={13}/><strong>Ask Parallax</strong></div><div className="top-right"><button className="knowledge-toggle" onClick={() => { setKnowledgeOpen(true); void refreshDriveKnowledge() }}><HardDrive size={14}/> Knowledge sources</button><button className="mobile-history-toggle" onClick={() => setHistoryOpen((open) => !open)} aria-expanded={historyOpen}><Clock3 size={14}/> History</button><div className="demo-pill"><span className="demo-dot"/>{isDemo ? 'Demo workspace' : 'Ready to ask'}</div></div>
+      <header className="topbar"><div className="mobile-brand"><img className="mobile-brand-mark" src="/parallax-mark.svg" alt="" />PARALLAX</div><div className="breadcrumb"><span>Work intelligence</span><ChevronRight size={13}/><strong>Ask Parallax</strong></div><div className="top-right"><button className="knowledge-toggle" onClick={() => { setKnowledgeOpen(true); setKnowledgeError(null); void refreshDriveKnowledge(); void refreshGoogleStatus() }}><HardDrive size={14}/> Knowledge sources</button><button className="mobile-history-toggle" onClick={() => setHistoryOpen((open) => !open)} aria-expanded={historyOpen}><Clock3 size={14}/> History</button><div className="demo-pill"><span className="demo-dot"/>{isDemo ? 'Demo workspace' : 'Ready to ask'}</div></div>
         {historyOpen && <div className="mobile-history-menu"><div className="saved-chats-label">Recent chats</div>{conversations.length ? conversations.map((conversation) => <button className="saved-chat" key={conversation.conversationId} onClick={() => void openConversation(conversation.conversationId)} title={conversation.title}>{conversation.title}</button>) : <div className="no-saved-chats">Your conversations will appear here.</div>}</div>}
       </header>
       <main className="main-content">
         {turns.length === 0 && <div className="intro"><div className="eyebrow"><Sparkles size={14}/> YOUR WORK, IN CONTEXT</div><h1>Everything, in context.</h1><p>Ask a question across your connected work apps.</p></div>}
 
-        {turns.length === 0 && <div className="prompt-grid" aria-label="Example question"><button className="prompt-card" onClick={() => void submitQuestion(suggestions[0])}><span className="prompt-icon"><Layers3 size={15}/></span><span><small className="example-label">TRY ASKING</small>{suggestions[0]}</span><ArrowUp size={13} style={{marginLeft:'auto',flex:'none',color:'#a2a7b7'}}/></button></div>}
+        {turns.length === 0 && <div className="prompt-grid" aria-label="Suggested questions">{suggestions.slice(0, 3).map((suggestion) => <button className="prompt-card" key={suggestion} onClick={() => void submitQuestion(suggestion)}><span className="prompt-icon"><Layers3 size={15}/></span><span><small className="example-label">TRY ASKING</small>{suggestion}</span><ArrowUp size={13} style={{marginLeft:'auto',flex:'none',color:'#a2a7b7'}}/></button>)}</div>}
 
         <div className="conversation-wrap">
         <div className="conversation" aria-live="polite" ref={conversationRef} onScroll={handleConversationScroll}>
@@ -231,12 +255,40 @@ function App() {
         {showLatestCue && turns.length > 0 && <button type="button" className="new-messages-cue" onClick={jumpToLatest}><ArrowDown size={14}/> New messages</button>}
         </div>
 
-        <div className="composer-wrap"><form className="composer" onSubmit={onSubmit}><textarea aria-label="Ask a question" placeholder="Ask anything about your work…" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); void submitQuestion() } }} disabled={loading}/><div className="composer-actions"><span className="composer-hint">Enter to send · Shift + Enter for a new line</span><button className="send-button" type="submit" disabled={!draft.trim() || loading} aria-label="Send question">{loading ? <LoaderCircle size={16}/> : <ArrowUp size={17}/>}</button></div></form></div>
+        <div className="composer-wrap"><form className="composer" onSubmit={onSubmit}><textarea aria-label="Ask a question" maxLength={4000} placeholder="Ask anything about your work…" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); void submitQuestion() } }} disabled={loading}/><div className="composer-actions"><span className="composer-hint">{draft.length > 0 && <span className="character-count">{draft.length}/4000 · </span>}Enter to send · Shift + Enter for a new line</span><button className="send-button" type="submit" disabled={!draft.trim() || loading} aria-label="Send question">{loading ? <LoaderCircle size={16} className="spin"/> : <ArrowUp size={17}/>}</button></div></form></div>
       </main>
     </section>
 
     {selectedCitation && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedCitation(null) }}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="source-title"><div className="modal-head"><div><SourceMark source={selectedCitation.source}/><h2 className="modal-title" id="source-title">{selectedCitation.title}</h2></div><button className="modal-close" aria-label="Close source details" onClick={() => setSelectedCitation(null)}><X size={16}/></button></div><div className="modal-body"><div className="detail-row"><span className="detail-label">Source</span><span className="detail-value" style={{textTransform:'capitalize'}}>{selectedCitation.source}</span></div><div className="detail-row"><span className="detail-label">Record ID</span><span className="detail-value">{selectedCitation.recordId}</span></div><div className="detail-row"><span className="detail-label">Citation</span><span className="detail-value">[{selectedCitation.number}] · Referenced in the answer</span></div>{selectedCitation.url ? <div className="detail-row"><span className="detail-label">Original source</span><a className="detail-value" href={selectedCitation.url} target="_blank" rel="noreferrer"><Link2 size={13} style={{verticalAlign:'middle',marginRight:5}}/>{selectedCitation.url}<ArrowLeft size={12} style={{transform:'rotate(135deg)',marginLeft:4,verticalAlign:'middle'}}/></a></div> : <div className="detail-row"><span className="detail-label">Original source</span><span className="detail-value">No source URL was provided by the API.</span></div>}</div></section></div>}
-    {knowledgeOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setKnowledgeOpen(false) }}><section className="modal knowledge-modal" role="dialog" aria-modal="true" aria-labelledby="knowledge-title"><div className="modal-head"><div><HardDrive size={18}/><h2 className="modal-title" id="knowledge-title">Knowledge sources</h2></div><button className="modal-close" aria-label="Close knowledge sources" onClick={() => setKnowledgeOpen(false)}><X size={16}/></button></div><div className="modal-body"><label className="folder-label" htmlFor="knowledge-mode">Knowledge mode</label><select id="knowledge-mode" className="folder-select" value={connectorDemoMode ? 'demo' : 'live'} onChange={(event) => setConnectorDemoMode(event.target.value === 'demo')}><option value="demo">Local synthetic data</option><option value="live">Connected sources</option></select><small className="knowledge-note">Local demo mode uses bundled sample records. Connected sources searches connected work apps and the Drive folder selected below.</small><p className="knowledge-description">Connect Google Drive and choose one folder. Parallax reads text files and Google Docs there and cites the original file.</p>{!driveKnowledge.connected ? <><a className="calendar-action" href="/api/oauth/drive/connect" target="_blank" rel="noreferrer">Connect Google Drive</a><button type="button" className="disconnect-drive" onClick={() => void refreshDriveKnowledge()}>Refresh connection status</button><small className="knowledge-note">After Google sign-in finishes in the new tab, return here and refresh. Read-only Drive access.</small></> : <><label className="folder-label" htmlFor="drive-folder">Search this Drive folder</label><select id="drive-folder" className="folder-select" value={driveKnowledge.selectedFolderId ?? ''} onChange={async (event) => { const id = event.target.value; try { if (id) await selectDriveFolder(id); else await clearDriveFolder(); await refreshDriveKnowledge() } catch (cause) { setKnowledgeError(cause instanceof Error ? cause.message : 'Could not save folder.') } }}><option value="">Choose a folder…</option>{driveKnowledge.folders.map((folder) => <option key={folder.id} value={folder.id}>{folder.name}</option>)}</select><small className="knowledge-note">Only files directly inside the selected folder are searched. Supported live file content: Google Docs and plain text files.</small><button type="button" className="disconnect-drive" onClick={async () => { try { await disconnectDrive(); setDriveKnowledge({ connected: false, folders: [], selectedFolderId: null }); setKnowledgeError(null) } catch (cause) { setKnowledgeError(cause instanceof Error ? cause.message : 'Could not disconnect Drive.') } }}>Disconnect Google Drive</button></>}{knowledgeError && <div className="error-banner" role="alert">{knowledgeError}</div>}</div></section></div>}
+    {knowledgeOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setKnowledgeOpen(false) }}>
+      <section className="modal knowledge-modal" role="dialog" aria-modal="true" aria-labelledby="knowledge-title">
+        <div className="modal-head"><div><HardDrive size={18}/><h2 className="modal-title" id="knowledge-title">Knowledge sources</h2></div><button className="modal-close" aria-label="Close knowledge sources" onClick={() => setKnowledgeOpen(false)}><X size={16}/></button></div>
+        <div className="modal-body">
+          <label className="folder-label" htmlFor="knowledge-mode">Knowledge mode</label>
+          <select id="knowledge-mode" className="folder-select" value={connectorDemoMode ? 'demo' : 'live'} onChange={(event) => setConnectorDemoMode(event.target.value === 'demo')}><option value="demo">Local synthetic data</option><option value="live">Connected sources</option></select>
+          <small className="knowledge-note">Local demo mode uses bundled sample records. Connected sources searches your connected work apps and selected Drive folder.</small>
+
+          <div className="integration-section">
+            <div className="integration-heading"><strong>Google connections</strong><button type="button" className="integration-refresh" onClick={() => { void refreshGoogleStatus(); void refreshDriveKnowledge() }} aria-label="Refresh Google connection status" title="Refresh status"><RefreshCw size={13}/></button></div>
+            <div className="integration-row"><span className="integration-icon"><Mail size={15}/></span><span className="integration-copy"><strong>Gmail</strong><small>Read and search your email</small></span>{googleStatus.gmail ? <><span className="integration-connected">Connected</span><button type="button" className="disconnect-drive" onClick={() => void disconnectGoogle('gmail')}>Disconnect</button></> : <a className="calendar-action integration-connect" href="/api/oauth/gmail/connect" target="_blank" rel="noreferrer" onClick={() => window.setTimeout(() => void refreshGoogleStatus(), 2500)}>Connect</a>}</div>
+            <div className="integration-row"><span className="integration-icon"><CalendarDays size={15}/></span><span className="integration-copy"><strong>Google Calendar</strong><small>Find availability and create events</small></span>{googleStatus.calendar ? <><span className="integration-connected">Connected</span><button type="button" className="disconnect-drive" onClick={() => void disconnectGoogle('calendar')}>Disconnect</button></> : <a className="calendar-action integration-connect" href="/api/oauth/calendar/connect" target="_blank" rel="noreferrer" onClick={() => window.setTimeout(() => void refreshGoogleStatus(), 2500)}>Connect</a>}</div>
+            <small className="knowledge-note">Sign in in the new tab, then use refresh if the connection status has not updated.</small>
+          </div>
+
+          <div className="integration-section drive-section">
+            <div className="integration-heading"><strong>Google Drive</strong>{driveKnowledge.connected && <span className="integration-connected">Connected</span>}</div>
+            <p className="knowledge-description">Connect Drive and choose a folder. Parallax reads supported files there and cites the original source.</p>
+            {!driveKnowledge.connected ? <><a className="calendar-action" href="/api/oauth/drive/connect" target="_blank" rel="noreferrer" onClick={() => window.setTimeout(() => void refreshDriveKnowledge(), 2500)}>Connect Google Drive</a><small className="knowledge-note">Read-only Drive access.</small></> : <>
+              <label className="folder-label" htmlFor="drive-folder">Search this Drive folder</label>
+              <select id="drive-folder" className="folder-select" value={driveKnowledge.selectedFolderId ?? ''} onChange={async (event) => { const id = event.target.value; try { if (id) await selectDriveFolder(id); else await clearDriveFolder(); await refreshDriveKnowledge() } catch (cause) { setKnowledgeError(cause instanceof Error ? cause.message : 'Could not save folder.') } }}><option value="">Choose a folder…</option>{driveKnowledge.folders.map((folder) => <option key={folder.id} value={folder.id}>{folder.name}</option>)}</select>
+              <small className="knowledge-note">Only files directly inside the selected folder are searched.</small>
+              <button type="button" className="disconnect-drive" onClick={async () => { try { await disconnectDrive(); setDriveKnowledge({ connected: false, folders: [], selectedFolderId: null }); setKnowledgeError(null) } catch (cause) { setKnowledgeError(cause instanceof Error ? cause.message : 'Could not disconnect Drive.') } }}>Disconnect Google Drive</button>
+            </>}
+          </div>
+          {knowledgeError && <div className="error-banner" role="alert">{knowledgeError}</div>}
+        </div>
+      </section>
+    </div>}
   </div>
 }
 

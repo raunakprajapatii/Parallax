@@ -74,3 +74,36 @@ def test_notion_specific_query_is_sent_to_search_endpoint(monkeypatch, tmp_path)
 
     assert result.error is None
     assert captured == {"page_size": 2, "query": "Atlas launch brief"}
+
+
+def test_notion_retries_with_entity_phrase_and_drops_unrelated_pages(monkeypatch, tmp_path):
+    searches = []
+
+    def page(page_id, title):
+        return {"id": page_id, "object": "page", "url": f"https://notion.test/{page_id}",
+                "last_edited_time": "2026-11-01T10:00:00Z",
+                "properties": {"Name": {"type": "title", "title": [{"plain_text": title}]}}}
+
+    class _Client:
+        def __init__(self, **kwargs): pass
+        def __enter__(self): return self
+        def __exit__(self, *args): return False
+        def post(self, url, json):
+            searches.append(json["query"])
+            if len(searches) == 1:
+                return _Response({"results": [page("atlas", "Parallax Atlas Launch Brief")]})
+            return _Response({"results": [page("northstar", "Northstar Labs Analytics Rollout")]})
+        def get(self, url, params):
+            return _Response({"results": [], "has_more": False})
+
+    monkeypatch.setattr("app.connectors.live.httpx.Client", _Client)
+    connector = LiveConnector("notion", ConnectorConfig(
+        enable_live=True, notion_token="test-notion-token",
+        oauth_db_path=str(tmp_path / "oauth.sqlite3"),
+    ))
+
+    result = connector.search("Northstar Labs Analytics Rollout project brief", limit=3)
+
+    assert result.error is None
+    assert searches == ["Northstar Labs Analytics Rollout project brief", "Northstar Labs Analytics Rollout"]
+    assert [item.id for item in result.records] == ["notion:northstar"]

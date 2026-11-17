@@ -18,7 +18,7 @@ _TERMS: dict[SourceName, tuple[str, ...]] = {
     "jira": ("jira", "ticket", "issue", "task", "tasks", "overdue", "unresolved", "priority", "blocked", "blocker", "status", "assignee", "assigned", "scrum-", "atl-", "sprint", "on my plate", "what should i work on", "next priority", "to-do"),
     "notion": ("notion", "notes", "meeting", "action item", "action items", "brief", "project documentation", "document", "documentation", "wiki", "roadmap", "launch readiness", "owner list"),
     "calendar": ("calendar", "meeting", "meetings", "event", "events", "appointment", "appointments"),
-    "drive": ("google drive", "drive", "company", "company knowledge", "knowledge base", "employee", "employees", "staff", "pan card", "pan number", "pan", "tax id", "gst", "leave policy", "annual leave", "support ticket", "support tickets", "atlas", "company profile", "employee directory"),
+    "drive": ("google drive", "drive", "company", "company knowledge", "knowledge base", "employee", "employees", "staff", "customer", "customers", "account", "accounts", "client", "clients", "crm", "hr", "leave request", "leave requests", "leave balance", "annual leave", "sick leave", "time off", "personnel", "sales development representative", "sales representative", "sdr", "pan card", "pan number", "pan", "tax id", "gst", "leave policy", "support ticket", "support tickets", "atlas", "company profile", "employee directory"),
 }
 _CROSS_SOURCE = ("across all sources", "all sources", "all work apps", "each blocker", "related to my current jira", "compare my jira", "mentioning unresolved jira", "cross-platform")
 _WORK_CONTEXT = (
@@ -27,7 +27,7 @@ _WORK_CONTEXT = (
     "blocked", "ticket", "issue", "task", "overdue", "unresolved", "sprint", "assignee", "owner", "roadmap", "handoff",
     "standup", "meeting", "meeting notes", "notes", "brief", "document", "documentation", "wiki", "action items", "release", "approval", "atl-", "scrum-", "project status", "assigned",
     "what needs attention", "what needs my attention", "what should i work on", "what's on my plate", "what is on my plate", "my next priority", "next priority", "latest updates",
-    "company", "employee", "employees", "pan card", "pan number", "pan", "tax id", "gst", "leave policy", "annual leave", "knowledge base", "google drive", "calendar", "meetings", "events",
+    "company", "employee", "employees", "customer", "customers", "account", "accounts", "client", "clients", "crm", "hr", "leave request", "leave requests", "leave balance", "annual leave", "sick leave", "time off", "personnel", "sales development representative", "sales representative", "sdr", "pan card", "pan number", "pan", "tax id", "gst", "leave policy", "knowledge base", "google drive", "calendar", "meetings", "events",
 )
 
 _FOLLOW_UP_PREFIXES = (
@@ -38,13 +38,24 @@ _FOLLOW_UP_PREFIXES = (
 )
 
 
+def _contains_term(text: str, term: str) -> bool:
+    if " " in term:
+        return term in text
+    return bool(re.search(rf"\b{re.escape(term)}\b", text))
+
+
 def is_work_query(query: str) -> bool:
     """Only route questions needing connected workspace context to source retrieval."""
     if re.search(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()):
         return True
     text = re.sub(r"[^\w\s']", "", query.casefold())
     text = re.sub(r"\s+", " ", text).strip()
-    return any(term in text for term in _WORK_CONTEXT)
+    if any(_contains_term(text, term) for term in _WORK_CONTEXT):
+        return True
+    # Specific factual questions about an entity usually need workspace evidence,
+    # even when the entity type is phrased in a way we do not yet recognize.
+    return bool(re.search(r"\b(fetch|find|look up|tell me about|what do we know about)\b.+\b(customer|account|client|company|vendor|employee|person|project|leave|hr)\b", text)
+                or re.search(r"\b(?:leave request|time off|sick leave)\b.*\b(?:for|of|from)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?", query))
 
 
 def is_follow_up(query: str) -> bool:
@@ -67,24 +78,48 @@ def route_query(query: str) -> Route:
     text = query.casefold()
     if re.search(r"\bPX-(?:SUP|ATLAS)-\d+\b", query.upper()):
         return Route(("drive",), "drive_record_id")
+    # Explicitly named sources must not be discarded just because the same
+    # question also contains a Jira issue key. Preserve Jira for the key, then
+    # search every other named source requested by the user.
+    # In questions such as "the Gmail of a person from Drive", Gmail means
+    # their email address. Treat it as a source only when the user is asking
+    # about the Gmail app/account itself.
+    gmail_is_source = bool(re.search(
+        r"\b(?:in|from|search|check|look in|look up in|my)\s+(?:google\s+)?gmail\b"
+        r"|\bgmail\s+(?:inbox|messages?|emails?|thread)\b", text))
+    named = [source for source, patterns in {
+        "gmail": ((r"\bgmail\b", r"\bgoogle mail\b") if gmail_is_source else (r"\bgoogle mail\b",)),
+        "jira": (r"\bjira\b",),
+        "notion": (r"\bnotion\b",),
+        "calendar": (r"\bcalendar\b",),
+        "drive": (r"\bgoogle drive\b", r"\bdrive\b", r"\bcompany knowledge\b", r"\bknowledge base\b"),
+    }.items() if any(re.search(pattern, text) for pattern in patterns)]
+    has_jira_key = bool(re.search(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()))
+    if named:
+        if has_jira_key and "jira" not in named:
+            named.append("jira")
+        return Route(tuple(named[:3]), "explicit_sources")
+    named_person = re.search(
+        r"\b(?:for|of|about)\s+[A-Za-z][A-Za-z'-]+\s+[A-Za-z][A-Za-z'-]+\b", query)
+    asks_employee_profile = bool(re.search(
+        r"\bwork\s+email\b|\b(?:employee\s+)?profile\b|\bemployee\s+details\b", text)
+        or (named_person and sum(bool(re.search(pattern, text)) for pattern in (
+            r"\bdepartment\b", r"\bmanager\b", r"\boffice\b", r"\bstart\s+date\b",
+            r"\bjob\s+title\b", r"\bemployment\s+status\b")) >= 2))
+    if named_person and asks_employee_profile:
+        return Route(("drive",), "drive_employee_profile")
     if re.search(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()):
         return Route(("jira",), "jira_issue_key")
-    selected = [source for source, terms in _TERMS.items() if any(term in text for term in terms)]
+    email_address_lookup = bool(re.search(r"\b(?:gmail|email(?: address)?)\s+(?:of|for)\b", text))
+    selected = [source for source, terms in _TERMS.items()
+                if not (source == "gmail" and email_address_lookup)
+                and any(_contains_term(text, term) for term in terms)]
     if re.search(r"\bwhat needs (?:my )?attention\b", text):
         return Route(("gmail", "jira"), "attention_summary")
     if re.search(r"\b(?:email|emails|mail)\b.*\b(?:jira|task|tasks|issue|issues)\b|\b(?:jira|task|tasks|issue|issues)\b.*\b(?:email|emails|mail)\b", text):
         return Route(("jira", "gmail"), "jira_to_email_lookup")
     # If the user names applications, honor that explicit selection. Domain
     # words such as "status" should not silently add a third connector.
-    named = [source for source, patterns in {
-        "gmail": (r"\bgmail\b", r"\bgoogle mail\b"),
-        "jira": (r"\bjira\b",),
-        "notion": (r"\bnotion\b",),
-        "calendar": (r"\bcalendar\b",),
-        "drive": (r"\bgoogle drive\b", r"\bdrive\b", r"\bcompany knowledge\b", r"\bknowledge base\b"),
-    }.items() if any(re.search(pattern, text) for pattern in patterns)]
-    if named:
-        return Route(tuple(named), "explicit_sources")
     if re.search(r"\b(?:related to|mention(?:ing)?|compare|across|with)\b", text) and len(selected) > 1:
         return Route(tuple(selected[:3]), "multi_source_intent")
     if any(term in text for term in _CROSS_SOURCE) or (
@@ -101,6 +136,11 @@ def retrieval_query(query: str, source: SourceName, planned_query: str | None = 
     """Translate common Gmail intents to Gmail's query language; preserve provider queries."""
     normalized = re.sub(r"\s+", " ", query).strip()
     lower = normalized.casefold()
+    # A source-specific plan carries the entity or identifier the planner chose
+    # for this connector. Do not discard it because the full question happens
+    # to contain a broad phrase such as "cross-check Jira".
+    if source in {"jira", "notion", "drive", "calendar"} and planned_query:
+        return planned_query
     if source == "jira" and re.search(r"\b(check|show|fetch|find)\b.*\b(jira|updates?|activity)\b|\b(jira|updates?|activity)\b.*\b(latest|recent|newest)\b", lower):
         return "latest Jira updates"
     if source == "jira" and any(term in lower for term in ("what should i work on", "on my plate", "what is on my plate", "assigned to me", "my tasks", "current tasks", "tasks do i have", "my tickets", "what should i focus on")):
@@ -109,10 +149,6 @@ def retrieval_query(query: str, source: SourceName, planned_query: str | None = 
         return "Which high-priority tasks remain unresolved?"
     if source == "jira" and any(term in lower for term in ("my jira task", "current jira task", "emails related to", "email related to")):
         return "What tasks are currently assigned to me?"
-    if source == "calendar" and planned_query:
-        return planned_query
-    if source in {"jira", "notion", "drive"} and planned_query:
-        return planned_query
     if source != "gmail":
         return normalized
     text = lower

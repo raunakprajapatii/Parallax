@@ -80,6 +80,16 @@ export async function createCalendarEvent(event: CalendarEventDraft): Promise<{ 
 
 export type DriveFolder = { id: string; name: string }
 export type DriveKnowledgeStatus = { connected: boolean; folders: DriveFolder[]; selectedFolderId: string | null }
+export type GoogleIntegrationStatus = { gmail: boolean; calendar: boolean }
+
+export function getGoogleIntegrationStatus(): Promise<GoogleIntegrationStatus> {
+  return getJson<GoogleIntegrationStatus>('/api/oauth/status')
+}
+
+export async function disconnectGoogleIntegration(provider: 'gmail' | 'calendar'): Promise<void> {
+  const response = await fetch(`/api/oauth/${provider}`, { method: 'DELETE' })
+  if (!response.ok) throw new Error(`Could not disconnect Google ${provider === 'gmail' ? 'Gmail' : 'Calendar'}.`)
+}
 
 export async function getDriveKnowledgeStatus(): Promise<DriveKnowledgeStatus> {
   const statusResponse = await getJson<Record<string, boolean>>('/api/oauth/status')
