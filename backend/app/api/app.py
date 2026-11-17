@@ -44,6 +44,10 @@ def create_app(*, orchestrator=None) -> FastAPI:
         calendar_connected=bool(app.state.oauth_store.get("calendar")),
         calendar_store=app.state.oauth_store
     )
+    drive = getattr(app.state.agent_orchestrator.connectors, "drive", None)
+    if config.demo_mode or (drive is not None and drive.selected_folder()):
+        from app.connectors.drive import warm_embeddings
+        app.router.on_startup.append(warm_embeddings)
     return app
 
 

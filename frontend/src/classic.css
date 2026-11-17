@@ -103,6 +103,22 @@ body,#root{height:100%;min-height:0;overflow:hidden}
 .citation-open{flex:none;color:#888;font-size:9px;text-transform:uppercase;letter-spacing:.04em}
 .answer-head small{line-height:1.6}
 .search-status{animation:turn-enter .2s ease-out both}
+.spin{animation:icon-spin .9s linear infinite}
+.character-count{color:#aaa}
+.integration-section{display:flex;width:100%;flex-direction:column;gap:10px;padding-top:12px;border-top:1px solid #282828}
+.integration-heading{display:flex;align-items:center;justify-content:space-between;color:#eee;font-size:11px}
+.integration-refresh{display:grid;place-items:center;width:27px;height:27px;border:1px solid #383838;background:#111;color:#bbb;border-radius:3px;cursor:pointer}
+.integration-refresh:hover{border-color:#888;color:#fff}
+.integration-row{display:flex;align-items:center;gap:9px;width:100%;padding:10px;border:1px solid #303030;background:#101010}
+.integration-icon{display:grid;place-items:center;flex:none;width:29px;height:29px;border:1px solid #414141;color:#ddd}
+.integration-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;color:#eee;font-size:11px}
+.integration-copy small{color:#888;font-size:9px;line-height:1.4}
+.integration-connected{flex:none;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.04em}
+.integration-connect{padding:7px 9px;font-size:9px}
+.drive-section{margin-top:2px}
+.drive-section .knowledge-description{font-size:10px}
+@keyframes icon-spin{to{transform:rotate(360deg)}}
+@media(min-width:1100px){.prompt-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none}.prompt-card{min-height:76px;padding:11px 12px}.prompt-card>span:nth-child(2){flex:1;min-width:0}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 .turn{animation:turn-enter .24s ease-out both}
 .answer-card{transition:border-color .2s ease,background .2s ease,transform .2s ease}

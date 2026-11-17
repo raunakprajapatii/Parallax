@@ -43,6 +43,34 @@ def test_csv_is_chunked_into_labeled_rows():
     assert passages == ["name: Ari; department: Sales", "name: Blair; department: Support"]
 
 
+def test_csv_rows_are_not_truncated_to_the_prose_chunk_size():
+    value = "x" * 1400
+    passages = DriveConnector._chunk_content(f"name,notes\nAri,{value}", "text/csv")
+    assert len(passages[0]) > 1100
+    assert passages[0].endswith(value)
+
+
+def test_changed_documents_are_embedded_in_one_batch(tmp_path, monkeypatch):
+    db_path = tmp_path / "drive.sqlite3"
+    calls = []
+
+    def fake_embed(texts):
+        calls.append(texts)
+        return [[1.0, 0.0] for _ in texts]
+
+    monkeypatch.setattr("app.connectors.drive._embed", fake_embed)
+    with sqlite3.connect(db_path) as db:
+        DriveConnector._ensure_index(db)
+        DriveConnector._store_documents(db, "folder", [
+            ({"id": "one", "name": "One", "mimeType": "text/plain"}, "First document."),
+            ({"id": "two", "name": "Two", "mimeType": "text/plain"}, "Second document."),
+        ])
+        assert db.execute("SELECT COUNT(*) FROM drive_rag_documents").fetchone()[0] == 2
+
+    assert len(calls) == 1
+    assert len(calls[0]) == 2
+
+
 def test_long_prose_chunks_overlap_for_context():
     text = " ".join(f"word{i}" for i in range(180))
     passages = DriveConnector._chunk_content(text, "text/plain", max_chars=200)

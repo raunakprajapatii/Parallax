@@ -34,6 +34,11 @@ def _embed(texts: list[str]):
     return _model.encode(texts, normalize_embeddings=True, show_progress_bar=False)
 
 
+def warm_embeddings() -> None:
+    """Load the local model before a chat request can hit its cold-start cost."""
+    _embed(["Google Drive retrieval warm-up"])
+
+
 def _query_profile(query: str) -> tuple[str, str, tuple[str, ...]]:
     """Identify the document family and add useful lexical variants."""
     text = query.casefold()
@@ -190,9 +195,8 @@ class DriveConnector:
                        if indexed.get(item["id"]) != item.get("modifiedTime", "") or item["id"] in unembedded]
             with ThreadPoolExecutor(max_workers=8, thread_name_prefix="drive-read") as executor:
                 downloads = {item["id"]: executor.submit(self._file_text, item, headers) for item in changed}
-                for item in changed:
-                    content = downloads[item["id"]].result()
-                    self._store_document(db, folder_id, item, content)
+                documents = [(item, downloads[item["id"]].result()) for item in changed]
+            self._store_documents(db, folder_id, documents)
 
     @staticmethod
     def _ensure_index(db: sqlite3.Connection) -> None:
@@ -220,24 +224,37 @@ class DriveConnector:
 
     @classmethod
     def _store_document(cls, db: sqlite3.Connection, folder_id: str, item: dict, content: str) -> None:
-        file_id = item["id"]
-        content = content[:1_500_000]
-        passages = cls._chunk_content(content, item.get("mimeType", ""))
-        vectors = _embed([f"{item['name']}\n{passage}" for passage in passages]) if passages else []
-        digest = hashlib.sha256(content.encode("utf-8", errors="replace")).hexdigest()
-        cls._delete_document(db, file_id)
-        db.execute("""INSERT OR REPLACE INTO drive_rag_documents
-            (file_id, folder_id, title, mime_type, url, modified_time, content_hash)
-            VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (file_id, folder_id, item["name"], item.get("mimeType", ""),
-             item.get("webViewLink") or f"https://drive.google.com/open?id={quote(file_id)}",
-             item.get("modifiedTime", ""), digest))
-        for ordinal, (passage, vector) in enumerate(zip(passages, vectors)):
-            embedding = struct.pack(f"{len(vector)}f", *vector)
-            cursor = db.execute("INSERT INTO drive_rag_passages(file_id, ordinal, content, embedding) VALUES (?, ?, ?, ?)",
-                                (file_id, ordinal, passage, embedding))
-            db.execute("INSERT INTO drive_rag_fts(rowid, title, content, file_id, passage_id) VALUES (?, ?, ?, ?, ?)",
-                       (cursor.lastrowid, item["name"], passage, file_id, cursor.lastrowid))
+        cls._store_documents(db, folder_id, [(item, content)])
+
+    @classmethod
+    def _store_documents(cls, db: sqlite3.Connection, folder_id: str,
+                         documents: list[tuple[dict, str]]) -> None:
+        """Chunk and embed changed files in one model call during index sync."""
+        prepared = []
+        texts = []
+        for item, content in documents:
+            passages = cls._chunk_content(content, item.get("mimeType", ""))
+            start = len(texts)
+            texts.extend(f"{item['name']}\n{passage}" for passage in passages)
+            prepared.append((item, content, passages, start))
+        vectors = _embed(texts) if texts else []
+        for item, content, passages, start in prepared:
+            file_id = item["id"]
+            digest = hashlib.sha256(content.encode("utf-8", errors="replace")).hexdigest()
+            cls._delete_document(db, file_id)
+            db.execute("""INSERT OR REPLACE INTO drive_rag_documents
+                (file_id, folder_id, title, mime_type, url, modified_time, content_hash)
+                VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (file_id, folder_id, item["name"], item.get("mimeType", ""),
+                 item.get("webViewLink") or f"https://drive.google.com/open?id={quote(file_id)}",
+                 item.get("modifiedTime", ""), digest))
+            for ordinal, passage in enumerate(passages):
+                vector = vectors[start + ordinal]
+                embedding = struct.pack(f"{len(vector)}f", *vector)
+                cursor = db.execute("INSERT INTO drive_rag_passages(file_id, ordinal, content, embedding) VALUES (?, ?, ?, ?)",
+                                    (file_id, ordinal, passage, embedding))
+                db.execute("INSERT INTO drive_rag_fts(rowid, title, content, file_id, passage_id) VALUES (?, ?, ?, ?, ?)",
+                           (cursor.lastrowid, item["name"], passage, file_id, cursor.lastrowid))
 
     @staticmethod
     def _delete_document(db: sqlite3.Connection, file_id: str) -> None:
@@ -258,7 +275,7 @@ class DriveConnector:
                 rows = csv.DictReader(io.StringIO(content))
                 passages = ["; ".join(f"{key}: {value.strip()}" for key, value in row.items()
                                       if key and value and value.strip()) for row in rows]
-                return [passage[:max_chars] for passage in passages if passage]
+                return [passage for passage in passages if passage]
             except csv.Error:
                 pass
         units = [unit.strip() for unit in re.split(r"\n\s*\n|(?<=[.!?])\s+", content) if unit.strip()]
@@ -351,38 +368,6 @@ class DriveConnector:
             for file_id, doc in ranked]
         return ToolResult(toolName="search_drive", query=" ".join(query.split()), records=records, latencyMs=0)
 
-    def _retrieve_fts_legacy(self, query: str, folder_id: str, limit: int) -> ToolResult:
-        terms = list(dict.fromkeys(re.findall(r"[\w-]+", query.casefold())))
-        terms = [term for term in terms if len(term) > 1 and term not in {
-            "what", "when", "where", "which", "who", "how", "does", "did", "the", "and", "for", "with", "from", "tell", "about", "please"}]
-        if not terms:
-            return ToolResult(toolName="search_drive", query=" ".join(query.split()), records=[], latencyMs=0)
-        match = " OR ".join('"' + term.replace('"', '""') + '"' for term in terms[:24])
-        with sqlite3.connect(self.db_path, timeout=30) as db:
-            self._ensure_index(db)
-            rows = db.execute("""SELECT d.file_id, d.title, d.mime_type, d.url, d.modified_time,
-                       p.content, bm25(drive_rag_fts, 3.0, 1.0) AS score
-                FROM drive_rag_fts f
-                JOIN drive_rag_passages p ON p.passage_id=CAST(f.passage_id AS INTEGER)
-                JOIN drive_rag_documents d ON d.file_id=f.file_id
-                WHERE drive_rag_fts MATCH ? AND d.folder_id=?
-                ORDER BY score, d.title COLLATE NOCASE LIMIT ?""",
-                (match, folder_id, max(limit * 6, 18))).fetchall()
-        grouped: dict[str, dict] = {}
-        for file_id, title, mime, url, modified, passage, score in rows:
-            doc = grouped.setdefault(file_id, {"title": title, "mime": mime, "url": url,
-                                                "modified": modified, "passages": [], "score": score})
-            if len(doc["passages"]) < 3 and passage not in doc["passages"]:
-                doc["passages"].append(passage)
-                doc["score"] += score
-        ranked = sorted(grouped.items(), key=lambda pair: (pair[1]["score"], pair[1]["title"].casefold()))[:max(0, limit)]
-        records = [SourceRecord(
-            id=f"drive:{file_id}", source="drive", title=doc["title"],
-            content="\n\n".join(doc["passages"]), url=doc["url"], createdAt=doc["modified"],
-            metadata={"mimeType": doc["mime"], "retrieval": "sqlite_fts5_bm25"})
-            for file_id, doc in ranked]
-        return ToolResult(toolName="search_drive", query=" ".join(query.split()), records=records, latencyMs=0)
-
     def _token(self) -> str:
         token = access_token(self.oauth_store, "drive", self.config.google_client_id, self.config.google_client_secret)
         if not token:
@@ -411,34 +396,3 @@ class DriveConnector:
             return ""
         response.raise_for_status()
         return response.text
-
-    @staticmethod
-    def _rank(query: str, records: list[SourceRecord], limit: int) -> ToolResult:
-        ignored = {"what", "when", "where", "which", "who", "whom", "whose", "how", "many", "much", "does", "did", "do", "is", "are", "was", "were", "the", "a", "an", "and", "or", "to", "for", "of", "in", "on", "at", "by", "with", "about", "tell", "me", "please", "our", "my", "their", "this", "that", "from", "can", "you", "show", "find", "give"}
-        words = [w for w in re.findall(r"[\w-]+", query.casefold()) if len(w) > 1 and w not in ignored]
-        ranked = []
-        for record in records:
-            # CSV rows and prose lines become independent passages; score them against
-            # the question and retain the parent file ID so citations open the source.
-            if record.title.casefold().endswith(".csv"):
-                rows = csv.DictReader(io.StringIO(record.content))
-                chunks = ["; ".join(f"{key}: {value.strip()}" for key, value in row.items()
-                                    if key and value and value.strip()) for row in rows]
-                chunks = [chunk for chunk in chunks if chunk]
-            else:
-                chunks = [part.strip() for part in re.split(r"\n+|(?<=[.!?])\s+", record.content) if part.strip()]
-            if not chunks:
-                chunks = [record.content]
-            passage_scores = sorted(
-                ((sum(chunk.casefold().count(word) for word in words), chunk) for chunk in chunks),
-                key=lambda item: (-item[0], item[1].casefold()),
-            )
-            matching = [(score, chunk) for score, chunk in passage_scores if score > 0][:5]
-            score = sum(item[0] for item in matching[:3])
-            score += sum(3 for word in words if word in record.title.casefold())
-            if score:
-                excerpt = "\n".join(chunk for _, chunk in matching) or record.content[:2200]
-                ranked.append((score, record.model_copy(update={"content": excerpt[:5000]})))
-        ranked.sort(key=lambda pair: (-pair[0], pair[1].title.casefold()))
-        return ToolResult(toolName="search_drive", query=" ".join(query.split()),
-                          records=[record for _, record in ranked[:max(0, limit)]], latencyMs=0)

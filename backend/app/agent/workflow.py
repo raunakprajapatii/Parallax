@@ -190,14 +190,16 @@ def build_agent_workflow(agent: Any):
             result: ToolResult | None = None
             retry_count = 0
             try:
-                for attempt in range(2):
+                attempts = 1 if source == "drive" else 2
+                timeout = max(agent.tool_timeout_seconds, 60.0) if source == "drive" else agent.tool_timeout_seconds
+                for attempt in range(attempts):
                     future = _TOOL_EXECUTOR.submit(
                         agent.connectors.search, source, query, limit=5, demo_mode=request.demoMode
                     )
                     try:
-                        result = future.result(timeout=agent.tool_timeout_seconds)
+                        result = future.result(timeout=timeout)
                     except FutureTimeout:
-                        if attempt == 0:
+                        if attempt + 1 < attempts:
                             retry_count += 1
                             sleep(0.15)
                             continue
@@ -272,8 +274,8 @@ def build_agent_workflow(agent: Any):
                 if answer == SYNTHESIS_UNAVAILABLE:
                     answer, citations = synthesize(request.message, records, max_records=2)
             else:
-                # Never expose raw connector records as if they were a finished answer.
-                answer, citations = SYNTHESIS_UNAVAILABLE, []
+                # Keep a useful evidence-only answer available when no model key is configured.
+                answer, citations = synthesize(request.message, records)
         citations = validate_citations(citations, records)
         agent._trace(state["trace_id"], "citation_validation_complete", citationCount=len(citations), valid=True)
         memory_used: list[str] = []

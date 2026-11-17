@@ -47,6 +47,18 @@ def test_routes_employee_leave_request_to_drive():
     assert route_query(question).sources == ("drive",)
 
 
+def test_routes_email_address_lookup_with_explicit_drive_source_only_to_drive():
+    question = "What's the Gmail of Dev Mehta from Drive?"
+    assert route_query(question).sources == ("drive",)
+    assert is_work_query(question)
+
+
+def test_routes_natural_employee_profile_question_to_drive_without_source_name():
+    question = "What work email, title, department, manager, office, and start date are listed for Dev Mehta?"
+    assert route_query(question).sources == ("drive",)
+    assert is_work_query(question)
+
+
 def test_general_talk_does_not_trigger_work_source_retrieval():
     assert not is_work_query("Hi, how are you?")
     assert not is_work_query("Explain how photosynthesis works")
@@ -139,6 +151,19 @@ def test_rank_records_keeps_one_relevant_record_per_source():
     ranked = rank_records("Compare Northstar rollout approval across Drive, Jira, and Notion", records, limit=3)
 
     assert {item.source for item in ranked} == {"drive", "jira", "notion"}
+
+
+def test_extractive_answer_keeps_the_complete_retrieved_passage():
+    from app.agent.synthesis import synthesize
+
+    passage = "Dev Mehta contact: dev.mehta@example.test. " + ("Additional verified detail. " * 30) + "Final verified detail."
+    answer, citations = synthesize("What is Dev Mehta contact?", [
+        record(id="drive:employee", source="drive", title="Employee directory", content=passage),
+    ])
+
+    assert passage in answer
+    assert "Final verified detail." in answer
+    assert citations[0].recordId == "drive:employee"
 
 
 def test_rejects_mismatched_citation_metadata():

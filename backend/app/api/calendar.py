@@ -32,8 +32,21 @@ def create_event(payload: CalendarEventRequest, request: Request):
         raise HTTPException(422, "The event must end after it starts and be scheduled in the future.")
     if any(not _EMAIL.fullmatch(email) for email in payload.attendeeEmails):
         raise HTTPException(422, "Each attendee must have a valid email address.")
-    token = access_token(store, "calendar", os.getenv("GOOGLE_CLIENT_ID"),
-                         os.getenv("GOOGLE_CLIENT_SECRET"))
+    try:
+        token = access_token(store, "calendar", os.getenv("GOOGLE_CLIENT_ID"),
+                             os.getenv("GOOGLE_CLIENT_SECRET"))
+    except httpx.HTTPStatusError as exc:
+        try:
+            oauth_error = exc.response.json().get("error")
+        except (ValueError, TypeError):
+            oauth_error = None
+        if oauth_error == "invalid_grant":
+            store.delete("calendar")
+            raise HTTPException(
+                409, "Google Calendar authorization expired. Reconnect Google Calendar, then reopen this draft to create the event.") from exc
+        raise HTTPException(502, "Google Calendar could not refresh its authorization. Please try again.") from exc
+    except httpx.HTTPError as exc:
+        raise HTTPException(502, "Google Calendar could not refresh its authorization. Please try again.") from exc
     if not token:
         raise HTTPException(409, "Reconnect Google Calendar to authorize event creation.")
     event = {"id": payload.draftId, "summary": payload.summary.strip(), "description": payload.description,

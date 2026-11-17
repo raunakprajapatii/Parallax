@@ -81,8 +81,14 @@ def route_query(query: str) -> Route:
     # Explicitly named sources must not be discarded just because the same
     # question also contains a Jira issue key. Preserve Jira for the key, then
     # search every other named source requested by the user.
+    # In questions such as "the Gmail of a person from Drive", Gmail means
+    # their email address. Treat it as a source only when the user is asking
+    # about the Gmail app/account itself.
+    gmail_is_source = bool(re.search(
+        r"\b(?:in|from|search|check|look in|look up in|my)\s+(?:google\s+)?gmail\b"
+        r"|\bgmail\s+(?:inbox|messages?|emails?|thread)\b", text))
     named = [source for source, patterns in {
-        "gmail": (r"\bgmail\b", r"\bgoogle mail\b"),
+        "gmail": ((r"\bgmail\b", r"\bgoogle mail\b") if gmail_is_source else (r"\bgoogle mail\b",)),
         "jira": (r"\bjira\b",),
         "notion": (r"\bnotion\b",),
         "calendar": (r"\bcalendar\b",),
@@ -93,9 +99,21 @@ def route_query(query: str) -> Route:
         if has_jira_key and "jira" not in named:
             named.append("jira")
         return Route(tuple(named[:3]), "explicit_sources")
+    named_person = re.search(
+        r"\b(?:for|of|about)\s+[A-Za-z][A-Za-z'-]+\s+[A-Za-z][A-Za-z'-]+\b", query)
+    asks_employee_profile = bool(re.search(
+        r"\bwork\s+email\b|\b(?:employee\s+)?profile\b|\bemployee\s+details\b", text)
+        or (named_person and sum(bool(re.search(pattern, text)) for pattern in (
+            r"\bdepartment\b", r"\bmanager\b", r"\boffice\b", r"\bstart\s+date\b",
+            r"\bjob\s+title\b", r"\bemployment\s+status\b")) >= 2))
+    if named_person and asks_employee_profile:
+        return Route(("drive",), "drive_employee_profile")
     if re.search(r"\b[A-Z][A-Z0-9]+-\d+\b", query.upper()):
         return Route(("jira",), "jira_issue_key")
-    selected = [source for source, terms in _TERMS.items() if any(_contains_term(text, term) for term in terms)]
+    email_address_lookup = bool(re.search(r"\b(?:gmail|email(?: address)?)\s+(?:of|for)\b", text))
+    selected = [source for source, terms in _TERMS.items()
+                if not (source == "gmail" and email_address_lookup)
+                and any(_contains_term(text, term) for term in terms)]
     if re.search(r"\bwhat needs (?:my )?attention\b", text):
         return Route(("gmail", "jira"), "attention_summary")
     if re.search(r"\b(?:email|emails|mail)\b.*\b(?:jira|task|tasks|issue|issues)\b|\b(?:jira|task|tasks|issue|issues)\b.*\b(?:email|emails|mail)\b", text):
