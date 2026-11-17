@@ -34,6 +34,41 @@ def _embed(texts: list[str]):
     return _model.encode(texts, normalize_embeddings=True, show_progress_bar=False)
 
 
+def _query_profile(query: str) -> tuple[str, str, tuple[str, ...]]:
+    """Identify the document family and add useful lexical variants."""
+    text = query.casefold()
+    if any(term in text for term in ("policy", "carryover", "carry over", "carry forward", "entitlement", "eligibility", "rule")):
+        synonyms = ("policy", "handbook", "carryover", "carry", "forward", "unused", "balance", "entitlement")
+        return "policy", "policy handbook leave carryover carry forward unused balance entitlement", synonyms
+    if any(term in text for term in ("leave request", "leave status", "who requested leave", "time off request")):
+        return "leave_record", query, ("leave", "request", "employee", "status")
+    if any(term in text for term in ("customer", "account", "client", "renewal", "account owner")):
+        return "customer", query, ("customer", "account", "account_name", "account_owner", "lifecycle_stage")
+    if any(term in text for term in ("project", "initiative", "blocker", "launch", "work item", "status")):
+        return "project", query, ("project", "initiative", "status", "owner", "blocker")
+    return "general", query, ()
+
+
+def _intent_title_boost(intent: str, title: str) -> float:
+    name = title.casefold()
+    if intent == "policy":
+        if any(term in name for term in ("policy", "handbook")):
+            return 0.012
+        if any(term in name for term in ("request", "ticket", "work_item")):
+            return -0.012
+    if intent == "leave_record":
+        if "leave" in name and "request" in name:
+            return 0.01
+        if "policy" in name or "handbook" in name:
+            return -0.006
+    if intent == "customer":
+        if any(term in name for term in ("customer", "account")):
+            return 0.01
+        if "support_ticket" in name or "support ticket" in name:
+            return -0.006
+    return 0.0
+
+
 class DriveConnector:
     def __init__(self, config: ConnectorConfig):
         self.config = config
@@ -254,7 +289,8 @@ class DriveConnector:
         return passages
 
     def _retrieve(self, query: str, folder_id: str, limit: int) -> ToolResult:
-        query_vector = _embed([query])[0]
+        intent, semantic_query, expansions = _query_profile(query)
+        query_vector = _embed([semantic_query])[0]
         query_vector = [float(value) for value in query_vector]
         query_norm = math.sqrt(sum(value * value for value in query_vector)) or 1.0
         query_vector = [value / query_norm for value in query_vector]
@@ -264,7 +300,7 @@ class DriveConnector:
                        d.modified_time, p.content, p.embedding
                 FROM drive_rag_passages p JOIN drive_rag_documents d ON d.file_id=p.file_id
                 WHERE d.folder_id=? AND p.embedding IS NOT NULL""", (folder_id,)).fetchall()
-            terms = list(dict.fromkeys(re.findall(r"[\w-]+", query.casefold())))
+            terms = list(dict.fromkeys([*re.findall(r"[\w-]+", query.casefold()), *expansions]))
             terms = [term for term in terms if len(term) > 1 and term not in {
                 "what", "when", "where", "which", "who", "how", "does", "did", "the", "and",
                 "for", "with", "from", "tell", "about", "please"}]
@@ -287,7 +323,7 @@ class DriveConnector:
         # Reciprocal-rank fusion avoids comparing cosine values with FTS5's
         # negative BM25 values directly. Both retrievers get a vote; semantic
         # matches carry slightly more weight, while exact term hits still help.
-        semantic_rank = sorted(semantic_scores, key=lambda pid: semantic_scores[pid], reverse=True)
+        semantic_rank = sorted(semantic_scores, key=lambda pid: semantic_scores[pid], reverse=True)[:max(50, limit * 20)]
         lexical_rank = [int(pid) for pid, _ in lexical_rows]
         combined: dict[int, float] = {}
         rrf_k = 60
@@ -300,12 +336,16 @@ class DriveConnector:
             file_id, title, mime, url, modified, passage = passage_rows[passage_id]
             doc = grouped.setdefault(file_id, {"title": title, "mime": mime, "url": url,
                                                 "modified": modified, "passages": [], "score": 0.0})
-            doc["score"] += score
+            score += _intent_title_boost(intent, title)
             doc["passages"].append((score, passage))
+        for doc in grouped.values():
+            best = sorted((score for score, _ in doc["passages"]), reverse=True)[:3]
+            doc["score"] = sum(best)
+            doc["passages"].sort(key=lambda item: item[0], reverse=True)
         ranked = sorted(grouped.items(), key=lambda pair: (-pair[1]["score"], pair[1]["title"].casefold()))[:max(0, limit)]
         records = [SourceRecord(
             id=f"drive:{file_id}", source="drive", title=doc["title"],
-            content="\n\n".join(text for _, text in sorted(doc["passages"], reverse=True)[:3]),
+            content="\n\n".join(text for _, text in doc["passages"][:3]),
             url=doc["url"], createdAt=doc["modified"],
             metadata={"mimeType": doc["mime"], "retrieval": "hybrid_vector_bm25"})
             for file_id, doc in ranked]

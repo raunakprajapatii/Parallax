@@ -151,17 +151,25 @@ def build_agent_workflow(agent: Any):
         provider = agent.llm_provider
         api_key, model = ((agent.gemini_api_key, agent.gemini_model) if provider == "gemini"
                           else (agent.groq_api_key, agent.groq_model))
-        fixed_route = route.reason in {"explicit_sources", "jira_issue_key", "drive_record_id"}
+        # Keep issue IDs and Drive record IDs deterministic; explicit multi-source
+        # requests still benefit from distinct per-source query planning.
+        fixed_route = route.reason in {"jira_issue_key", "drive_record_id"}
         if not fixed_route and route.sources == ("drive",):
             fixed_route = True
         plan = None if fixed_route else plan_search(
             state["contextual_query"], api_key, model, provider, allowed_sources=route.sources)
         if plan:
-            sources, queries, reason = plan.sources, plan.queries, "llm_plan"
+            # An explicit source list is a user constraint. Let the planner
+            # tailor each connector query, but do not let it silently drop one.
+            sources = (tuple(dict.fromkeys((*route.sources, *plan.sources)))[:3]
+                       if route.reason == "explicit_sources" else plan.sources)
+            queries, reason = plan.queries, "llm_plan"
         else:
             sources, queries, reason = route.sources, {}, route.reason
         selected = list(sources[:3])
-        agent._trace(state["trace_id"], "route_complete", selectedSources=selected, reason=reason)
+        agent._trace(state["trace_id"], "route_complete", selectedSources=selected,
+                     sourceQueries={source: queries.get(source) or retrieval_query(state["contextual_query"], source)
+                                    for source in selected}, reason=reason)
         return {"selected_sources": selected, "source_queries": queries,
                 "tool_results": [], "records": []}
 
@@ -210,7 +218,7 @@ def build_agent_workflow(agent: Any):
                     related_jira_terms.extend(record.title for record in result.records if record.title)
                 agent._trace(state["trace_id"], "tool_complete", tool=result.toolName,
                              durationMs=result.latencyMs, recordCount=len(result.records),
-                             retries=retry_count, error=result.error)
+                             retries=retry_count, query=query, error=result.error)
             except FutureTimeout:
                 elapsed = int((perf_counter() - started) * 1000)
                 results.append(ToolResult(toolName=f"search_{source}", query=query,

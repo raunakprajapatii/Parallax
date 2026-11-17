@@ -14,6 +14,44 @@ from .config import ConnectorConfig
 from .oauth import OAuthStore, access_token
 
 
+_NOTION_QUERY_NOISE = {
+    "a", "an", "and", "brief", "check", "compare", "details", "document", "for",
+    "google", "in", "jira", "latest", "notion", "of", "on", "owner", "owners",
+    "page", "pages", "project", "projects", "search", "status", "the", "to", "with",
+}
+
+
+def _notion_terms(query: str) -> set[str]:
+    """Return discriminating query terms for filtering Notion search results."""
+    return {word.casefold() for word in re.findall(r"[\w'-]+", query)
+            if len(word) > 2 and word.casefold() not in _NOTION_QUERY_NOISE}
+
+
+def _notion_relevance(query: str, title: str, content: str, *, broad: bool) -> tuple[bool, int]:
+    """Reject pages returned by Notion that do not match a specific request."""
+    if broad:
+        return True, 0
+    wanted = _notion_terms(query)
+    if not wanted:
+        return True, 0
+    title_terms = _notion_terms(title)
+    content_terms = _notion_terms(content)
+    title_hits = wanted & title_terms
+    content_hits = wanted & content_terms
+    score = len(title_hits) * 3 + len(content_hits)
+    # A title hit is normally enough for Notion's title-oriented search. A body
+    # match needs two terms so a generic word like "approval" cannot pull in an
+    # unrelated project page.
+    return bool(title_hits or len(content_hits) >= 2), score
+
+
+def _compact_notion_query(query: str) -> str:
+    """Keep the entity name when the initial natural-language search is too broad."""
+    words = [word for word in re.findall(r"[\w'-]+", query)
+             if word.casefold() not in _NOTION_QUERY_NOISE]
+    return " ".join(words[:6])
+
+
 def _plain(value: Any) -> str:
     if isinstance(value, str):
         return value
@@ -221,32 +259,47 @@ class LiveConnector:
         headers = {"Authorization": f"Bearer {token}", "Notion-Version": self.config.notion_version}
         with httpx.Client(timeout=15, headers=headers) as client:
             broad_query = bool(re.search(r"\b(latest|recent|newest|check)\b.*\b(updates?|activity|pages?|notion|notes?|meeting|documents?)|\bcheck notion\b", query.casefold()))
-            payload: dict[str, Any] = {"page_size": min(max(limit, 1), 100)}
-            if not broad_query and query.strip():
-                payload["query"] = query
-            search_data = client.post("https://api.notion.com/v1/search", json=payload).raise_for_status().json()
-            results = search_data.get("results", [])
-            records = []
-            for page in results:
-                title = ""
-                for prop in page.get("properties", {}).values():
-                    if prop.get("type") == "title":
-                        title = _plain(prop.get("title")); break
-                page_id = page["id"]
-                blocks: list[dict[str, Any]] = []
-                cursor = None
-                while len(blocks) < 500:
-                    params: dict[str, Any] = {"page_size": 100}
-                    if cursor:
-                        params["start_cursor"] = cursor
-                    block_page = client.get(f"https://api.notion.com/v1/blocks/{page_id}/children",
-                                            params=params).raise_for_status().json()
-                    blocks.extend(block_page.get("results", []))
-                    cursor = block_page.get("next_cursor")
-                    if not block_page.get("has_more") or not cursor:
-                        break
-                content = " ".join(_plain(block.get(block.get("type", ""), {}).get("rich_text", [])) for block in blocks)
-                records.append(SourceRecord(id=f"notion:{page_id}", source="notion", title=title or "Notion page",
-                    content=content, url=page.get("url"), createdAt=page.get("last_edited_time"),
-                    metadata={"object": page.get("object", "page")}))
-            return records
+            def retrieve(search_query: str | None) -> list[SourceRecord]:
+                payload: dict[str, Any] = {"page_size": min(max(limit, 1), 100)}
+                if search_query:
+                    payload["query"] = search_query
+                search_data = client.post("https://api.notion.com/v1/search", json=payload).raise_for_status().json()
+                records: list[SourceRecord] = []
+                for page in search_data.get("results", []):
+                    title = ""
+                    for prop in page.get("properties", {}).values():
+                        if prop.get("type") == "title":
+                            title = _plain(prop.get("title")); break
+                    page_id = page["id"]
+                    blocks: list[dict[str, Any]] = []
+                    cursor = None
+                    while len(blocks) < 500:
+                        params: dict[str, Any] = {"page_size": 100}
+                        if cursor:
+                            params["start_cursor"] = cursor
+                        block_page = client.get(f"https://api.notion.com/v1/blocks/{page_id}/children",
+                                                params=params).raise_for_status().json()
+                        blocks.extend(block_page.get("results", []))
+                        cursor = block_page.get("next_cursor")
+                        if not block_page.get("has_more") or not cursor:
+                            break
+                    content = " ".join(_plain(block.get(block.get("type", ""), {}).get("rich_text", [])) for block in blocks)
+                    records.append(SourceRecord(id=f"notion:{page_id}", source="notion", title=title or "Notion page",
+                        content=content, url=page.get("url"), createdAt=page.get("last_edited_time"),
+                        metadata={"object": page.get("object", "page")}))
+                return records
+
+            records = retrieve(None if broad_query else query.strip())
+            relevant = [(record, _notion_relevance(query, record.title, record.content, broad=broad_query))
+                        for record in records]
+            relevant = [(record, score) for record, (matched, score) in relevant if matched]
+            # Search again with the entity-only phrase when Notion returns pages
+            # for the generic words but none for the requested project.
+            compact = _compact_notion_query(query)
+            if records and not relevant and compact and compact.casefold() != query.casefold():
+                records = retrieve(compact)
+                relevant = [(record, _notion_relevance(query, record.title, record.content, broad=broad_query))
+                            for record in records]
+                relevant = [(record, score) for record, (matched, score) in relevant if matched]
+            relevant.sort(key=lambda item: (-item[1], item[0].title.casefold(), item[0].id))
+            return [record for record, _ in relevant[:limit]]
